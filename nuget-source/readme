@@ -1,0 +1,4 @@
+add libraries:
+
+ - Neuralia.System.Data.HashFunction.xxHash
+ - Neuralia.Blockchains.Tools
