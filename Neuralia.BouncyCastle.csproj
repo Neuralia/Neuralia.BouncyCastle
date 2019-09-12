@@ -22,7 +22,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Neuralia.Blockchains.Tools" Version="1.0.0" />
-    <PackageReference Include="Neuralia.System.Data.HashFunction.xxHash" Version="1.0.0" />
+    <PackageReference Include="Neuralia.Data.HashFunction.xxHash" Version="1.0.0" />
   </ItemGroup>
   
   <ItemGroup>
