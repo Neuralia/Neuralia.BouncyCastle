@@ -1,6 +1,5 @@
 ﻿using System.IO;
 using Neuralia.Blockchains.Tools.Data;
-using Neuralia.Blockchains.Tools.Data.Allocation;
 using Microsoft.IO;
 using Neuralia.BouncyCastle.extra.pqc.math.ntru.polynomial;
 
@@ -44,7 +43,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru {
 		/// (
 		/// )
 		/// </seealso>
-		public NTRUEncryptionPrivateKeyParameters(IByteArray b, NTRUEncryptionParameters @params) : this((RecyclableMemoryStream) new RecyclableMemoryStreamManager().GetStream("input", b.Bytes, b.Offset, b.Length), @params) {
+		public NTRUEncryptionPrivateKeyParameters(SafeArrayHandle b, NTRUEncryptionParameters @params) : this((RecyclableMemoryStream) new RecyclableMemoryStreamManager().GetStream("input", b.Bytes, b.Offset, b.Length), @params) {
 		}
 
 		/// <summary>
@@ -83,27 +82,28 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru {
 		///     Converts the key to a byte array
 		/// </summary>
 		/// <returns> the encoded key </returns>
-		/// <seealso cref= # NTRUEncryptionPrivateKeyParameters( IByteArray, NTRUEncryptionParameters
+		/// <seealso cref= # NTRUEncryptionPrivateKeyParameters( ArrayWrapper, NTRUEncryptionParameters
 		/// )
 		/// </seealso>
-		public virtual IByteArray Encoded {
+		public virtual SafeArrayHandle Encoded {
 			get {
-				IByteArray hBytes = this.h.toBinary(this.@params.q);
-				IByteArray tBytes;
+				SafeArrayHandle res = null;
+				using(SafeArrayHandle hBytes = this.h.toBinary(this.@params.q)) {
+					SafeArrayHandle tBytes;
 
-				if(this.t is ProductFormPolynomial) {
-					tBytes = ((ProductFormPolynomial) this.t).toBinary();
-				} else {
-					tBytes = this.t.toIntegerPolynomial().toBinary3Tight();
+					if(this.t is ProductFormPolynomial) {
+						tBytes = ((ProductFormPolynomial) this.t).toBinary();
+					} else {
+						tBytes = this.t.toIntegerPolynomial().toBinary3Tight();
+					}
+
+					res = ByteArray.Create(hBytes.Length + tBytes.Length);
+
+					res.Entry.CopyFrom(hBytes.Entry, 0, 0, hBytes.Length);
+					res.Entry.CopyFrom(tBytes.Entry, 0, hBytes.Length, tBytes.Length);
+
+					hBytes.Dispose();
 				}
-
-				IByteArray res = MemoryAllocators.Instance.cryptoAllocator.Take(hBytes.Length + tBytes.Length);
-
-				res.CopyFrom(hBytes, 0, 0, hBytes.Length);
-				res.CopyFrom(tBytes, 0, hBytes.Length, tBytes.Length);
-
-				hBytes.Return();
-				tBytes.Return();
 
 				return res;
 			}

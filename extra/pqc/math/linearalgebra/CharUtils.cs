@@ -1,6 +1,5 @@
 ﻿using System;
 using Neuralia.Blockchains.Tools.Data;
-using Neuralia.Blockchains.Tools.Data.Allocation;
 
 namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 	public sealed class CharUtils {
@@ -29,8 +28,8 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 		/// </summary>
 		/// <param name="chars"> the char array </param>
 		/// <returns> the converted array </returns>
-		public static IByteArray toByteArray(char[] chars) {
-			IByteArray result = MemoryAllocators.Instance.cryptoAllocator.Take(chars.Length);
+		public static SafeArrayHandle toByteArray(char[] chars) {
+			SafeArrayHandle result = ByteArray.Create(chars.Length);
 
 			for(int i = chars.Length - 1; i >= 0; i--) {
 				result[i] = (byte) chars[i];
@@ -45,16 +44,16 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 		/// </summary>
 		/// <param name="chars"> the char array </param>
 		/// <returns> the converted array </returns>
-		public static IByteArray toByteArrayForPBE(char[] chars) {
+		public static SafeArrayHandle toByteArrayForPBE(char[] chars) {
 
-			IByteArray @out = MemoryAllocators.Instance.cryptoAllocator.Take(chars.Length);
+			SafeArrayHandle @out = ByteArray.Create(chars.Length);
 
 			for(int i = 0; i < chars.Length; i++) {
 				@out[i] = (byte) chars[i];
 			}
 
 			int         length = @out.Length * 2;
-			IByteArray ret    = MemoryAllocators.Instance.cryptoAllocator.Take(length + 2);
+			SafeArrayHandle ret    = ByteArray.Create(length + 2);
 
 			int j = 0;
 

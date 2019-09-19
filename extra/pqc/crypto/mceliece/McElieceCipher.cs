@@ -120,7 +120,7 @@ namespace org.bouncycastle.pqc.crypto.mceliece
 		/// </summary>
 		/// <param name="input"> the plain text </param>
 		/// <returns> the cipher text </returns>
-		public virtual IByteArray messageEncrypt(IByteArray input)
+		public virtual SafeArrayHandle messageEncrypt(SafeArrayHandle input)
 		{
 			if (!this.forEncryption)
 			{
@@ -136,10 +136,10 @@ namespace org.bouncycastle.pqc.crypto.mceliece
 			return mGZ.Encoded;
 		}
 
-		private GF2Vector computeMessageRepresentative(IByteArray input)
+		private GF2Vector computeMessageRepresentative(SafeArrayHandle input)
 		{
-			IByteArray data = new ByteArray(this.maxPlainTextSize + ((this.k & 0x07) != 0 ? 1 : 0));
-			input.CopyTo(data, 0, 0, input.Length);
+			SafeArrayHandle data = ByteArray.Create(this.maxPlainTextSize + ((this.k & 0x07) != 0 ? 1 : 0));
+			input.Entry.CopyTo(data.Entry, 0, 0, input.Length);
 			data[input.Length] = 0x01;
 			return GF2Vector.OS2VP(this.k, data);
 		}
@@ -152,7 +152,7 @@ namespace org.bouncycastle.pqc.crypto.mceliece
 		/// <exception cref="InvalidCipherTextException"> if the cipher text is invalid. </exception>
 
 
-		public virtual IByteArray messageDecrypt(IByteArray input)
+		public virtual SafeArrayHandle messageDecrypt(SafeArrayHandle input)
 		{
 			if (this.forEncryption)
 			{
@@ -199,9 +199,9 @@ namespace org.bouncycastle.pqc.crypto.mceliece
 			return this.computeMessage(mVec);
 		}
 
-		private IByteArray computeMessage(GF2Vector mr)
+		private SafeArrayHandle computeMessage(GF2Vector mr)
 		{
-			IByteArray mrBytes = mr.Encoded;
+			SafeArrayHandle mrBytes = mr.Encoded;
 			// find first non-zero byte
 			int index;
 			for (index = mrBytes.Length - 1; index >= 0 && mrBytes[index] == 0; index--)
@@ -216,8 +216,8 @@ namespace org.bouncycastle.pqc.crypto.mceliece
 			}
 
 			// extract and return message
-			IByteArray mBytes = new ByteArray(index);
-			mrBytes.CopyTo(mBytes, 0, 0, index);
+			SafeArrayHandle mBytes = ByteArray.Create(index);
+			mrBytes.Entry.CopyTo(mBytes.Entry, 0, 0, index);
 			return mBytes;
 		}
 

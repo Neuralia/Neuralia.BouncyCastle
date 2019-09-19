@@ -1,6 +1,5 @@
 ﻿using System;
 using Neuralia.Blockchains.Tools.Data;
-using Neuralia.Blockchains.Tools.Data.Allocation;
 using Neuralia.BouncyCastle.extra.pqc.crypto.ntru.numeric;
 using Org.BouncyCastle.Security;
 
@@ -1165,38 +1164,36 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 			return true;
 		}
 
-		public static IByteArray integerToOctets(BigInteger val) {
-			IByteArray valBytes = val.Abs().ToByteArray();
+		public static SafeArrayHandle integerToOctets(BigInteger val) {
+			using(SafeArrayHandle valBytes = val.Abs().ToByteArray()) {
 
-			// check whether the array includes a sign bit
-			if((val.BitLength & 7) != 0) {
-				return valBytes;
+				// check whether the array includes a sign bit
+				if((val.BitLength & 7) != 0) {
+					return valBytes;
+				}
+
+				// get rid of the sign bit (first byte)
+				SafeArrayHandle tmp = ByteArray.Create(val.BitLength >> 3);
+				tmp.Entry.CopyFrom(valBytes.Entry, 1, 0, tmp.Length);
+
+				return tmp;
+
 			}
-
-			// get rid of the sign bit (first byte)
-			IByteArray tmp = MemoryAllocators.Instance.cryptoAllocator.Take(val.BitLength >> 3);
-			tmp.CopyFrom(valBytes, 1, 0, tmp.Length);
-
-			valBytes.Return();
-
-			return tmp;
 		}
 
-		public static BigInteger octetsToInteger(IByteArray data, int offset, int length) {
-			IByteArray val = MemoryAllocators.Instance.cryptoAllocator.Take(length + 1);
+		public static BigInteger octetsToInteger(SafeArrayHandle data, int offset, int length) {
+			using(SafeArrayHandle val = ByteArray.Create(length + 1)) {
 
-			val[0] = 0;
+				val[0] = 0;
 
-			val.CopyFrom(data, offset, 1, length);
+				val.Entry.CopyFrom(data.Entry, offset, 1, length);
 
-			BigInteger bigint = new BigInteger(val);
+				return new BigInteger(val);
 
-			val.Return();
-
-			return bigint;
+			}
 		}
 
-		public static BigInteger octetsToInteger(IByteArray data) {
+		public static BigInteger octetsToInteger(SafeArrayHandle data) {
 			return octetsToInteger(data, 0, data.Length);
 		}
 	}

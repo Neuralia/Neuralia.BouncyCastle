@@ -36,7 +36,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru {
 		public   int     minCallsR;
 
 		public int        N, q, df, df1, df2, df3;
-		public IByteArray oid;
+		public readonly SafeArrayHandle oid = SafeArrayHandle.Create();
 		public int        pkLen;
 		public int        polyType;
 		public bool       sparse;
@@ -69,7 +69,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru {
 		///     a valid identifier for a <code>java.security.MessageDigest</code> instance such as
 		///     <code>SHA-256</code>. The <code>MessageDigest</code> must support the <code>getDigestLength()</code> method.
 		/// </param>
-		public NTRUEncryptionParameters(int N, int q, int df, int dm0, int db, int c, int minCallsR, int minCallsMask, bool hashSeed, IByteArray oid, bool sparse, bool fastFp, IDigest hashAlg) {
+		public NTRUEncryptionParameters(int N, int q, int df, int dm0, int db, int c, int minCallsR, int minCallsMask, bool hashSeed, SafeArrayHandle oid, bool sparse, bool fastFp, IDigest hashAlg) {
 			this.N            = N;
 			this.q            = q;
 			this.df           = df;
@@ -117,7 +117,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru {
 		///     a valid identifier for a <code>java.security.MessageDigest</code> instance such as
 		///     <code>SHA-256</code>
 		/// </param>
-		public NTRUEncryptionParameters(int N, int q, int df1, int df2, int df3, int dm0, int db, int c, int minCallsR, int minCallsMask, bool hashSeed, IByteArray oid, bool sparse, bool fastFp, IDigest hashAlg) {
+		public NTRUEncryptionParameters(int N, int q, int df1, int df2, int df3, int dm0, int db, int c, int minCallsR, int minCallsMask, bool hashSeed, SafeArrayHandle oid, bool sparse, bool fastFp, IDigest hashAlg) {
 			this.N            = N;
 			this.q            = q;
 			this.df1          = df1;
@@ -142,7 +142,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru {
 		/// </summary>
 		/// <param name="is"> an input stream </param>
 		/// <exception cref="IOException"> </exception>
-		public NTRUEncryptionParameters(IByteArray data, Func<string, IDigest> digestGenerator) {
+		public NTRUEncryptionParameters(SafeArrayHandle data, Func<string, IDigest> digestGenerator) {
 			IDataRehydrator rehydrator = DataSerializationFactory.CreateRehydrator(data);
 			this.N            = rehydrator.ReadInt();
 			this.q            = rehydrator.ReadInt();

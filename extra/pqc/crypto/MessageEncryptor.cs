@@ -17,11 +17,11 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto {
 		void init(bool forEncrypting, ICipherParameters param);
 
 		/// <param name="message"> the message to be signed. </param>
-		IByteArray messageEncrypt(IByteArray message);
+		SafeArrayHandle messageEncrypt(SafeArrayHandle message);
 
 		/// <param name="cipher"> the cipher text of the message </param>
 		/// <exception cref="InvalidCipherTextException"> </exception>
-		IByteArray messageDecrypt(IByteArray cipher);
+		SafeArrayHandle messageDecrypt(SafeArrayHandle cipher);
 	}
 
 }

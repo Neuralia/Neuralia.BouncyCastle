@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using Neuralia.Blockchains.Tools.Data;
-using Neuralia.Blockchains.Tools.Data.Allocation;
 using Neuralia.BouncyCastle.extra.pqc.math.ntru.euclid;
 using Neuralia.BouncyCastle.extra.pqc.math.ntru.polynomial;
 using Org.BouncyCastle.Security;
@@ -116,8 +115,8 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.ntru.util {
 		/// <param name="length"> </param>
 		/// <returns> an array of length <code>length</code> </returns>
 		/// <exception cref="IOException"> </exception>
-		public static IByteArray readFullLength(Stream InputStream, int length) {
-			IByteArray arr = MemoryAllocators.Instance.cryptoAllocator.Take(length);
+		public static SafeArrayHandle readFullLength(Stream InputStream, int length) {
+			SafeArrayHandle arr = ByteArray.Create(length);
 
 			if(InputStream.Read(arr.Bytes, arr.Offset, arr.Length) != arr.Length) {
 				throw new IOException("Not enough bytes to read.");

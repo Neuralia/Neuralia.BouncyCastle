@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using Neuralia.Blockchains.Tools.Data;
-using Neuralia.Blockchains.Tools.Data.Allocation;
 using Org.BouncyCastle.Math;
 
 namespace Neuralia.BouncyCastle.extra.pqc.math.ntru.util {
@@ -72,11 +71,11 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.ntru.util {
 		/// <param name="a"> the input array </param>
 		/// <param name="q"> the modulus </param>
 		/// <returns> the encoded array </returns>
-		public static IByteArray encodeModQ(int[] a, int q) {
+		public static SafeArrayHandle encodeModQ(int[] a, int q) {
 			int        bitsPerCoeff = 31 - Extensions.NumberOfLeadingZeros(q);
 			int        numBits      = a.Length      * bitsPerCoeff;
 			int        numBytes     = (numBits + 7) / 8;
-			IByteArray data         = MemoryAllocators.Instance.cryptoAllocator.Take(numBytes);
+			SafeArrayHandle data         = ByteArray.Create(numBytes);
 			int        bitIndex     = 0;
 			int        byteIndex    = 0;
 
@@ -109,7 +108,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.ntru.util {
 		/// <param name="N">    number of coefficients </param>
 		/// <param name="q"> </param>
 		/// <returns> an array containing <code>N</code> coefficients between <code>0</code> and <code>q-1</code> </returns>
-		public static int[] decodeModQ(IByteArray data, int N, int q) {
+		public static int[] decodeModQ(SafeArrayHandle data, int N, int q) {
 			int[] coeffs       = new int[N];
 			int   bitsPerCoeff = 31 - Extensions.NumberOfLeadingZeros(q);
 			int   numBits      = N * bitsPerCoeff;
@@ -141,7 +140,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.ntru.util {
 		public static int[] decodeModQ(Stream @is, int N, int q) {
 			int        qBits = 31 - Extensions.NumberOfLeadingZeros(q);
 			int        size  = ((N * qBits) + 7) / 8;
-			IByteArray arr   = Util.readFullLength(@is, size);
+			SafeArrayHandle arr   = Util.readFullLength(@is, size);
 
 			return decodeModQ(arr, N, q);
 		}
@@ -158,7 +157,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.ntru.util {
 		/// <param name="data"> an encoded ternary polynomial </param>
 		/// <param name="N">    number of coefficients </param>
 		/// <returns> the decoded coefficients </returns>
-		public static int[] decodeMod3Sves(IByteArray data, int N) {
+		public static int[] decodeMod3Sves(SafeArrayHandle data, int N) {
 			int[] coeffs     = new int[N];
 			int   coeffIndex = 0;
 
@@ -182,16 +181,16 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.ntru.util {
 		/// <summary>
 		///     Encodes an <code>int</code> array whose elements are between <code>-1</code> and <code>1</code>, to a byte array.
 		///     <code>coeffs[2*i]</code> and <code>coeffs[2*i+1]</code> must not both equal -1 for any integer <code>i</code>,
-		///     so this method is only safe to use with arrays produced by <seealso cref="#decodeMod3Sves(IByteArray, int)" />.
+		///     so this method is only safe to use with arrays produced by <seealso cref="#decodeMod3Sves(ArrayWrapper, int)" />.
 		///     <br>
 		///         See P1363.1 section 9.2.3.
 		/// </summary>
 		/// <param name="arr"> </param>
 		/// <returns> the encoded array </returns>
-		public static IByteArray encodeMod3Sves(int[] arr) {
+		public static SafeArrayHandle encodeMod3Sves(int[] arr) {
 			int        numBits   = ((arr.Length * 3) + 1) / 2;
 			int        numBytes  = (numBits          + 7) / 8;
-			IByteArray data      = MemoryAllocators.Instance.cryptoAllocator.Take(numBytes);
+			SafeArrayHandle data      = ByteArray.Create(numBytes);
 			int        bitIndex  = 0;
 			int        byteIndex = 0;
 
@@ -226,7 +225,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.ntru.util {
 		///     Encodes an <code>int</code> array whose elements are between <code>-1</code> and <code>1</code>, to a byte array.
 		/// </summary>
 		/// <returns> the encoded array </returns>
-		public static IByteArray encodeMod3Tight(int[] intArray) {
+		public static SafeArrayHandle encodeMod3Tight(int[] intArray) {
 			BigInteger sum = BigInteger.Zero;
 
 			for(int i = intArray.Length - 1; i >= 0; i--) {
@@ -239,22 +238,22 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.ntru.util {
 
 			if(arr.Length < size) {
 				// pad with leading zeros so arr.length==size
-				IByteArray arr2 = MemoryAllocators.Instance.cryptoAllocator.Take(size);
-				arr2.CopyFrom(arr, 0, size - arr.Length, arr.Length);
+				SafeArrayHandle arr2 = ByteArray.Create(size);
+				arr2.Entry.CopyFrom(arr, 0, size - arr.Length, arr.Length);
 
 				return arr2;
 			}
 
 			if(arr.Length > size) {
 				// drop sign bit
-				IByteArray arr2 = MemoryAllocators.Instance.cryptoAllocator.Take(arr.Length - 1);
-				arr2.CopyFrom(arr, 1, 0, arr.Length - 1);
+				SafeArrayHandle arr2 = ByteArray.Create(arr.Length - 1);
+				arr2.Entry.CopyFrom(arr, 1, 0, arr.Length - 1);
 
 				return arr2;
 			}
 
-			IByteArray arr3 = MemoryAllocators.Instance.cryptoAllocator.Take(arr.Length);
-			arr3.CopyFrom(arr);
+			SafeArrayHandle arr3 = ByteArray.Create(arr.Length);
+			arr3.Entry.CopyFrom(arr);
 
 			return arr3;
 		}
@@ -265,7 +264,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.ntru.util {
 		/// <param name="b"> a byte array </param>
 		/// <param name="N"> number of coefficients </param>
 		/// <returns> the decoded array </returns>
-		public static int[] decodeMod3Tight(IByteArray b, int N) {
+		public static int[] decodeMod3Tight(SafeArrayHandle b, int N) {
 			BigInteger sum    = new BigInteger(1, b.ToExactByteArray());
 			int[]      coeffs = new int[N];
 
@@ -290,12 +289,12 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.ntru.util {
 		/// <returns> the decoded array </returns>
 		public static int[] decodeMod3Tight(MemoryStream InputStream, int N) {
 			int        size = (int) Math.Ceiling((N * Math.Log(3)) / Math.Log(2) / 8);
-			IByteArray arr  = Util.readFullLength(InputStream, size);
+			SafeArrayHandle arr  = Util.readFullLength(InputStream, size);
 
 			return decodeMod3Tight(arr, N);
 		}
 
-		private static int getBit(IByteArray arr, int bitIndex) {
+		private static int getBit(SafeArrayHandle arr, int bitIndex) {
 			int byteIndex = bitIndex / 8;
 			int arrElem   = arr[byteIndex] & 0xFF;
 

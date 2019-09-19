@@ -33,7 +33,7 @@ namespace org.bouncycastle.pqc.crypto.mceliece
 		/// <returns> the encoded message as <seealso cref="GF2Vector"/> </returns>
 
 
-		public static GF2Vector encode(int n, int t, IByteArray m)
+		public static GF2Vector encode(int n, int t, SafeArrayHandle m)
 		{
 			if (n < t)
 			{
@@ -88,7 +88,7 @@ namespace org.bouncycastle.pqc.crypto.mceliece
 		/// <param name="t">   integer </param>
 		/// <param name="vec"> the binary vector </param>
 		/// <returns> the decoded vector as a byte array </returns>
-		public static IByteArray decode(int n, int t, GF2Vector vec)
+		public static SafeArrayHandle decode(int n, int t, GF2Vector vec)
 		{
 			if ((vec.Length != n) || (vec.HammingWeight != t))
 			{
@@ -136,7 +136,7 @@ namespace org.bouncycastle.pqc.crypto.mceliece
 		/// <param name="t"> integer </param>
 		/// <param name="m"> the message vector as a byte array </param>
 		/// <returns> a message representative for <tt>m</tt> </returns>
-		public static IByteArray signConversion(int n, int t, IByteArray m)
+		public static SafeArrayHandle signConversion(int n, int t, SafeArrayHandle m)
 		{
 			if (n < t)
 			{
@@ -164,10 +164,10 @@ namespace org.bouncycastle.pqc.crypto.mceliece
 				nr = 8;
 			}
 			// take s bit from m
-			IByteArray data = new ByteArray(nq + 1);
+			SafeArrayHandle data = ByteArray.Create(nq + 1);
 			if (m.Length < data.Length)
 			{
-				m.CopyTo(data);
+				m.Entry.CopyTo(data.Entry);
 				for (int i = m.Length; i < data.Length; i++)
 				{
 					data[i] = 0;
@@ -175,7 +175,7 @@ namespace org.bouncycastle.pqc.crypto.mceliece
 			}
 			else
 			{
-				m.CopyTo(data,0,0,nq);
+				m.Entry.CopyTo(data.Entry,0,0,nq);
 				int h = (1 << nr) - 1;
 				data[nq] = (byte)(h & m[nq]);
 			}
@@ -208,11 +208,11 @@ namespace org.bouncycastle.pqc.crypto.mceliece
 				}
 			}
 
-			IByteArray result = new ByteArray(sq + 1);
-			IByteArray help = d.ToByteArray();
+			SafeArrayHandle result = ByteArray.Create(sq + 1);
+			SafeArrayHandle help = d.ToByteArray();
 			if (help.Length < result.Length)
 			{
-				help.CopyTo(result);
+				help.Entry.CopyTo(result.Entry);
 				for (int i = help.Length; i < result.Length; i++)
 				{
 					result[i] = 0;
@@ -220,7 +220,7 @@ namespace org.bouncycastle.pqc.crypto.mceliece
 			}
 			else
 			{
-				help.CopyTo(result,0,0,sq);
+				help.Entry.CopyTo(result.Entry,0,0,sq);
 				result[sq] = (byte)(((1 << sr) - 1) & help[sq]);
 			}
 

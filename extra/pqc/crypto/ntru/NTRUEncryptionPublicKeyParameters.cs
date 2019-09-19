@@ -27,7 +27,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru {
 		/// <param name="params"> the NtruEncrypt parameters to use </param>
 		/// <seealso cref= # Encoded
 		/// </seealso>
-		public NTRUEncryptionPublicKeyParameters(IByteArray b, NTRUEncryptionParameters @params) : base(false, @params) {
+		public NTRUEncryptionPublicKeyParameters(SafeArrayHandle b, NTRUEncryptionParameters @params) : base(false, @params) {
 
 			this.h = IntegerPolynomial.fromBinary(b, @params.N, @params.q);
 		}
@@ -49,10 +49,10 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru {
 		///     Converts the key to a byte array
 		/// </summary>
 		/// <returns> the encoded key </returns>
-		/// <seealso cref= # NTRUEncryptionPublicKeyParameters( IByteArray, NTRUEncryptionParameters
+		/// <seealso cref= # NTRUEncryptionPublicKeyParameters( ArrayWrapper, NTRUEncryptionParameters
 		/// )
 		/// </seealso>
-		public virtual IByteArray Encoded => this.h.toBinary(this.@params.q);
+		public virtual SafeArrayHandle Encoded => this.h.toBinary(this.@params.q);
 
 		/// <summary>
 		///     Writes the key to an output stream

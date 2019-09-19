@@ -1,12 +1,12 @@
-using Neuralia.Blockchains.Tools.Data.Allocation;
+using Neuralia.Blockchains.Tools.Data;
 
 namespace Neuralia.BouncyCastle.extra {
 	public static class SquareArrays {
-		public static MemoryBlockDoubleArray ReturnRectangularbyteArray3(int size1, int size2) {
-			MemoryBlockDoubleArray doubleBlock = MemoryAllocators.Instance.doubleArrayCryptoAllocator.Take(size1);
+		public static ByteArray[] ReturnRectangularbyteArray3(int size1, int size2) {
+			ByteArray[] doubleBlock = new ByteArray[size1];
 
 			for(int array1 = 0; array1 < size1; array1++) {
-				doubleBlock[array1] = MemoryAllocators.Instance.cryptoAllocator.Take(size2);
+				doubleBlock[array1] = ByteArray.Create(size2);
 			}
 
 			return doubleBlock;

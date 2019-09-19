@@ -1,6 +1,5 @@
 ﻿using System;
 using Neuralia.Blockchains.Tools.Data;
-using Neuralia.Blockchains.Tools.Data.Allocation;
 using Neuralia.BouncyCastle.extra.pqc.crypto.ntru.numeric;
 
 namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
@@ -113,7 +112,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 		///     -conform.
 		/// </summary>
 		/// <returns> this element as byte array </returns>
-		IByteArray toByteArray();
+		SafeArrayHandle toByteArray();
 
 		/// <summary>
 		///     Return a String representation of this element.

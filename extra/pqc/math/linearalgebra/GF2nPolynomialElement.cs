@@ -1,6 +1,5 @@
 ﻿using System;
 using Neuralia.Blockchains.Tools.Data;
-using Neuralia.Blockchains.Tools.Data.Allocation;
 using Neuralia.BouncyCastle.extra.pqc.crypto.ntru.numeric;
 
 namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
@@ -58,13 +57,13 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 
 		/// <summary>
 		///     Creates a new GF2nPolynomialElement using the given field <i>f</i> and
-		///     IByteArray <i>os</i> as value. The conversion is done according to 1363.
+		///     ArrayWrapper <i>os</i> as value. The conversion is done according to 1363.
 		/// </summary>
 		/// <param name="f">  the GF2nField to use </param>
 		/// <param name="os"> the octet string to assign to this GF2nPolynomialElement </param>
 		/// <seealso cref="P1363 5.5.5 p23, OS2FEP/OS2BSP"
 		/// </seealso>
-		public GF2nPolynomialElement(GF2nPolynomialField f, IByteArray os) {
+		public GF2nPolynomialElement(GF2nPolynomialField f, SafeArrayHandle os) {
 			this.mField     = f;
 			this.mDegree    = this.mField.Degree;
 			this.polynomial = new GF2Polynomial(this.mDegree, os);
@@ -915,12 +914,12 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 		}
 
 		/// <summary>
-		///     Converts this GF2nPolynomialElement to a IByteArray according to 1363.
+		///     Converts this GF2nPolynomialElement to a ArrayWrapper according to 1363.
 		/// </summary>
-		/// <returns> a IByteArray representing the value of this GF2nPolynomialElement </returns>
+		/// <returns> a ArrayWrapper representing the value of this GF2nPolynomialElement </returns>
 		/// <seealso cref="P1363 5.5.2 p22f BS2OSP, FE2OSP"
 		/// </seealso>
-		public override IByteArray toByteArray() {
+		public override SafeArrayHandle toByteArray() {
 			return this.polynomial.toByteArray();
 		}
 

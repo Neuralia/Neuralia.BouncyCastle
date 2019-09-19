@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using Neuralia.Blockchains.Tools.Data;
-using Neuralia.Blockchains.Tools.Data.Allocation;
 
 namespace Neuralia.BouncyCastle.extra {
 
@@ -38,7 +37,7 @@ namespace Neuralia.BouncyCastle.extra {
 			return a.SequenceEqual(b);
 		}
 
-		public static bool AreEqual(IByteArray a, IByteArray b) {
+		public static bool AreEqual(SafeArrayHandle a, SafeArrayHandle b) {
 
 			//return FastCompare(a,b);
 			return a.Equals(b);
@@ -80,13 +79,13 @@ namespace Neuralia.BouncyCastle.extra {
 			return data == null ? null : (byte[]) data.Clone();
 		}
 
-		public static IByteArray Clone(IByteArray data) {
+		public static SafeArrayHandle Clone(SafeArrayHandle data) {
 			if(data.IsNull) {
 				return null;
 			}
 
-			IByteArray clone = MemoryAllocators.Instance.cryptoAllocator.Take(data.Length);
-			data.CopyTo(clone, 0, 0, clone.Length);
+			SafeArrayHandle clone = ByteArray.Create(data.Length);
+			data.Entry.CopyTo(clone.Entry, 0, 0, clone.Length);
 
 			return clone;
 		}
@@ -113,7 +112,7 @@ namespace Neuralia.BouncyCastle.extra {
 			return newbuffer;
 		}
 
-		public static IByteArray Concatenate(IByteArray a, IByteArray b) {
+		public static SafeArrayHandle Concatenate(SafeArrayHandle a, SafeArrayHandle b) {
 			if(a == null) {
 				return Clone(b);
 			}
@@ -122,10 +121,10 @@ namespace Neuralia.BouncyCastle.extra {
 				return Clone(a);
 			}
 
-			IByteArray joined = MemoryAllocators.Instance.cryptoAllocator.Take(a.Length + b.Length);
+			SafeArrayHandle joined = ByteArray.Create(a.Length + b.Length);
 
-			a.CopyTo(joined, 0, 0, a.Length);
-			b.CopyTo(joined, 0, a.Length, b.Length);
+			a.Entry.CopyTo(joined.Entry, 0, 0, a.Length);
+			b.Entry.CopyTo(joined.Entry, 0, a.Length, b.Length);
 
 			return joined;
 		}
@@ -138,10 +137,10 @@ namespace Neuralia.BouncyCastle.extra {
 			return tmp;
 		}
 
-		public static IByteArray CopyOf(IByteArray data, int newLength) {
-			IByteArray tmp = MemoryAllocators.Instance.cryptoAllocator.Take(newLength);
+		public static SafeArrayHandle CopyOf(SafeArrayHandle data, int newLength) {
+			SafeArrayHandle tmp = ByteArray.Create(newLength);
 
-			tmp.CopyFrom(data, 0, 0, Math.Min(newLength, data.Length));
+			tmp.Entry.CopyFrom(data.Entry, 0, 0, Math.Min(newLength, data.Length));
 
 			return tmp;
 		}
@@ -154,8 +153,8 @@ namespace Neuralia.BouncyCastle.extra {
 		/// <param name="b">second array</param>
 		/// <returns>true if arrays equal, false otherwise.</returns>
 		public static bool ConstantTimeAreEqual(
-			IByteArray	a,
-			IByteArray	b)
+			SafeArrayHandle	a,
+			SafeArrayHandle	b)
 		{
 			int i = a.Length;
 			if (i != b.Length)

@@ -85,7 +85,7 @@ namespace org.bouncycastle.pqc.crypto.mceliece
 		/// <param name="encH">         the encoded canonical check matrix </param>
 		/// <param name="encQInv">      the encoded matrix used to compute square roots in
 		///                     <tt>(GF(2<sup>m</sup>))<sup>t</sup></tt> </param>
-		public McEliecePrivateKeyParameters(int n, int k, IByteArray encField, IByteArray encGoppaPoly, IByteArray encSInv, IByteArray encP1, IByteArray encP2, IByteArray encH, IByteArray[] encQInv) : base(true, null)
+		public McEliecePrivateKeyParameters(int n, int k, SafeArrayHandle encField, SafeArrayHandle encGoppaPoly, SafeArrayHandle encSInv, SafeArrayHandle encP1, SafeArrayHandle encP2, SafeArrayHandle encH, SafeArrayHandle[] encQInv) : base(true, null)
 		{
 			this.n = n;
 			this.k = k;

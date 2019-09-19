@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Runtime.Serialization;
 using Neuralia.Blockchains.Tools.Data;
-using Neuralia.Blockchains.Tools.Data.Allocation;
-
 using Org.BouncyCastle.Security;
 
 #region License Information
@@ -221,7 +219,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru.numeric {
         ///     </para>
         /// </summary>
         /// <param name="Value">Two's complement representation of the new BigInteger</param>
-        public BigInteger(IByteArray Value) {
+        public BigInteger(SafeArrayHandle Value) {
 			if(Value.Length == 0) {
 				throw new FormatException("Zero length BigInteger");
 			}
@@ -247,7 +245,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru.numeric {
         /// <param name="Signum">Sign of the new BigInteger (-1 for negative, 0 for zero, 1 for positive)</param>
         /// <param name="Magnitude">Magnitude of the new BigInteger with the most significant byte first</param>
         /// <exception cref="FormatException">Thrown if an invalid Signum or Magnitude is passed</exception>
-        public BigInteger(int Signum, IByteArray Magnitude) {
+        public BigInteger(int Signum, SafeArrayHandle Magnitude) {
 			if(Magnitude == null) {
 				throw new NullReferenceException();
 			}
@@ -1062,9 +1060,9 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru.numeric {
         ///     Returns the two's complement representation of this BigInteger in a byte array
         /// </summary>
         /// <returns>Two's complement representation of this</returns>
-        public IByteArray ToByteArray() {
+        public SafeArrayHandle ToByteArray() {
 			if(this._sign == 0) {
-				IByteArray item = MemoryAllocators.Instance.cryptoAllocator.Take(1);
+				SafeArrayHandle item = ByteArray.Create(1);
 				item[0] = 0;
 
 				return item;
@@ -1076,7 +1074,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru.numeric {
 			int        bytesLen = ((int) (uint) bitLen >> 3) + 1;
 
 			// Puts the little-endian int array representing the magnitude of this BigInteger into the big-endian byte array.
-			IByteArray bytes           = MemoryAllocators.Instance.cryptoAllocator.Take(bytesLen);
+			SafeArrayHandle bytes           = ByteArray.Create(bytesLen);
 			int         firstByteNumber = 0;
 			int         highBytes;
 			int         digitIndex     = 0;
@@ -1309,7 +1307,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru.numeric {
 			return (this._numberLength == 1) && (this._digits[0] == 1);
 		}
 
-		private void PutBytesNegativeToIntegers(IByteArray ByteValues) {
+		private void PutBytesNegativeToIntegers(SafeArrayHandle ByteValues) {
 			// Puts a big-endian byte array into a little-endian applying two complement
 			int bytesLen  = ByteValues.Length;
 			int highBytes = bytesLen & 3;
@@ -1360,7 +1358,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru.numeric {
 			}
 		}
 
-		private void PutBytesPositiveToIntegers(IByteArray ByteValues) {
+		private void PutBytesPositiveToIntegers(SafeArrayHandle ByteValues) {
 			// Puts a big-endian byte array into a little-endian int array
 			int bytesLen  = ByteValues.Length;
 			int highBytes = bytesLen & 3;
@@ -1452,7 +1450,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru.numeric {
         /// <param name="Context">The streaming context</param>
         private BigInteger(SerializationInfo Info, StreamingContext Context) {
 			this._sign = Info.GetInt32("sign");
-			IByteArray magn = (IByteArray) Info.GetValue("magnitude", typeof(IByteArray));
+			SafeArrayHandle magn = (SafeArrayHandle) Info.GetValue("magnitude", typeof(SafeArrayHandle));
 			this.PutBytesPositiveToIntegers(magn);
 			this.CutOffLeadingZeroes();
 		}
@@ -1464,8 +1462,8 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru.numeric {
         /// <param name="Context">The streaming context</param>
         void ISerializable.GetObjectData(SerializationInfo Info, StreamingContext Context) {
 			Info.AddValue("sign", this._sign);
-			IByteArray magn = this.Abs().ToByteArray();
-			Info.AddValue("magnitude", magn, typeof(IByteArray));
+			SafeArrayHandle magn = this.Abs().ToByteArray();
+			Info.AddValue("magnitude", magn, typeof(SafeArrayHandle));
 		}
 
 	#endregion
@@ -1626,7 +1624,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru.numeric {
 				return this.ToString();
 			}
 
-			if(ConversionType == typeof(IByteArray)) {
+			if(ConversionType == typeof(SafeArrayHandle)) {
 				return this.ToByteArray();
 			}
 

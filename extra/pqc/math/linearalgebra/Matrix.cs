@@ -1,5 +1,4 @@
 ﻿using Neuralia.Blockchains.Tools.Data;
-using Neuralia.Blockchains.Tools.Data.Allocation;
 
 namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 	/// <summary>
@@ -58,7 +57,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 		public virtual int NumColumns => this.numColumns;
 
 		/// <returns> the encoded matrix, i.e., this matrix in byte array form. </returns>
-		public abstract IByteArray Encoded { get; }
+		public abstract SafeArrayHandle Encoded { get; }
 
 		/// <summary>
 		///     Check if this is the zero matrix (i.e., all entries are zero).

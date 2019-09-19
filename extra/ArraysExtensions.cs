@@ -1,14 +1,13 @@
 using System;
 using System.Text;
 using Neuralia.Blockchains.Tools.Data;
-using Neuralia.Blockchains.Tools.Data.Allocation;
 using Neuralia.BouncyCastle.extra.pqc.crypto.ntru.numeric;
 using Org.BouncyCastle.Utilities;
 
 namespace Neuralia.BouncyCastle.extra {
 	/// <summary> General array utilities.</summary>
 	public abstract class ArraysExtensions {
-		public static IByteArray Concatenate(IByteArray a, IByteArray b) {
+		public static SafeArrayHandle Concatenate(SafeArrayHandle a, SafeArrayHandle b) {
 			return FastArrays.Concatenate(a, b);
 		}
 
@@ -34,13 +33,13 @@ namespace Neuralia.BouncyCastle.extra {
 			return Arrays.Concatenate(a, b);
 		}
 
-		public static IByteArray Concatenate(IByteArray a, IByteArray b, IByteArray c) {
+		public static SafeArrayHandle Concatenate(SafeArrayHandle a, SafeArrayHandle b, SafeArrayHandle c) {
 			if((a != null) && (b != null) && (c != null)) {
-				IByteArray rv = MemoryAllocators.Instance.cryptoAllocator.Take(a.Length + b.Length + c.Length);
+				SafeArrayHandle rv = ByteArray.Create(a.Length + b.Length + c.Length);
 
-				a.CopyTo(rv, 0, 0, a.Length);
-				b.CopyTo(rv, 0, a.Length, b.Length);
-				c.CopyTo(rv, 0, a.Length + b.Length, c.Length);
+				a.Entry.CopyTo(rv.Entry, 0, 0, a.Length);
+				b.Entry.CopyTo(rv.Entry, 0, a.Length, b.Length);
+				c.Entry.CopyTo(rv.Entry, 0, a.Length + b.Length, c.Length);
 
 				return rv;
 			}
@@ -56,17 +55,17 @@ namespace Neuralia.BouncyCastle.extra {
 			return Concatenate(a, b);
 		}
 
-		public static IByteArray WrapMemory(byte[] array) {
-			IByteArray rv = MemoryAllocators.Instance.cryptoAllocator.Take(array.Length);
-			rv.CopyFrom((ReadOnlySpan<byte>) array, 0, 0, array.Length);
+		public static SafeArrayHandle WrapMemory(byte[] array) {
+			SafeArrayHandle rv = ByteArray.Create(array.Length);
+			rv.Entry.CopyFrom((ReadOnlySpan<byte>) array, 0, 0, array.Length);
 
 			return rv;
 		}
 
-		public static byte[] UnWrapMemory(IByteArray array) {
+		public static byte[] UnWrapMemory(SafeArrayHandle array) {
 			//TODO: fix this, its inneficient
 			byte[] entry = new byte[array.Length];
-			array.CopyTo(entry, 0, 0, array.Length);
+			array.Entry.CopyTo(entry, 0, 0, array.Length);
 
 			return entry;
 		}

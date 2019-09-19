@@ -1,6 +1,6 @@
 ﻿using System;
 using System.IO;
-using Neuralia.Blockchains.Tools.Data.Allocation;
+using Neuralia.Blockchains.Tools.Data;
 
 #region License Information
 
@@ -192,9 +192,9 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru.numeric {
         /// </summary>
         /// <param name="X">Integer to copy</param>
         /// <returns>The integer bytes</returns>
-        internal static MemoryBlock IntToBytes(int X) {
+        internal static ByteArray IntToBytes(int X) {
 			int[]       num  = new int[1] {X};
-			MemoryBlock data = MemoryAllocators.Instance.cryptoAllocator.Take(4);
+			ByteArray data = ByteArray.Create(4);
 			Buffer.BlockCopy(num, 0, data.Bytes, data.Offset, 4);
 
 			return data;
@@ -205,8 +205,8 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru.numeric {
         /// </summary>
         /// <param name="X">Array of integers</param>
         /// <returns>The integers bytes</returns>
-        internal static MemoryBlock IntsToBytes(int[] X) {
-			MemoryBlock data = MemoryAllocators.Instance.cryptoAllocator.Take(X.Length * 4);
+        internal static ByteArray IntsToBytes(int[] X) {
+	        ByteArray data = ByteArray.Create(X.Length * 4);
 			Buffer.BlockCopy(X, 0, data.Bytes, data.Offset, X.Length * 4);
 
 			return data;
@@ -371,9 +371,9 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru.numeric {
         /// </summary>
         /// <param name="Data">The byte array to reverse</param>
         /// <returns>The reversed integer</returns>
-        public static int ReverseBytes(MemoryBlock Data) {
+        public static int ReverseBytes(ByteArray Data) {
 			// make a copy
-			MemoryBlock temp = MemoryAllocators.Instance.cryptoAllocator.Take(Data.Length);
+			ByteArray temp = ByteArray.Create(Data.Length);
 			Data.CopyTo(temp);
 
 			// reverse and copy to int

@@ -1,6 +1,5 @@
 ﻿using System;
 using Neuralia.Blockchains.Tools.Data;
-using Neuralia.Blockchains.Tools.Data.Allocation;
 using Neuralia.BouncyCastle.extra.pqc.crypto.ntru.numeric;
 
 namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
@@ -131,19 +130,18 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 		///     array
 		/// </param>
 		/// <returns> the value <tt>big</tt> as byte array </returns>
-		public static IByteArray toMinimalByteArray(BigInteger value) {
-			IByteArray valBytes = value.ToByteArray();
+		public static SafeArrayHandle toMinimalByteArray(BigInteger value) {
+			using(SafeArrayHandle valBytes = value.ToByteArray()) {
 
-			if((valBytes.Length == 1) || ((value.BitLength & 0x07) != 0)) {
-				return valBytes;
+				if((valBytes.Length == 1) || ((value.BitLength & 0x07) != 0)) {
+					return valBytes.Branch();
+				}
+
+				SafeArrayHandle result = ByteArray.Create(value.BitLength >> 3);
+				result.Entry.CopyFrom(valBytes.Entry, 1, 0, result.Length);
+
+				return result;
 			}
-
-			IByteArray result = MemoryAllocators.Instance.cryptoAllocator.Take(value.BitLength >> 3);
-			result.CopyFrom(valBytes, 1, 0, result.Length);
-
-			valBytes.Return();
-
-			return result;
 		}
 	}
 

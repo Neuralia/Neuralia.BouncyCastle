@@ -35,6 +35,7 @@ namespace Org.BouncyCastle.Crypto
         public SecureRandom Random
         {
             get { return random; }
+            set { random = value; }
         }
 
 		/**

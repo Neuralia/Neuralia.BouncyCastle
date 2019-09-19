@@ -1,8 +1,6 @@
 ﻿using System;
 using Neuralia.Blockchains.Tools;
 using Neuralia.Blockchains.Tools.Data;
-using Neuralia.Blockchains.Tools.Data.Allocation;
-
 using Org.BouncyCastle.Crypto;
 
 namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru {
@@ -20,7 +18,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru {
 		private readonly int        minCallsR;
 		private readonly int        N;
 		private          int        remLen;
-		private readonly IByteArray seed;
+		private readonly SafeArrayHandle seed = SafeArrayHandle.Create();
 		private          int        totLen;
 
 		/// <summary>
@@ -28,7 +26,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru {
 		/// </summary>
 		/// <param name="seed">   a seed of arbitrary length to initialize the index generator with </param>
 		/// <param name="params"> NtruEncrypt parameters </param>
-		internal IndexGenerator(IByteArray seed, NTRUEncryptionParameters @params) {
+		internal IndexGenerator(SafeArrayHandle seed, NTRUEncryptionParameters @params) {
 			this.seed      = seed;
 			this.N         = @params.N;
 			this.c         = @params.c;
@@ -49,14 +47,15 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru {
 		internal virtual int nextIndex() {
 			if(!this.initialized) {
 				this.buf = new BitString();
-				IByteArray hash = MemoryAllocators.Instance.cryptoAllocator.Take(this.hashAlg.GetDigestSize());
 
-				while(this.counter < this.minCallsR) {
-					this.appendHash(this.buf, hash);
-					this.counter++;
+				using(SafeArrayHandle hash = ByteArray.Create(this.hashAlg.GetDigestSize())) {
+
+					while(this.counter < this.minCallsR) {
+						this.appendHash(this.buf, hash);
+						this.counter++;
+					}
+
 				}
-
-				hash.Return();
 
 				this.totLen      = this.minCallsR * 8 * this.hLen;
 				this.remLen      = this.totLen;
@@ -70,23 +69,24 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru {
 				if(this.remLen < this.c) {
 					int        tmpLen     = this.c       - this.remLen;
 					int        cThreshold = this.counter + (((tmpLen + this.hLen) - 1) / this.hLen);
-					IByteArray hash       = MemoryAllocators.Instance.cryptoAllocator.Take(this.hashAlg.GetDigestSize());
 
-					while(this.counter < cThreshold) {
-						this.appendHash(M, hash);
-						this.counter++;
+					using(SafeArrayHandle hash = ByteArray.Create(this.hashAlg.GetDigestSize())) {
 
-						if(tmpLen > (8 * this.hLen)) {
-							tmpLen -= 8 * this.hLen;
+						while(this.counter < cThreshold) {
+							this.appendHash(M, hash);
+							this.counter++;
+
+							if(tmpLen > (8 * this.hLen)) {
+								tmpLen -= 8 * this.hLen;
+							}
 						}
+
+						this.remLen = (8 * this.hLen) - tmpLen;
+						this.buf?.Dispose();
+
+						this.buf = new BitString();
+						this.buf.appendBits(hash);
 					}
-
-					this.remLen = (8 * this.hLen) - tmpLen;
-					this.buf?.Dispose();
-
-					this.buf = new BitString();
-					this.buf.appendBits(hash);
-					hash.Return();
 				} else {
 					this.remLen -= this.c;
 				}
@@ -100,7 +100,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru {
 			}
 		}
 
-		private void appendHash(BitString m, IByteArray hash) {
+		private void appendHash(BitString m, SafeArrayHandle hash) {
 			this.hashAlg.BlockUpdate(this.seed.Bytes, this.seed.Offset, this.seed.Length);
 
 			this.putInt(this.hashAlg, this.counter);
@@ -108,7 +108,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru {
 			byte[] tempHash = hash.ToExactByteArrayCopy();
 			this.hashAlg.DoFinal(tempHash, 0);
 
-			hash.CopyFrom(ref tempHash, 0, 0, tempHash.Length);
+			hash.Entry.CopyFrom(ref tempHash, 0, 0, tempHash.Length);
 
 			m.appendBits(hash);
 		}
@@ -120,10 +120,10 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru {
 			hashAlg.Update((byte) counter);
 		}
 
-		private static IByteArray copyOf(IByteArray src, int len) {
-			IByteArray tmp = MemoryAllocators.Instance.cryptoAllocator.Take(len);
+		private static SafeArrayHandle copyOf(SafeArrayHandle src, int len) {
+			SafeArrayHandle tmp = ByteArray.Create(len);
 
-			tmp.CopyFrom(src, 0, 0, len < src.Length ? len : src.Length);
+			tmp.Entry.CopyFrom(src.Entry, 0, 0, len < src.Length ? len : src.Length);
 
 			return tmp;
 		}
@@ -132,17 +132,17 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru {
 		///     Represents a string of bits and supports appending, reading the head, and reading the tail.
 		/// </summary>
 		public class BitString : IDisposable2 {
-			internal IByteArray bytes = MemoryAllocators.Instance.cryptoAllocator.Take(4);
+			internal SafeArrayHandle bytes = ByteArray.Create(4);
 			internal int        lastByteBits; // lastByteBits <= 8
 			internal int        numBytes;     // includes the last byte even if only some of its bits are used
 
-			public virtual IByteArray Bytes => (IByteArray) this.bytes.Clone();
+			public virtual SafeArrayHandle Bytes => (SafeArrayHandle) this.bytes.Branch();
 
 			/// <summary>
 			///     Appends all bits in a byte array to the end of the bit string.
 			/// </summary>
 			/// <param name="bytes"> a byte array </param>
-			internal virtual void appendBits(IByteArray bytes) {
+			internal virtual void appendBits(SafeArrayHandle bytes) {
 				for(int i = 0; i != bytes.Length; i++) {
 					this.appendBits(bytes[i]);
 				}
@@ -154,11 +154,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru {
 			/// <param name="b"> a byte </param>
 			public virtual void appendBits(byte b) {
 				if(this.numBytes == this.bytes.Length) {
-					IByteArray temp = this.bytes;
-
 					this.bytes = copyOf(this.bytes, 2 * this.bytes.Length);
-
-					temp?.Return();
 				}
 
 				if(this.numBytes == 0) {
@@ -182,9 +178,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru {
 			public virtual BitString getTrailing(int numBits) {
 				BitString newStr = new BitString();
 				newStr.numBytes = (numBits + 7) / 8;
-				newStr.bytes?.Return();
-
-				newStr.bytes = MemoryAllocators.Instance.cryptoAllocator.Take(newStr.numBytes);
+				newStr.bytes = ByteArray.Create(newStr.numBytes);
 
 				for(int i = 0; i < newStr.numBytes; i++) {
 					newStr.bytes[i] = this.bytes[i];
@@ -237,7 +231,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru {
 
 				if(disposing && !this.IsDisposed) {
 					try {
-						this.bytes.Return();
+						this.bytes.Dispose();
 
 					} finally {
 						this.IsDisposed = true;

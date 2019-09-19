@@ -50,7 +50,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.qtesla {
 		/// <returns> key public data. </returns>
 		public sbyte[] PublicData => ArraysExtensions.Clone(this.publicKey);
 
-		public IByteArray Dehydrate() {
+		public SafeArrayHandle Dehydrate() {
 			IDataDehydrator dehydrator = DataSerializationFactory.CreateDehydrator();
 
 			dehydrator.Write((byte) this.securityCategory);
@@ -59,17 +59,16 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.qtesla {
 			return dehydrator.ToArray();
 		}
 
-		public static QTESLAPublicKeyParameters Rehydrate(IByteArray data) {
+		public static QTESLAPublicKeyParameters Rehydrate(SafeArrayHandle data) {
 			IDataRehydrator rehydrator = DataSerializationFactory.CreateRehydrator(data);
 
 			QTESLASecurityCategory.SecurityCategories securityCategory = (QTESLASecurityCategory.SecurityCategories) rehydrator.ReadByte();
-			IByteArray                                publicKey        = rehydrator.ReadNonNullableArray();
 
-			var results = new QTESLAPublicKeyParameters(securityCategory, (sbyte[]) (Array) publicKey.ToExactByteArrayCopy());
-			
-			publicKey.Return();
+			using(SafeArrayHandle publicKey = rehydrator.ReadNonNullableArray()) {
 
-			return results;
+				return new QTESLAPublicKeyParameters(securityCategory, (sbyte[]) (Array) publicKey.ToExactByteArrayCopy());
+
+			}
 		}
 	}
 

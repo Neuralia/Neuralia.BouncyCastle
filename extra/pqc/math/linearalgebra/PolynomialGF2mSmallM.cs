@@ -1,6 +1,5 @@
 ﻿using System;
 using Neuralia.Blockchains.Tools.Data;
-using Neuralia.Blockchains.Tools.Data.Allocation;
 using Org.BouncyCastle.Security;
 
 namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
@@ -105,8 +104,8 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 		///     Create a polynomial over the finite field GF(2^m).
 		/// </summary>
 		/// <param name="field"> the finite field GF(2^m) </param>
-		/// <param name="enc">   IByteArray polynomial in byte array form </param>
-		public PolynomialGF2mSmallM(GF2mField field, IByteArray enc) {
+		/// <param name="enc">   ArrayWrapper polynomial in byte array form </param>
+		public PolynomialGF2mSmallM(GF2mField field, SafeArrayHandle enc) {
 			this.field = field;
 
 			// decodes polynomial
@@ -201,7 +200,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 		///     Returns encoded polynomial, i.e., this polynomial in byte array form
 		/// </summary>
 		/// <returns> the encoded polynomial </returns>
-		public virtual IByteArray Encoded {
+		public virtual SafeArrayHandle Encoded {
 			get {
 				int d     = 8;
 				int count = 1;
@@ -211,7 +210,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 					d += 8;
 				}
 
-				IByteArray res = MemoryAllocators.Instance.cryptoAllocator.Take(this.coefficients.Length * count);
+				SafeArrayHandle res = ByteArray.Create(this.coefficients.Length * count);
 				count = 0;
 
 				for(int i = 0; i < this.coefficients.Length; i++) {

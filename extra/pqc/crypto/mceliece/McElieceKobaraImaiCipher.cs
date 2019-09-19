@@ -32,7 +32,7 @@ namespace org.bouncycastle.pqc.crypto.mceliece
 		/// <summary>
 		/// A predetermined public constant.
 		/// </summary>
-		public static readonly IByteArray PUBLIC_CONSTANT = (ByteArray)System.Text.Encoding.UTF8.GetBytes("a predetermined public constant");
+		public static readonly SafeArrayHandle PUBLIC_CONSTANT = (ByteArray)System.Text.Encoding.UTF8.GetBytes("a predetermined public constant");
 
 
 		private IDigest messDigest;
@@ -119,7 +119,7 @@ namespace org.bouncycastle.pqc.crypto.mceliece
 			this.t = privKey.T;
 		}
 
-		public virtual IByteArray messageEncrypt(IByteArray input)
+		public virtual SafeArrayHandle messageEncrypt(SafeArrayHandle input)
 		{
 			if (!this.forEncryption)
 			{
@@ -127,13 +127,13 @@ namespace org.bouncycastle.pqc.crypto.mceliece
 			}
 			
 			// there seems to be an issue here where the decrypted size is not the right size. so we store the size in the first 4 bytes.
-			IByteArray newInput = new ByteArray(input.Length + sizeof(int));
+			SafeArrayHandle newInput = ByteArray.Create(input.Length + sizeof(int));
 			var bytes = BitConverter.GetBytes(input.Length);
 			newInput[0] = bytes[0];
 			newInput[1] = bytes[1];
 			newInput[2] = bytes[2];
 			newInput[3] = bytes[3];
-			input.CopyTo(newInput, sizeof(int));
+			input.Entry.CopyTo(newInput.Entry, sizeof(int));
 			input = newInput;
 
 			int c2Len = this.messDigest.GetDigestSize();
@@ -151,12 +151,12 @@ namespace org.bouncycastle.pqc.crypto.mceliece
 			int c6Len = c1Len + c2Len - c4Len - c5Len;
 
 			// compute (m||const)
-			IByteArray mConst = new ByteArray(c1Len);
-			input.CopyTo(mConst);
-			PUBLIC_CONSTANT.CopyTo(mConst, 0, mLen, PUBLIC_CONSTANT.Length);
+			SafeArrayHandle mConst = ByteArray.Create(c1Len);
+			input.Entry.CopyTo(mConst.Entry);
+			PUBLIC_CONSTANT.Entry.CopyTo(mConst.Entry, 0, mLen, PUBLIC_CONSTANT.Length);
 
 			// generate random r of length c2Len bytes
-			IByteArray r = new ByteArray(c2Len);
+			SafeArrayHandle r = ByteArray.Create(c2Len);
 			this.sr.NextBytes(r.ToExactByteArray());
 
 			// get PRNG object
@@ -167,7 +167,7 @@ namespace org.bouncycastle.pqc.crypto.mceliece
 			sr0.AddSeedMaterial(r.ToExactByteArray());
 
 			// generate random sequence ...
-			IByteArray c1 = new ByteArray(c1Len);
+			SafeArrayHandle c1 = ByteArray.Create(c1Len);
 			sr0.NextBytes(c1.ToExactByteArray());
 
 			// ... and XOR with (m||const) to obtain c1
@@ -177,12 +177,12 @@ namespace org.bouncycastle.pqc.crypto.mceliece
 			}
 
 			// compute H(c1) ...
-			IByteArray c2 = new ByteArray(this.messDigest.GetDigestSize());
+			SafeArrayHandle c2 = ByteArray.Create(this.messDigest.GetDigestSize());
 			this.messDigest.BlockUpdate(c1.ToExactByteArray(), 0, c1.Length);
 			
 			byte[] result = new byte[this.messDigest.GetDigestSize()];
 			this.messDigest.DoFinal(result, 0);
-			c2.CopyFrom(result);
+			c2.Entry.CopyFrom(result.AsSpan());
 
 
 			// ... and XOR with r
@@ -192,23 +192,23 @@ namespace org.bouncycastle.pqc.crypto.mceliece
 			}
 
 			// compute (c2||c1)
-			IByteArray c2c1 = ByteUtils.concatenate(c2, c1);
+			SafeArrayHandle c2c1 = ByteUtils.concatenate(c2, c1);
 
 			// split (c2||c1) into (c6||c5||c4), where c4Len is k/8 bytes, c5Len is
 			// floor[log(n|t)]/8 bytes, and c6Len is c1Len+c2Len-c4Len-c5Len (may be
 			// 0).
-			IByteArray c6 = new ByteArray(0);
+			SafeArrayHandle c6 = ByteArray.Create(0);
 			if (c6Len > 0)
 			{
-				c6 = new ByteArray(c6Len);
-				c2c1.CopyTo(c6, 0, 0, c6Len);
+				c6 = ByteArray.Create(c6Len);
+				c2c1.Entry.CopyTo(c6.Entry, 0, 0, c6Len);
 			}
 
-			IByteArray c5 = new ByteArray(c5Len);
-			c2c1.CopyTo(c5, c6Len, 0, c5Len);
+			SafeArrayHandle c5 = ByteArray.Create(c5Len);
+			c2c1.Entry.CopyTo(c5.Entry, c6Len, 0, c5Len);
 
-			IByteArray c4 = new ByteArray(c4Len);
-			c2c1.CopyTo(c4, c6Len + c5Len, 0, c4Len);
+			SafeArrayHandle c4 = ByteArray.Create(c4Len);
+			c2c1.Entry.CopyTo(c4.Entry, c6Len + c5Len, 0, c4Len);
 
 			// convert c4 to vector over GF(2)
 			GF2Vector c4Vec = GF2Vector.OS2VP(this.k, c4);
@@ -217,12 +217,12 @@ namespace org.bouncycastle.pqc.crypto.mceliece
 			GF2Vector z = Conversions.encode(this.n, this.t, c5);
 
 			// compute encC4 = E(c4, z)
-			IByteArray encC4 = McElieceCCA2Primitives.encryptionPrimitive((McElieceCCA2PublicKeyParameters) this.key, c4Vec, z).Encoded;
+			SafeArrayHandle encC4 = McElieceCCA2Primitives.encryptionPrimitive((McElieceCCA2PublicKeyParameters) this.key, c4Vec, z).Encoded;
 
 			// if c6Len > 0
 			if (c6Len > 0)
 			{
-				// return (c6||encC4)
+				// return (c6||e.DatancC4)
 				return ByteUtils.concatenate(c6, encC4);
 			}
 			// else, return encC4
@@ -232,7 +232,7 @@ namespace org.bouncycastle.pqc.crypto.mceliece
 
 
 
-		public virtual IByteArray messageDecrypt(IByteArray input)
+		public virtual SafeArrayHandle messageDecrypt(SafeArrayHandle input)
 		{
 			if (this.forEncryption)
 			{
@@ -251,7 +251,7 @@ namespace org.bouncycastle.pqc.crypto.mceliece
 			int c6Len = input.Length - nDiv8;
 
 			// split cipher text (c6||encC4), where c6 may be empty
-			IByteArray c6, encC4;
+			SafeArrayHandle c6, encC4;
 			if (c6Len > 0)
 			{
 				var c6EncC4 = ByteUtils.split(input, c6Len);
@@ -260,7 +260,7 @@ namespace org.bouncycastle.pqc.crypto.mceliece
 			}
 			else
 			{
-				c6 = new ByteArray(0);
+				c6 = ByteArray.Create(0);
 				encC4 = input;
 			}
 
@@ -269,7 +269,7 @@ namespace org.bouncycastle.pqc.crypto.mceliece
 
 			// decrypt encC4Vec to obtain c4 and error vector z
 			GF2Vector[] c4z = McElieceCCA2Primitives.decryptionPrimitive((McElieceCCA2PrivateKeyParameters) this.key, encC4Vec);
-			IByteArray c4 = c4z[0].Encoded;
+			SafeArrayHandle c4 = c4z[0].Encoded;
 			GF2Vector z = c4z[1];
 
 			// if length of c4 is greater than c4Len (because of padding) ...
@@ -280,26 +280,26 @@ namespace org.bouncycastle.pqc.crypto.mceliece
 			}
 
 			// compute c5 = Conv^-1(z)
-			IByteArray c5 = Conversions.decode(this.n, this.t, z);
+			SafeArrayHandle c5 = Conversions.decode(this.n, this.t, z);
 
 			// compute (c6||c5||c4)
-			IByteArray c6c5c4 = ByteUtils.concatenate(c6, c5);
+			SafeArrayHandle c6c5c4 = ByteUtils.concatenate(c6, c5);
 			c6c5c4 = ByteUtils.concatenate(c6c5c4, c4);
 
 			// split (c6||c5||c4) into (c2||c1), where c2Len = mdLen and c1Len =
 			// input.length-c2Len bytes.
 			int c1Len = c6c5c4.Length - c2Len;
 			var c2c1 = ByteUtils.split(c6c5c4, c2Len);
-			IByteArray c2 = c2c1[0];
-			IByteArray c1 = c2c1[1];
+			SafeArrayHandle c2 = c2c1[0];
+			SafeArrayHandle c1 = c2c1[1];
 
 			// compute H(c1) ...
-			IByteArray rPrime = new ByteArray(this.messDigest.GetDigestSize());
+			SafeArrayHandle rPrime = ByteArray.Create(this.messDigest.GetDigestSize());
 			this.messDigest.BlockUpdate(c1.ToExactByteArray(), 0, c1.Length);
 			
 			byte[] result = new byte[this.messDigest.GetDigestSize()];
 			this.messDigest.DoFinal(result, 0);
-			rPrime.CopyFrom(result);
+			rPrime.Entry.CopyFrom(result.AsSpan());
 
 			// ... and XOR with c2 to obtain r'
 			for (int i = c2Len - 1; i >= 0; i--)
@@ -314,7 +314,7 @@ namespace org.bouncycastle.pqc.crypto.mceliece
 			sr0.AddSeedMaterial(rPrime.ToExactByteArray());
 
 			// generate random sequence R(r') ...
-			IByteArray mConstPrime = new ByteArray(c1Len);
+			SafeArrayHandle mConstPrime = ByteArray.Create(c1Len);
 			sr0.NextBytes(mConstPrime.ToExactByteArray());
 
 			// ... and XOR with c1 to obtain (m||const')
@@ -329,8 +329,8 @@ namespace org.bouncycastle.pqc.crypto.mceliece
 			}
 
 			var temp = ByteUtils.split(mConstPrime, c1Len - PUBLIC_CONSTANT.Length);
-			IByteArray mr = temp[0];
-			IByteArray constPrime = temp[1];
+			SafeArrayHandle mr = temp[0];
+			SafeArrayHandle constPrime = temp[1];
 
 			if (!ByteUtils.Equals(constPrime, PUBLIC_CONSTANT))
 			{
@@ -347,8 +347,8 @@ namespace org.bouncycastle.pqc.crypto.mceliece
 
 			int length = BitConverter.ToInt32(sizeBytes, 0);
 			
-			IByteArray newInput = new ByteArray(length);
-			mr.CopyTo(newInput, sizeof(int), 0, length);
+			SafeArrayHandle newInput = ByteArray.Create(length);
+			mr.Entry.CopyTo(newInput.Entry, sizeof(int), 0, length);
 
 			return newInput;
 		}

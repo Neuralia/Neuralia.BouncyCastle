@@ -1,6 +1,5 @@
 ﻿using System;
 using Neuralia.Blockchains.Tools.Data;
-using Neuralia.Blockchains.Tools.Data.Allocation;
 using Neuralia.BouncyCastle.extra.pqc.crypto.ntru.numeric;
 
 namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
@@ -136,14 +135,14 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 		}
 
 		/// <summary>
-		///     Creates a new GF2Polynomial by converting the given IByteArray <i>os</i>
+		///     Creates a new GF2Polynomial by converting the given ArrayWrapper <i>os</i>
 		///     according to 1363 and using the given <i>length</i>.
 		/// </summary>
 		/// <param name="length"> the intended length of this polynomial </param>
 		/// <param name="os">     the octet string to assign to this polynomial </param>
 		/// <seealso cref="P1363 5.5.2 p22f, OS2BSP"
 		/// </seealso>
-		public GF2Polynomial(int length, IByteArray os) {
+		public GF2Polynomial(int length, SafeArrayHandle os) {
 			int l = length;
 
 			if(l < 1) {
@@ -203,11 +202,11 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 			this.value  = new int[this.blocks];
 			this.len    = l;
 			int         i;
-			IByteArray val = bi.ToByteArray();
+			SafeArrayHandle val = bi.ToByteArray();
 
 			if(val[0] == 0) {
-				IByteArray dummy = MemoryAllocators.Instance.cryptoAllocator.Take(val.Length - 1);
-				dummy.CopyFrom(val, 1, 0, dummy.Length);
+				SafeArrayHandle dummy = ByteArray.Create(val.Length - 1);
+				dummy.Entry.CopyFrom(val.Entry, 1, 0, dummy.Length);
 
 				val.Return();
 				val = dummy;
@@ -235,6 +234,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 			}
 
 			this.reduceN();
+			val.Return();
 		}
 
 		/// <summary>
@@ -426,16 +426,16 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 		}
 
 		/// <summary>
-		///     Converts this polynomial to a IByteArray (octet string) according to 1363.
+		///     Converts this polynomial to a ArrayWrapper (octet string) according to 1363.
 		/// </summary>
-		/// <returns> a IByteArray representing the value of this polynomial </returns>
+		/// <returns> a ArrayWrapper representing the value of this polynomial </returns>
 		/// <seealso cref="P1363 5.5.2 p22f, BS2OSP"
 		/// </seealso>
-		public virtual IByteArray toByteArray() {
+		public virtual SafeArrayHandle toByteArray() {
 			int         k  = ((this.len - 1) >> 3) + 1;
 			int         ov = k & 0x03;
 			int         m;
-			IByteArray res = MemoryAllocators.Instance.cryptoAllocator.Take(k);
+			SafeArrayHandle res = ByteArray.Create(k);
 			int         i;
 
 			for(i = 0; i < (k >> 2); i++) {
@@ -462,7 +462,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 		/// </seealso>
 		public virtual BigInteger toFlexiBigInt() {
 			if((this.len == 0) || this.Zero) {
-				return new BigInteger(0, MemoryAllocators.Instance.cryptoAllocator.Take(0));
+				return new BigInteger(0, ByteArray.Create(0));
 			}
 
 			return new BigInteger(1, this.toByteArray());

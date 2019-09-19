@@ -117,7 +117,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.ntru.polynomial {
 		/// <param name="data"> an encoded ternary polynomial </param>
 		/// <param name="N">    number of coefficients </param>
 		/// <returns> the decoded polynomial </returns>
-		public static IntegerPolynomial fromBinary3Sves(IByteArray data, int N) {
+		public static IntegerPolynomial fromBinary3Sves(SafeArrayHandle data, int N) {
 			return new IntegerPolynomial(ArrayEncoder.decodeMod3Sves(data, N));
 		}
 
@@ -127,7 +127,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.ntru.polynomial {
 		/// <param name="b"> a byte array </param>
 		/// <param name="N"> number of coefficients </param>
 		/// <returns> the decoded polynomial </returns>
-		public static IntegerPolynomial fromBinary3Tight(IByteArray b, int N) {
+		public static IntegerPolynomial fromBinary3Tight(SafeArrayHandle b, int N) {
 			return new IntegerPolynomial(ArrayEncoder.decodeMod3Tight(b, N));
 		}
 
@@ -152,7 +152,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.ntru.polynomial {
 		/// <param name="N">    number of coefficients </param>
 		/// <param name="q"> </param>
 		/// <returns> the decoded polynomial </returns>
-		public static IntegerPolynomial fromBinary(IByteArray data, int N, int q) {
+		public static IntegerPolynomial fromBinary(SafeArrayHandle data, int N, int q) {
 			return new IntegerPolynomial(ArrayEncoder.decodeModQ(data, N, q));
 		}
 
@@ -177,7 +177,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.ntru.polynomial {
 		///     so this method is only safe to use with polynomials produced by <code>fromBinary3Sves()</code>.
 		/// </summary>
 		/// <returns> the encoded polynomial </returns>
-		public virtual IByteArray toBinary3Sves() {
+		public virtual SafeArrayHandle toBinary3Sves() {
 			return ArrayEncoder.encodeMod3Sves(this.coeffs);
 		}
 
@@ -185,7 +185,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.ntru.polynomial {
 		///     Converts a polynomial with ternary coefficients to binary.
 		/// </summary>
 		/// <returns> the encoded polynomial </returns>
-		public virtual IByteArray toBinary3Tight() {
+		public virtual SafeArrayHandle toBinary3Tight() {
 			return ArrayEncoder.encodeMod3Tight(this.coeffs);
 		}
 
@@ -194,7 +194,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.ntru.polynomial {
 		/// </summary>
 		/// <param name="q"> </param>
 		/// <returns> the encoded polynomial </returns>
-		public virtual IByteArray toBinary(int q) {
+		public virtual SafeArrayHandle toBinary(int q) {
 			return ArrayEncoder.encodeModQ(this.coeffs, q);
 		}
 

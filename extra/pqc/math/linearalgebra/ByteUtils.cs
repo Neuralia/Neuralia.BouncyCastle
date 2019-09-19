@@ -1,6 +1,5 @@
 ﻿using System;
 using Neuralia.Blockchains.Tools.Data;
-using Neuralia.Blockchains.Tools.Data.Allocation;
 
 namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 	/// <summary>
@@ -23,7 +22,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 		/// <param name="left">  the first byte array </param>
 		/// <param name="right"> the second byte array </param>
 		/// <returns> the result of the comparison </returns>
-		public static bool Equals(IByteArray left, IByteArray right) {
+		public static bool Equals(SafeArrayHandle left, SafeArrayHandle right) {
 			if(left == null) {
 				return right == null;
 			}
@@ -51,7 +50,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 		/// <param name="left">  the first byte array </param>
 		/// <param name="right"> the second byte array </param>
 		/// <returns> the result of the comparison </returns>
-		public static bool Equals(MemoryBlockDoubleArray left, MemoryBlockDoubleArray right) {
+		public static bool Equals(ByteArray[] left, ByteArray[] right) {
 			if(left.Length != right.Length) {
 				return false;
 			}
@@ -71,7 +70,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 		/// <param name="left">  the first byte array </param>
 		/// <param name="right"> the second byte array </param>
 		/// <returns> the result of the comparison </returns>
-		public static bool Equals(MemoryBlockDoubleArray[] left, MemoryBlockDoubleArray[] right) {
+		public static bool Equals(ByteArray[][] left, ByteArray[][] right) {
 			if(left.Length != right.Length) {
 				return false;
 			}
@@ -97,7 +96,17 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 		/// </summary>
 		/// <param name="array"> the array to compute the hashcode of </param>
 		/// <returns> the hashcode </returns>
-		public static int deepHashCode(IByteArray array) {
+		public static int deepHashCode(SafeArrayHandle array) {
+			int result = 1;
+
+			for(int i = 0; i < array.Length; i++) {
+				result = (31 * result) + array[i];
+			}
+
+			return result;
+		}
+		
+		public static int deepHashCode(ByteArray array) {
 			int result = 1;
 
 			for(int i = 0; i < array.Length; i++) {
@@ -113,7 +122,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 		/// </summary>
 		/// <param name="array"> the array to compute the hashcode of </param>
 		/// <returns> the hashcode </returns>
-		public static int deepHashCode(MemoryBlockDoubleArray array) {
+		public static int deepHashCode(ByteArray[] array) {
 			int result = 1;
 
 			for(int i = 0; i < array.Length; i++) {
@@ -129,7 +138,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 		/// </summary>
 		/// <param name="array"> the array to compute the hashcode of </param>
 		/// <returns> the hashcode </returns>
-		public static int deepHashCode(MemoryBlockDoubleArray[] array) {
+		public static int deepHashCode(ByteArray[][] array) {
 			int result = 1;
 
 			for(int i = 0; i < array.Length; i++) {
@@ -147,13 +156,13 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 		///     the clone of the given array, or <tt>null</tt> if the array is
 		///     <tt>null</tt>
 		/// </returns>
-		public static IByteArray clone(IByteArray array) {
+		public static SafeArrayHandle clone(SafeArrayHandle array) {
 			if(array == null) {
 				return null;
 			}
 
-			IByteArray result = MemoryAllocators.Instance.cryptoAllocator.Take(array.Length);
-			result.CopyFrom(array, 0, 0, array.Length);
+			SafeArrayHandle result = ByteArray.Create(array.Length);
+			result.Entry.CopyFrom(array.Entry, 0, 0, array.Length);
 
 			return result;
 		}
@@ -163,7 +172,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 		/// </summary>
 		/// <param name="s"> a hex string </param>
 		/// <returns> a byte array with the corresponding value </returns>
-		public static IByteArray fromHexString(string s) {
+		public static SafeArrayHandle fromHexString(string s) {
 			char[] rawChars = s.ToUpper().ToCharArray();
 
 			int hexChars = 0;
@@ -174,7 +183,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 				}
 			}
 
-			IByteArray byteString = MemoryAllocators.Instance.cryptoAllocator.Take((hexChars + 1) >> 1);
+			SafeArrayHandle byteString = ByteArray.Create((hexChars + 1) >> 1);
 
 			int pos = hexChars & 1;
 
@@ -200,7 +209,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 		/// </summary>
 		/// <param name="input"> the byte array to be converted </param>
 		/// <returns> the corresponding hexstring </returns>
-		public static string toHexString(IByteArray input) {
+		public static string toHexString(SafeArrayHandle input) {
 			string result = "";
 
 			for(int i = 0; i < input.Length; i++) {
@@ -218,7 +227,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 		/// <param name="prefix">    the prefix to put at the beginning of the hex string </param>
 		/// <param name="seperator"> a separator string </param>
 		/// <returns> the corresponding hex string </returns>
-		public static string toHexString(IByteArray input, string prefix, string seperator) {
+		public static string toHexString(SafeArrayHandle input, string prefix, string seperator) {
 			string result = prefix;
 
 			for(int i = 0; i < input.Length; i++) {
@@ -238,7 +247,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 		/// </summary>
 		/// <param name="input"> the byte array to be converted </param>
 		/// <returns> the corresponding bit string </returns>
-		public static string toBinaryString(IByteArray input) {
+		public static string toBinaryString(SafeArrayHandle input) {
 			string result = "";
 			int    i;
 
@@ -265,8 +274,8 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 		/// <param name="x1"> the first array </param>
 		/// <param name="x2"> the second array </param>
 		/// <returns> x1 XOR x2 </returns>
-		public static IByteArray xor(IByteArray x1, IByteArray x2) {
-			IByteArray @out = MemoryAllocators.Instance.cryptoAllocator.Take(x1.Length);
+		public static SafeArrayHandle xor(SafeArrayHandle x1, SafeArrayHandle x2) {
+			SafeArrayHandle @out = ByteArray.Create(x1.Length);
 
 			for(int i = x1.Length - 1; i >= 0; i--) {
 				@out[i] = (byte) (x1[i] ^ x2[i]);
@@ -284,11 +293,11 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 		///     (x2||x1) (little-endian order, i.e. x1 is at lower memory
 		///     addresses)
 		/// </returns>
-		public static IByteArray concatenate(IByteArray x1, IByteArray x2) {
-			IByteArray result = MemoryAllocators.Instance.cryptoAllocator.Take(x1.Length + x2.Length);
+		public static SafeArrayHandle concatenate(SafeArrayHandle x1, SafeArrayHandle x2) {
+			SafeArrayHandle result = ByteArray.Create(x1.Length + x2.Length);
 
-			x1.CopyTo(result);
-			x2.CopyTo(result, 0, x1.Length, x2.Length);
+			x1.Entry.CopyTo(result.Entry);
+			x2.Entry.CopyTo(result.Entry, 0, x1.Length, x2.Length);
 
 			return result;
 		}
@@ -300,13 +309,13 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 		/// </summary>
 		/// <param name="array"> a 2-dimensional byte array </param>
 		/// <returns> the concatenated input array </returns>
-		public static IByteArray concatenate(MemoryBlockDoubleArray array) {
+		public static SafeArrayHandle concatenate(ByteArray[] array) {
 			int        rowLength = array[0].Length;
-			IByteArray result    = MemoryAllocators.Instance.cryptoAllocator.Take(array.Length * rowLength);
+			SafeArrayHandle result    = ByteArray.Create(array.Length * rowLength);
 			int        index     = 0;
 
 			for(int i = 0; i < array.Length; i++) {
-				result.CopyFrom(array[i], 0, index, rowLength);
+				result.Entry.CopyFrom(array[i], 0, index, rowLength);
 				index += rowLength;
 			}
 
@@ -322,17 +331,17 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 		/// <param name="index"> the index where the byte array is split </param>
 		/// <returns> the splitted input array as an array of two byte arrays </returns>
 		/// <exception cref="ArrayIndexOutOfBoundsException"> if <tt>index</tt> is out of bounds </exception>
-		public static MemoryBlockDoubleArray split(IByteArray input, int index) {
+		public static ByteArray[] split(SafeArrayHandle input, int index) {
 			if(index > input.Length) {
 				throw new IndexOutOfRangeException();
 			}
 
-			MemoryBlockDoubleArray result = MemoryAllocators.Instance.doubleArrayCryptoAllocator.Take(2);
-			result[0] = MemoryAllocators.Instance.cryptoAllocator.Take(index);
-			result[1] = MemoryAllocators.Instance.cryptoAllocator.Take(input.Length - index);
+			ByteArray[] result = new ByteArray[2];
+			result[0] = ByteArray.Create(index);
+			result[1] = ByteArray.Create(input.Length - index);
 
-			result[0].CopyFrom(input, 0, 0, index);
-			result[1].CopyFrom(input, index, 0, input.Length - index);
+			result[0].CopyFrom(input.Entry, 0, 0, index);
+			result[1].CopyFrom(input.Entry, index, 0, input.Length - index);
 
 			return result;
 		}
@@ -347,9 +356,9 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 		///     a subarray of <tt>input</tt>, ranging from <tt>start</tt>
 		///     (inclusively) to <tt>end</tt> (exclusively)
 		/// </returns>
-		public static IByteArray subArray(IByteArray input, int start, int end) {
-			IByteArray result = MemoryAllocators.Instance.cryptoAllocator.Take(end - start);
-			result.CopyFrom(input, start, 0, end - start);
+		public static SafeArrayHandle subArray(SafeArrayHandle input, int start, int end) {
+			SafeArrayHandle result = ByteArray.Create(end - start);
+			result.Entry.CopyFrom(input.Entry, start, 0, end - start);
 
 			return result;
 		}
@@ -363,7 +372,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 		///     a subarray of <tt>input</tt>, ranging from <tt>start</tt> to
 		///     the end of the array
 		/// </returns>
-		public static IByteArray subArray(IByteArray input, int start) {
+		public static SafeArrayHandle subArray(SafeArrayHandle input, int start) {
 			return subArray(input, start, input.Length);
 		}
 
@@ -375,7 +384,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 		///     the byte array
 		/// </param>
 		/// <returns> char array </returns>
-		public static char[] toCharArray(IByteArray input) {
+		public static char[] toCharArray(SafeArrayHandle input) {
 			char[] result = new char[input.Length];
 
 			for(int i = 0; i < input.Length; i++) {

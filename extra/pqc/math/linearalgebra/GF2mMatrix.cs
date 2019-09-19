@@ -1,6 +1,5 @@
 ﻿using System;
 using Neuralia.Blockchains.Tools.Data;
-using Neuralia.Blockchains.Tools.Data.Allocation;
 
 namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 	/// <summary>
@@ -27,8 +26,8 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 		///     Constructor.
 		/// </summary>
 		/// <param name="field"> a finite field GF(2^m) </param>
-		/// <param name="enc">   IByteArray matrix in byte array form </param>
-		public GF2mMatrix(GF2mField field, IByteArray enc) {
+		/// <param name="enc">   ArrayWrapper matrix in byte array form </param>
+		public GF2mMatrix(GF2mField field, SafeArrayHandle enc) {
 
 			this.field = field;
 
@@ -99,7 +98,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 		}
 
 		/// <returns> a byte array encoding of this matrix </returns>
-		public override IByteArray Encoded {
+		public override SafeArrayHandle Encoded {
 			get {
 				int d     = 8;
 				int count = 1;
@@ -109,7 +108,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 					d += 8;
 				}
 
-				IByteArray bf = MemoryAllocators.Instance.cryptoAllocator.Take((this.numRows * this.numColumns * count) + 4);
+				SafeArrayHandle bf = ByteArray.Create((this.numRows * this.numColumns * count) + 4);
 				bf[0] = unchecked((byte) (this.numRows                      & 0xff));
 				bf[1] = unchecked((byte) ((int) ((uint) this.numRows >> 8)  & 0xff));
 				bf[2] = unchecked((byte) ((int) ((uint) this.numRows >> 16) & 0xff));

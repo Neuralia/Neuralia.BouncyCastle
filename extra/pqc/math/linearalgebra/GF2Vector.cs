@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Text;
 using Neuralia.Blockchains.Tools.Data;
-using Neuralia.Blockchains.Tools.Data.Allocation;
 using Org.BouncyCastle.Security;
 
 namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
@@ -147,7 +146,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 		///     Encode this vector as byte array.
 		/// </summary>
 		/// <returns> the encoded vector </returns>
-		public override IByteArray Encoded {
+		public override SafeArrayHandle Encoded {
 			get {
 				int byteLen = (this.length + 7) >> 3;
 
@@ -220,7 +219,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 		/// <param name="length"> the length of the vector </param>
 		/// <param name="encVec"> the encoded vector </param>
 		/// <returns> the decoded vector </returns>
-		public static GF2Vector OS2VP(int length, IByteArray encVec) {
+		public static GF2Vector OS2VP(int length, SafeArrayHandle encVec) {
 			if(length < 0) {
 				throw new ArithmeticException("negative length");
 			}

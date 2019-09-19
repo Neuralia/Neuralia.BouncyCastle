@@ -216,13 +216,13 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.ntru.polynomial {
 			int bitsPerIndex = 32 - Extensions.NumberOfLeadingZeros(maxIndex - 1);
 
 			int        data1Len = ((numOnes * bitsPerIndex) + 7) / 8;
-			IByteArray data1    = Util.readFullLength(@is, data1Len);
+			SafeArrayHandle data1    = Util.readFullLength(@is, data1Len);
 			int[]      ones     = ArrayEncoder.decodeModQ(data1, numOnes, maxIndex);
 
 			data1.Return();
 
 			int        data2Len = ((numNegOnes * bitsPerIndex) + 7) / 8;
-			IByteArray data2    = Util.readFullLength(@is, data2Len);
+			SafeArrayHandle data2    = Util.readFullLength(@is, data2Len);
 			int[]      negOnes  = ArrayEncoder.decodeModQ(data2, numNegOnes, maxIndex);
 
 			data2.Return();
@@ -247,13 +247,13 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.ntru.polynomial {
 		///     Encodes the polynomial to a byte array writing <code>BITS_PER_INDEX</code> bits for each coefficient.
 		/// </summary>
 		/// <returns> the encoded polynomial </returns>
-		public virtual IByteArray toBinary() {
+		public virtual SafeArrayHandle toBinary() {
 			int        maxIndex = 1 << BITS_PER_INDEX;
-			IByteArray bin1     = ArrayEncoder.encodeModQ(this.ones, maxIndex);
-			IByteArray bin2     = ArrayEncoder.encodeModQ(this.negOnes, maxIndex);
+			SafeArrayHandle bin1     = ArrayEncoder.encodeModQ(this.ones, maxIndex);
+			SafeArrayHandle bin2     = ArrayEncoder.encodeModQ(this.negOnes, maxIndex);
 
-			IByteArray bin = FastArrays.CopyOf(bin1, bin1.Length + bin2.Length);
-			bin.CopyFrom(bin2, 0, bin1.Length, bin2.Length);
+			SafeArrayHandle bin = FastArrays.CopyOf(bin1, bin1.Length + bin2.Length);
+			bin.Entry.CopyFrom(bin2.Entry, 0, bin1.Length, bin2.Length);
 
 			bin1.Return();
 			bin2.Return();

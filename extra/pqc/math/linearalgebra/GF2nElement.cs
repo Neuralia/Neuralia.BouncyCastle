@@ -1,5 +1,4 @@
 ﻿using Neuralia.Blockchains.Tools.Data;
-using Neuralia.Blockchains.Tools.Data.Allocation;
 using Neuralia.BouncyCastle.extra.pqc.crypto.ntru.numeric;
 
 namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
@@ -56,7 +55,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 
 		public abstract          string      ToString(int radix);
 		public override abstract string      ToString();
-		public abstract          IByteArray toByteArray();
+		public abstract          SafeArrayHandle toByteArray();
 		public abstract          BigInteger  toFlexiBigInt();
 		public abstract          GFElement   invert();
 		public abstract          void        multiplyThisBy(GFElement factor);

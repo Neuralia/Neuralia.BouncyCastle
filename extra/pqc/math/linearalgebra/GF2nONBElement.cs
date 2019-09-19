@@ -1,6 +1,5 @@
 ﻿using System;
 using Neuralia.Blockchains.Tools.Data;
-using Neuralia.Blockchains.Tools.Data.Allocation;
 using Neuralia.BouncyCastle.extra.pqc.crypto.ntru.numeric;
 using Org.BouncyCastle.Security;
 
@@ -83,7 +82,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 		/// </summary>
 		/// <param name="gf2n"> the field </param>
 		/// <param name="e">    the encoded element </param>
-		public GF2nONBElement(GF2nONBField gf2n, IByteArray e) {
+		public GF2nONBElement(GF2nONBField gf2n, SafeArrayHandle e) {
 			this.mField  = gf2n;
 			this.mDegree = this.mField.Degree;
 			this.mLength = gf2n.ONBLength;
@@ -295,7 +294,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 		///     ... 7} (val[i]<<(i*8)) .... mPol[1]= sum{ i= 8, ... 15} ( val[ i]<<(i*8))
 		/// </summary>
 		/// <param name="val"> the value in ONB representation </param>
-		private void assign(IByteArray val) {
+		private void assign(SafeArrayHandle val) {
 			int j;
 			this.mPol = new long[this.mLength];
 
@@ -949,12 +948,12 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 		///     -conform.
 		/// </summary>
 		/// <returns> this element as byte array </returns>
-		public override IByteArray toByteArray() {
+		public override SafeArrayHandle toByteArray() {
 			/// <summary>
 			/// @todo this method does not reverse the bit-order as it should!!! </summary>
 
 			int         k      = ((this.mDegree - 1) >> 3) + 1;
-			IByteArray result = MemoryAllocators.Instance.cryptoAllocator.Take(k);
+			SafeArrayHandle result = ByteArray.Create(k);
 			int         i;
 
 			for(i = 0; i < k; i++) {

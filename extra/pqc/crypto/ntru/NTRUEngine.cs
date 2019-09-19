@@ -1,8 +1,6 @@
 ﻿using System;
 using Neuralia.Blockchains.Tools;
 using Neuralia.Blockchains.Tools.Data;
-using Neuralia.Blockchains.Tools.Data.Allocation;
-
 using Neuralia.BouncyCastle.extra.pqc.math.ntru.polynomial;
 
 using Org.BouncyCastle.Crypto;
@@ -25,7 +23,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru {
 
 		public string AlgorithmName => "NTRU";
 
-		public virtual void Init(bool forEncryption, ICipherParameters parameters) {
+		public virtual void Init(bool forEncryption, ICipherParameters parameters, SecureRandom random = null) {
 			this.forEncryption = forEncryption;
 
 			if(forEncryption) {
@@ -35,7 +33,8 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru {
 					this.random = p.Random;
 					this.pubKey = (NTRUEncryptionPublicKeyParameters) p.Parameters;
 				} else {
-					this.random = new SecureRandom();
+					
+					this.random = random ?? new SecureRandom();
 					this.pubKey = (NTRUEncryptionPublicKeyParameters) parameters;
 				}
 
@@ -54,7 +53,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru {
 			return ((this.@params.N * this.log2(this.@params.q)) + 7) / 8;
 		}
 
-		public IByteArray ProcessBlock(IByteArray input) {
+		public SafeArrayHandle ProcessBlock(SafeArrayHandle input) {
 
 			if(this.forEncryption) {
 				return this.encrypt(input, this.pubKey);
@@ -71,7 +70,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru {
 		/// <param name="m">      The message to encrypt </param>
 		/// <param name="pubKey"> the public key to encrypt the message with </param>
 		/// <returns> the encrypted message </returns>
-		private IByteArray encrypt(IByteArray m, NTRUEncryptionPublicKeyParameters pubKey) {
+		private SafeArrayHandle encrypt(SafeArrayHandle m, NTRUEncryptionPublicKeyParameters pubKey) {
 			IntegerPolynomial pub = pubKey.h;
 			int               N   = this.@params.N;
 			int               q   = this.@params.q;
@@ -83,7 +82,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru {
 			int        pkLen         = this.@params.pkLen;
 			int        minCallsMask  = this.@params.minCallsMask;
 			bool       hashSeed      = this.@params.hashSeed;
-			IByteArray oid           = this.@params.oid;
+			SafeArrayHandle oid           = this.@params.oid;
 
 			int l = m.Length;
 
@@ -97,29 +96,29 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru {
 
 			while(true) {
 				// M = b|octL|m|p0
-				IByteArray b = MemoryAllocators.Instance.cryptoAllocator.Take(db / 8);
+				SafeArrayHandle b = ByteArray.Create(db / 8);
 				this.random.NextBytes(b.Bytes, b.Offset, b.Length);
-				IByteArray p0 = MemoryAllocators.Instance.cryptoAllocator.Take((maxLenBytes + 1) - l);
-				IByteArray M  = MemoryAllocators.Instance.cryptoAllocator.Take(bufferLenBits / 8);
+				SafeArrayHandle p0 = ByteArray.Create((maxLenBytes + 1) - l);
+				SafeArrayHandle M  = ByteArray.Create(bufferLenBits / 8);
 
-				b.CopyTo(M, 0, 0, b.Length);
+				b.Entry.CopyTo(M.Entry, 0, 0, b.Length);
 
 				M[b.Length] = (byte) l;
-				m.CopyTo(M, 0, b.Length      + 1, m.Length);
-				p0.CopyTo(M, 0, b.Length + 1 + m.Length, p0.Length);
+				m.Entry.CopyTo(M.Entry, 0, b.Length      + 1, m.Length);
+				p0.Entry.CopyTo(M.Entry, 0, b.Length + 1 + m.Length, p0.Length);
 
 				IntegerPolynomial mTrin = IntegerPolynomial.fromBinary3Sves(M, N);
 
 				// sData = OID|m|b|hTrunc
-				IByteArray bh     = pub.toBinary(q);
-				IByteArray hTrunc = this.copyOf(bh, pkLen / 8);
-				IByteArray sData  = this.buildSData(oid, m, l, b, hTrunc);
+				SafeArrayHandle bh     = pub.toBinary(q);
+				SafeArrayHandle hTrunc = this.copyOf(bh, pkLen / 8);
+				SafeArrayHandle sData  = this.buildSData(oid, m, l, b, hTrunc);
 
 				IPolynomial       r  = this.generateBlindingPoly(sData, M);
 				IntegerPolynomial R  = r.mult(pub, q);
 				IntegerPolynomial R4 = R.clone();
 				R4.modPositive(4);
-				IByteArray        oR4  = R4.toBinary(4);
+				SafeArrayHandle        oR4  = R4.toBinary(4);
 				IntegerPolynomial mask = this.MGF(oR4, N, minCallsMask, hashSeed);
 				mTrin.add(mask);
 				mTrin.mod3();
@@ -151,13 +150,13 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru {
 			}
 		}
 
-		private IByteArray buildSData(IByteArray oid, IByteArray m, int l, IByteArray b, IByteArray hTrunc) {
-			IByteArray sData = MemoryAllocators.Instance.cryptoAllocator.Take(oid.Length + l + b.Length + hTrunc.Length);
+		private SafeArrayHandle buildSData(SafeArrayHandle oid, SafeArrayHandle m, int l, SafeArrayHandle b, SafeArrayHandle hTrunc) {
+			SafeArrayHandle sData = ByteArray.Create(oid.Length + l + b.Length + hTrunc.Length);
 
-			oid.CopyTo(sData, 0, 0, oid.Length);
-			m.CopyTo(sData, 0, oid.Length, m.Length);
-			b.CopyTo(sData, 0, oid.Length                 + m.Length, b.Length);
-			hTrunc.CopyTo(sData, 0, oid.Length + m.Length + b.Length, hTrunc.Length);
+			oid.Entry.CopyTo(sData.Entry, 0, 0, oid.Length);
+			m.Entry.CopyTo(sData.Entry, 0, oid.Length, m.Length);
+			b.Entry.CopyTo(sData.Entry, 0, oid.Length                 + m.Length, b.Length);
+			hTrunc.Entry.CopyTo(sData.Entry, 0, oid.Length + m.Length + b.Length, hTrunc.Length);
 
 			return sData;
 		}
@@ -176,7 +175,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru {
 		/// <param name="seed"> </param>
 		/// <param name="M">    message representative </param>
 		/// <returns> a blinding polynomial </returns>
-		private IPolynomial generateBlindingPoly(IByteArray seed, IByteArray M) {
+		private IPolynomial generateBlindingPoly(SafeArrayHandle seed, SafeArrayHandle M) {
 			IndexGenerator ig = new IndexGenerator(seed, this.@params);
 
 			if(this.@params.polyType == NTRUParameters.TERNARY_POLYNOMIAL_TYPE_PRODUCT) {
@@ -233,19 +232,19 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru {
 		/// <param name="N"> </param>
 		/// <param name="minCallsR"> </param>
 		/// <param name="hashSeed">  whether to hash the seed </param>
-		private IntegerPolynomial MGF(IByteArray seed, int N, int minCallsR, bool hashSeed) {
+		private IntegerPolynomial MGF(SafeArrayHandle seed, int N, int minCallsR, bool hashSeed) {
 			IDigest    hashAlg = this.@params.hashAlg;
 			int        hashLen = hashAlg.GetDigestSize();
-			IByteArray buf     = MemoryAllocators.Instance.cryptoAllocator.Take(minCallsR * hashLen);
-			IByteArray Z       = hashSeed ? this.calcHash(hashAlg, seed) : seed;
+			SafeArrayHandle buf     = ByteArray.Create(minCallsR * hashLen);
+			SafeArrayHandle Z       = hashSeed ? this.calcHash(hashAlg, seed) : seed;
 			int        counter = 0;
 
 			while(counter < minCallsR) {
 				hashAlg.BlockUpdate(Z.ToExactByteArray(), 0, Z.Length);
 				this.putInt(hashAlg, counter);
 
-				IByteArray hash = this.calcHash(hashAlg);
-				hash.CopyTo(buf, 0, counter * hashLen, hashLen);
+				SafeArrayHandle hash = this.calcHash(hashAlg);
+				hash.Entry.CopyTo(buf.Entry, 0, counter * hashLen, hashLen);
 
 				hash.Return();
 				counter++;
@@ -294,7 +293,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru {
 				hashAlg.BlockUpdate(Z.ToExactByteArrayCopy(), 0, Z.Length);
 				this.putInt(hashAlg, counter);
 
-				IByteArray hash = this.calcHash(hashAlg);
+				SafeArrayHandle hash = this.calcHash(hashAlg);
 
 				buf?.Return();
 
@@ -311,18 +310,18 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru {
 			hashAlg.Update((byte) counter);
 		}
 
-		private IByteArray calcHash(IDigest hashAlg) {
+		private SafeArrayHandle calcHash(IDigest hashAlg) {
 
 			byte[] tempHash = new byte[hashAlg.GetDigestSize()];
 			hashAlg.DoFinal(tempHash, 0);
 
-			IByteArray resultHash = MemoryAllocators.Instance.cryptoAllocator.Take(tempHash.Length);
-			resultHash.CopyFrom(ref tempHash, 0, 0, tempHash.Length);
+			SafeArrayHandle resultHash = ByteArray.Create(tempHash.Length);
+			resultHash.Entry.CopyFrom(ref tempHash, 0, 0, tempHash.Length);
 
 			return resultHash;
 		}
 
-		private IByteArray calcHash(IDigest hashAlg, IByteArray input) {
+		private SafeArrayHandle calcHash(IDigest hashAlg, SafeArrayHandle input) {
 
 			hashAlg.BlockUpdate(input.Bytes, input.Offset, input.Length);
 
@@ -340,7 +339,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru {
 		///     if  the encrypted data is invalid, or <code>maxLenBytes</code> is greater
 		///     than 255
 		/// </exception>
-		private IByteArray decrypt(IByteArray data, NTRUEncryptionPrivateKeyParameters privKey) {
+		private SafeArrayHandle decrypt(SafeArrayHandle data, NTRUEncryptionPrivateKeyParameters privKey) {
 			IPolynomial       priv_t         = privKey.t;
 			IntegerPolynomial priv_fp        = privKey.fp;
 			IntegerPolynomial pub            = privKey.h;
@@ -352,7 +351,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru {
 			int               pkLen          = this.@params.pkLen;
 			int               minCallsMask   = this.@params.minCallsMask;
 			bool              hashSeed       = this.@params.hashSeed;
-			IByteArray        oid            = this.@params.oid;
+			SafeArrayHandle        oid            = this.@params.oid;
 
 			if(maxMsgLenBytes > 255) {
 				throw new DataLengthException("maxMsgLenBytes values bigger than 255 are not supported");
@@ -380,15 +379,15 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru {
 			cR.modPositive(q);
 			IntegerPolynomial cR4 = cR.clone();
 			cR4.modPositive(4);
-			IByteArray        coR4   = cR4.toBinary(4);
+			SafeArrayHandle        coR4   = cR4.toBinary(4);
 			IntegerPolynomial mask   = this.MGF(coR4, N, minCallsMask, hashSeed);
 			IntegerPolynomial cMTrin = ci;
 			cMTrin.sub(mask);
 			cMTrin.mod3();
-			IByteArray cM = cMTrin.toBinary3Sves();
+			SafeArrayHandle cM = cMTrin.toBinary3Sves();
 
-			IByteArray cb = MemoryAllocators.Instance.cryptoAllocator.Take(bLen);
-			cM.CopyTo(cb, 0, 0, bLen);
+			SafeArrayHandle cb = ByteArray.Create(bLen);
+			cM.Entry.CopyTo(cb.Entry, 0, 0, bLen);
 
 			int cl = cM[bLen] & 0xFF; // llen=1, so read one byte
 
@@ -396,13 +395,13 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru {
 				throw new InvalidCipherTextException("Message too long: " + cl + ">" + maxMsgLenBytes);
 			}
 
-			IByteArray cm = MemoryAllocators.Instance.cryptoAllocator.Take(cl);
-			cM.CopyTo(cm, bLen + 1, 0, cl);
+			SafeArrayHandle cm = ByteArray.Create(cl);
+			cM.Entry.CopyTo(cm.Entry, bLen + 1, 0, cl);
 
-			IByteArray p0 = MemoryAllocators.Instance.cryptoAllocator.Take(cM.Length - (bLen + 1 + cl));
-			cM.CopyTo(p0, bLen + 1 + cl, 0, p0.Length);
+			SafeArrayHandle p0 = ByteArray.Create(cM.Length - (bLen + 1 + cl));
+			cM.Entry.CopyTo(p0.Entry, bLen + 1 + cl, 0, p0.Length);
 
-			IByteArray tempempty = MemoryAllocators.Instance.cryptoAllocator.Take(p0.Length);
+			SafeArrayHandle tempempty = ByteArray.Create(p0.Length);
 
 			
 			if(!FastArrays.ConstantTimeAreEqual(p0, tempempty)) {
@@ -412,9 +411,9 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru {
 			tempempty.Return();
 
 			// sData = OID|m|b|hTrunc
-			IByteArray bh     = pub.toBinary(q);
-			IByteArray hTrunc = this.copyOf(bh, pkLen / 8);
-			IByteArray sData  = this.buildSData(oid, cm, cl, cb, hTrunc);
+			SafeArrayHandle bh     = pub.toBinary(q);
+			SafeArrayHandle hTrunc = this.copyOf(bh, pkLen / 8);
+			SafeArrayHandle sData  = this.buildSData(oid, cm, cl, cb, hTrunc);
 
 			IPolynomial       cr      = this.generateBlindingPoly(sData, cm);
 			IntegerPolynomial cRPrime = cr.mult(pub);
@@ -463,10 +462,10 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru {
 			return c;
 		}
 
-		private IByteArray copyOf(IByteArray src, int len) {
-			IByteArray tmp = MemoryAllocators.Instance.cryptoAllocator.Take(len);
+		private SafeArrayHandle copyOf(SafeArrayHandle src, int len) {
+			SafeArrayHandle tmp = ByteArray.Create(len);
 
-			src.CopyTo(tmp, 0, 0, len < src.Length ? len : src.Length);
+			src.Entry.CopyTo(tmp.Entry, 0, 0, len < src.Length ? len : src.Length);
 
 			return tmp;
 		}

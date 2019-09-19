@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Text;
 using Neuralia.Blockchains.Tools.Data;
-using Neuralia.Blockchains.Tools.Data.Allocation;
 
 namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 
@@ -28,7 +27,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 		/// </summary>
 		/// <param name="field"> finite field </param>
 		/// <param name="v">     array with elements of vector </param>
-		public GF2mVector(GF2mField field, IByteArray v) {
+		public GF2mVector(GF2mField field, SafeArrayHandle v) {
 			this.field = new GF2mField(field);
 
 			// decode vector
@@ -95,7 +94,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 		public virtual int[] IntArrayForm => IntUtils.clone(this.vector);
 
 		/// <returns> a byte array encoding of this vector </returns>
-		public override IByteArray Encoded {
+		public override SafeArrayHandle Encoded {
 			get {
 				int d     = 8;
 				int count = 1;
@@ -105,7 +104,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 					d += 8;
 				}
 
-				IByteArray res = MemoryAllocators.Instance.cryptoAllocator.Take(this.vector.Length * count);
+				SafeArrayHandle res = ByteArray.Create(this.vector.Length * count);
 				count = 0;
 
 				for(int i = 0; i < this.vector.Length; i++) {

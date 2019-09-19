@@ -1,6 +1,5 @@
 ﻿using System;
 using Neuralia.Blockchains.Tools.Data;
-using Neuralia.Blockchains.Tools.Data.Allocation;
 using Org.BouncyCastle.Security;
 
 namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
@@ -58,7 +57,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 		///     Create a permutation from an encoded permutation.
 		/// </summary>
 		/// <param name="enc"> the encoded permutation </param>
-		public Permutation(IByteArray enc) {
+		public Permutation(SafeArrayHandle enc) {
 			if(enc.Length <= 4) {
 				throw new ArgumentException("invalid encoding");
 			}
@@ -114,11 +113,11 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 		///     Encode this permutation as byte array.
 		/// </summary>
 		/// <returns> the encoded permutation </returns>
-		public virtual IByteArray Encoded {
+		public virtual SafeArrayHandle Encoded {
 			get {
 				int         n      = this.perm.Length;
 				int         size   = IntegerFunctions.ceilLog256(n                    - 1);
-				IByteArray result = MemoryAllocators.Instance.cryptoAllocator.Take(4 + (n * size));
+				SafeArrayHandle result = ByteArray.Create(4 + (n * size));
 				LittleEndianConversions.I2OSP(n, result, 0);
 
 				for(int i = 0; i < n; i++) {

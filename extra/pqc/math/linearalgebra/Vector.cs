@@ -1,5 +1,4 @@
 ﻿using Neuralia.Blockchains.Tools.Data;
-using Neuralia.Blockchains.Tools.Data.Allocation;
 
 namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 	/// <summary>
@@ -16,7 +15,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 		public int Length => this.length;
 
 		/// <returns> this vector as byte array </returns>
-		public abstract IByteArray Encoded { get; }
+		public abstract SafeArrayHandle Encoded { get; }
 
 		/// <summary>
 		///     Return whether this is the zero vector (i.e., all elements are zero).

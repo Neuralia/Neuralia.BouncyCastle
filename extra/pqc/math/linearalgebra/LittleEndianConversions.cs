@@ -1,6 +1,5 @@
 ﻿using System;
 using Neuralia.Blockchains.Tools.Data;
-using Neuralia.Blockchains.Tools.Data.Allocation;
 
 namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 	/// <summary>
@@ -25,7 +24,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 		/// <param name="input"> the byte array holding the octet string </param>
 		/// <returns> an integer representing the octet string <tt>input</tt> </returns>
 		/// <exception cref="ArithmeticException"> if the length of the given octet string is larger than 4. </exception>
-		public static int OS2IP(IByteArray input) {
+		public static int OS2IP(SafeArrayHandle input) {
 			return (input[0] & 0xff) | ((input[1] & 0xff) << 8) | ((input[2] & 0xff) << 16) | ((input[3] & 0xff) << 24);
 		}
 
@@ -36,7 +35,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 		/// <param name="input"> the byte array </param>
 		/// <param name="inOff"> the offset into the byte array </param>
 		/// <returns> the resulting integer </returns>
-		public static int OS2IP(IByteArray input, int inOff) {
+		public static int OS2IP(SafeArrayHandle input, int inOff) {
 			int result = input[inOff++] & 0xff;
 			result |= (input[inOff++]   & 0xff) << 8;
 			result |= (input[inOff++]   & 0xff) << 16;
@@ -53,7 +52,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 		/// <param name="inOff"> the offset into the byte array </param>
 		/// <param name="inLen"> the length of the encoding </param>
 		/// <returns> the resulting integer </returns>
-		public static int OS2IP(IByteArray input, int inOff, int inLen) {
+		public static int OS2IP(SafeArrayHandle input, int inOff, int inLen) {
 			int result = 0;
 
 			for(int i = inLen - 1; i >= 0; i--) {
@@ -70,7 +69,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 		/// <param name="input"> the byte array </param>
 		/// <param name="inOff"> the offset into the byte array </param>
 		/// <returns> the resulting long integer </returns>
-		public static long OS2LIP(IByteArray input, int inOff) {
+		public static long OS2LIP(SafeArrayHandle input, int inOff) {
 			long result = input[inOff++]     & 0xff;
 			result |= (input[inOff++]        & 0xff) << 8;
 			result |= (input[inOff++]        & 0xff) << 16;
@@ -88,8 +87,8 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 		/// </summary>
 		/// <param name="x"> the integer to convert </param>
 		/// <returns> the converted integer </returns>
-		public static IByteArray I2OSP(int x) {
-			IByteArray result = MemoryAllocators.Instance.cryptoAllocator.Take(4);
+		public static SafeArrayHandle I2OSP(int x) {
+			SafeArrayHandle result = ByteArray.Create(4);
 			result[0] = (byte) x;
 			result[1] = (byte) (int) ((uint) x >> 8);
 			result[2] = (byte) (int) ((uint) x >> 16);
@@ -104,7 +103,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 		/// <param name="value">  the integer to convert </param>
 		/// <param name="output"> the byte array to hold the result </param>
 		/// <param name="outOff"> the integer offset into the byte array </param>
-		public static void I2OSP(int value, IByteArray output, int outOff) {
+		public static void I2OSP(int value, SafeArrayHandle output, int outOff) {
 			output[outOff++] = (byte) value;
 			output[outOff++] = (byte) (int) ((uint) value >> 8);
 			output[outOff++] = (byte) (int) ((uint) value >> 16);
@@ -120,7 +119,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 		/// <param name="output"> the byte array to hold the result </param>
 		/// <param name="outOff"> the integer offset into the byte array </param>
 		/// <param name="outLen"> the length of the encoding </param>
-		public static void I2OSP(int value, IByteArray output, int outOff, int outLen) {
+		public static void I2OSP(int value, SafeArrayHandle output, int outOff, int outLen) {
 			for(int i = outLen - 1; i >= 0; i--) {
 				output[outOff + i] = (byte) (int) ((uint) value >> (8 * i));
 			}
@@ -131,8 +130,8 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 		/// </summary>
 		/// <param name="input"> the integer to convert </param>
 		/// <returns> the converted integer </returns>
-		public static IByteArray I2OSP(long input) {
-			IByteArray output = MemoryAllocators.Instance.cryptoAllocator.Take(8);
+		public static SafeArrayHandle I2OSP(long input) {
+			SafeArrayHandle output = ByteArray.Create(8);
 			output[0] = (byte) input;
 			output[1] = (byte) (long) ((ulong) input >> 8);
 			output[2] = (byte) (long) ((ulong) input >> 16);
@@ -151,7 +150,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 		/// <param name="input">  the integer to convert </param>
 		/// <param name="output"> byte array holding the output </param>
 		/// <param name="outOff"> offset in output array where the result is stored </param>
-		public static void I2OSP(long input, IByteArray output, int outOff) {
+		public static void I2OSP(long input, SafeArrayHandle output, int outOff) {
 			output[outOff++] = (byte) input;
 			output[outOff++] = (byte) (long) ((ulong) input >> 8);
 			output[outOff++] = (byte) (long) ((ulong) input >> 16);
@@ -170,9 +169,9 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 		/// <param name="input">  the int array </param>
 		/// <param name="outLen"> the length of the converted array </param>
 		/// <returns> the converted array </returns>
-		public static IByteArray toByteArray(int[] input, int outLen) {
+		public static SafeArrayHandle toByteArray(int[] input, int outLen) {
 			int         intLen = input.Length;
-			IByteArray result = MemoryAllocators.Instance.cryptoAllocator.Take(outLen);
+			SafeArrayHandle result = ByteArray.Create(outLen);
 			int         index  = 0;
 
 			for(int i = 0; i <= (intLen - 2); i++, index += 4) {
@@ -189,7 +188,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 		/// </summary>
 		/// <param name="input"> the byte array </param>
 		/// <returns> the converted array </returns>
-		public static int[] toIntArray(IByteArray input) {
+		public static int[] toIntArray(SafeArrayHandle input) {
 			int   intLen  = (input.Length + 3) / 4;
 			int   lastLen = input.Length & 0x03;
 			int[] result  = new int[intLen];

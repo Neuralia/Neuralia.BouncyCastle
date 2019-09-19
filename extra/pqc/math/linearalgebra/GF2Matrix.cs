@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Text;
 using Neuralia.Blockchains.Tools.Data;
-using Neuralia.Blockchains.Tools.Data.Allocation;
 using Org.BouncyCastle.Security;
 
 namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
@@ -30,7 +29,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 		///     Create the matrix from encoded form.
 		/// </summary>
 		/// <param name="enc"> the encoded matrix </param>
-		public GF2Matrix(IByteArray enc) {
+		public GF2Matrix(SafeArrayHandle enc) {
 			if(enc.Length < 9) {
 				throw new ArithmeticException("given array is not an encoded matrix over GF(2)");
 			}
@@ -189,12 +188,12 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 		///     Returns encoded matrix, i.e., this matrix in byte array form
 		/// </summary>
 		/// <returns> the encoded matrix </returns>
-		public override IByteArray Encoded {
+		public override SafeArrayHandle Encoded {
 			get {
 				int n = (int) ((uint) (this.numColumns + 7) >> 3);
 				n *= this.numRows;
 				n += 8;
-				IByteArray enc = MemoryAllocators.Instance.cryptoAllocator.Take(n);
+				SafeArrayHandle enc = ByteArray.Create(n);
 
 				LittleEndianConversions.I2OSP(this.numRows, enc, 0);
 				LittleEndianConversions.I2OSP(this.numColumns, enc, 4);

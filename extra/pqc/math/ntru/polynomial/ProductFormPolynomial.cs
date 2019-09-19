@@ -57,7 +57,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.ntru.polynomial {
 			return new ProductFormPolynomial(f1, f2, f3);
 		}
 
-		public static ProductFormPolynomial fromBinary(IByteArray data, int N, int df1, int df2, int df3Ones, int df3NegOnes) {
+		public static ProductFormPolynomial fromBinary(SafeArrayHandle data, int N, int df1, int df2, int df3Ones, int df3NegOnes) {
 			return fromBinary(new MemoryStream(data.ToExactByteArray()), N, df1, df2, df3Ones, df3NegOnes);
 		}
 
@@ -71,15 +71,15 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.ntru.polynomial {
 			return new ProductFormPolynomial(f1, f2, f3);
 		}
 
-		public virtual IByteArray toBinary() {
-			IByteArray f1Bin = this.f1.toBinary();
-			IByteArray f2Bin = this.f2.toBinary();
-			IByteArray f3Bin = this.f3.toBinary();
+		public virtual SafeArrayHandle toBinary() {
+			SafeArrayHandle f1Bin = this.f1.toBinary();
+			SafeArrayHandle f2Bin = this.f2.toBinary();
+			SafeArrayHandle f3Bin = this.f3.toBinary();
 
-			IByteArray all = FastArrays.CopyOf(f1Bin, f1Bin.Length + f2Bin.Length + f3Bin.Length);
+			SafeArrayHandle all = FastArrays.CopyOf(f1Bin, f1Bin.Length + f2Bin.Length + f3Bin.Length);
 
-			all.CopyFrom(f2Bin, 0, f1Bin.Length, f2Bin.Length);
-			all.CopyFrom(f2Bin, 0, f1Bin.Length + f2Bin.Length, f3Bin.Length);
+			all.Entry.CopyFrom(f2Bin.Entry, 0, f1Bin.Length, f2Bin.Length);
+			all.Entry.CopyFrom(f2Bin.Entry, 0, f1Bin.Length + f2Bin.Length, f3Bin.Length);
 
 			f1Bin.Return();
 			f2Bin.Return();

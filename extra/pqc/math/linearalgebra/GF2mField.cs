@@ -1,6 +1,5 @@
 ﻿using System;
 using Neuralia.Blockchains.Tools.Data;
-using Neuralia.Blockchains.Tools.Data.Allocation;
 using Org.BouncyCastle.Security;
 
 namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
@@ -64,7 +63,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 
 		}
 
-		public GF2mField(IByteArray enc) {
+		public GF2mField(SafeArrayHandle enc) {
 			if(enc.Length != 4) {
 				throw new ArgumentException("byte array is not an encoded finite field");
 			}
@@ -99,7 +98,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 		///     return the encoded form of this field
 		/// </summary>
 		/// <returns> the field in byte array form </returns>
-		public virtual IByteArray Encoded => LittleEndianConversions.I2OSP(this.polynomial);
+		public virtual SafeArrayHandle Encoded => LittleEndianConversions.I2OSP(this.polynomial);
 
 		/// <summary>
 		///     create a random non-zero field element
