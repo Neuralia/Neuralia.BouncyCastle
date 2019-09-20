@@ -1,6 +1,6 @@
 #!/bin/bash
 
-dotnet restore
+dotnet restore --no-cache
 
 if dotnet build Neuralia.BouncyCastle.sln -c Release --no-incremental ; then
     if  dotnet pack Neuralia.BouncyCastle.sln -c Release -o ./ ; then
