@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text;
 using Neuralia.Blockchains.Tools.Data;
+using Neuralia.Blockchains.Tools.Data.Arrays;
 
 namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 

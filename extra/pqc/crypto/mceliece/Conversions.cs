@@ -1,5 +1,6 @@
 ﻿using System;
 using Neuralia.Blockchains.Tools.Data;
+using Neuralia.Blockchains.Tools.Data.Arrays;
 using Neuralia.BouncyCastle.extra.pqc.crypto.ntru.numeric;
 using Neuralia.BouncyCastle.extra.pqc.math.linearalgebra;
 

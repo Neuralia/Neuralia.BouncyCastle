@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using Neuralia.Blockchains.Tools.Data;
+using Neuralia.Blockchains.Tools.Data.Arrays;
 using Org.BouncyCastle.Math;
 
 namespace Neuralia.BouncyCastle.extra.pqc.math.ntru.util {
@@ -234,7 +235,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.ntru.util {
 			}
 
 			int       size = (THREE.Pow(intArray.Length).BitLength + 7) / 8;
-			ByteArray arr  = sum.ToByteArray();
+			ByteArray arr  = ByteArray.WrapAndOwn(sum.ToByteArray());
 
 			if(arr.Length < size) {
 				// pad with leading zeros so arr.length==size

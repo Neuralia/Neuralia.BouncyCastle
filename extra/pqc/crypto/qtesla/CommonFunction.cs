@@ -1,7 +1,8 @@
 ﻿using System;
+using Neuralia.Blockchains.Tools.Serialization;
 
 namespace Neuralia.BouncyCastle.extra.pqc.crypto.qtesla {
-	internal class CommonFunction {
+	internal unsafe class CommonFunction {
 
 		/// <summary>
 		///     **************************************************************************************************
@@ -23,18 +24,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.qtesla {
 
 			if(((leftOffset + length) <= left.Length) && ((rightOffset + length) <= right.Length)) {
 
-				for(int i = 0; i < length; i++) {
-
-					if(left[leftOffset + i] != right[rightOffset + i]) {
-
-						return false;
-
-					}
-
-				}
-
-				return true;
-
+				return left.AsSpan().Slice(leftOffset, length).SequenceEqual(right.AsSpan().Slice(rightOffset, length));
 			}
 
 			return false;
@@ -58,21 +48,14 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.qtesla {
 
 			short number = 0;
 
-			if((load.Length - loadOffset) >= (Const.SHORT_SIZE / Const.BYTE_SIZE)) {
-
-				number ^= (short) ((short)  (load[loadOffset + 0] & 0xFF) << (Const.BYTE_SIZE * 0));
-				number ^= (short) ((short)  (load[loadOffset + 1] & 0xFF) << (Const.BYTE_SIZE * 1));
-
-			} else {
-
-				for(int i = 0; i < (load.Length - loadOffset); i++) {
-
-					number ^= (short) ((short) (load[loadOffset + i] & 0xFF) << (Const.BYTE_SIZE * i));
-
-				}
-
+			if(load.Length <= loadOffset) {
+				return number;
 			}
-
+			fixed(sbyte* ptr = load.AsSpan().Slice(loadOffset, load.Length - loadOffset)) {
+				
+				TypeSerializer.Deserialize((byte*)ptr, out  number);
+			}
+			
 			return number;
 
 		}
@@ -93,24 +76,14 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.qtesla {
 		public static int load32(sbyte[] load, int loadOffset) {
 
 			int number = 0;
-
-			if((load.Length - loadOffset) >= (Const.INT_SIZE / Const.BYTE_SIZE)) {
-
-				number ^= (int) (load[loadOffset + 0] & 0xFF) << (Const.BYTE_SIZE * 0);
-				number ^= (int) (load[loadOffset + 1] & 0xFF) << (Const.BYTE_SIZE * 1);
-				number ^= (int) (load[loadOffset + 2] & 0xFF) << (Const.BYTE_SIZE * 2);
-				number ^= (int) (load[loadOffset + 3] & 0xFF) << (Const.BYTE_SIZE * 3);
-
-			} else {
-
-				for(int i = 0; i < (load.Length - loadOffset); i++) {
-
-					number ^= (load[loadOffset + i] & 0xFF) << (Const.BYTE_SIZE * i);
-
-				}
-
+			if(load.Length <= loadOffset) {
+				return number;
 			}
-
+			fixed(sbyte* ptr = load.AsSpan().Slice(loadOffset, load.Length - loadOffset)) {
+				
+				TypeSerializer.Deserialize((byte*)ptr, out  number);
+			}
+			
 			return number;
 
 		}
@@ -130,28 +103,15 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.qtesla {
 		/// </returns>
 		public static long load64(sbyte[] load, int loadOffset) {
 
-			long number = 0L;
-
-			if((load.Length - loadOffset) >= (Const.LONG_SIZE / Const.BYTE_SIZE)) {
-
-				number ^= (long) (load[loadOffset + 0] & 0xFF) << (Const.BYTE_SIZE * 0);
-				number ^= (long) (load[loadOffset + 1] & 0xFF) << (Const.BYTE_SIZE * 1);
-				number ^= (long) (load[loadOffset + 2] & 0xFF) << (Const.BYTE_SIZE * 2);
-				number ^= (long) (load[loadOffset + 3] & 0xFF) << (Const.BYTE_SIZE * 3);
-				number ^= (long) (load[loadOffset + 4] & 0xFF) << (Const.BYTE_SIZE * 4);
-				number ^= (long) (load[loadOffset + 5] & 0xFF) << (Const.BYTE_SIZE * 5);
-				number ^= (long) (load[loadOffset + 6] & 0xFF) << (Const.BYTE_SIZE * 6);
-				number ^= (long) (load[loadOffset + 7] & 0xFF) << (Const.BYTE_SIZE * 7);
-			} else {
-
-				for(int i = 0; i < (load.Length - loadOffset); i++) {
-
-					number ^= (long) (load[loadOffset + i] & 0xFF) << (Const.BYTE_SIZE * i);
-
-				}
-
+			long number = 0;
+			if(load.Length <= loadOffset) {
+				return number;
 			}
-
+			fixed(sbyte* ptr = load.AsSpan().Slice(loadOffset, load.Length - loadOffset)) {
+				
+				TypeSerializer.Deserialize((byte*)ptr, out  number);
+			}
+			
 			return number;
 
 		}
@@ -172,21 +132,13 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.qtesla {
 		/// </returns>
 		public static void store16(sbyte[] store, int storeOffset, short number) {
 
-			if((store.Length - storeOffset) >= (Const.SHORT_SIZE / Const.BYTE_SIZE)) {
-
-				store[storeOffset + 0] = unchecked((sbyte) ((number >> (Const.BYTE_SIZE * 0)) & 0xFF));
-				store[storeOffset + 1] = unchecked((sbyte) ((number >> (Const.BYTE_SIZE * 1)) & 0xFF));
-
-			} else {
-
-				for(int i = 0; i < (store.Length - storeOffset); i++) {
-
-					store[storeOffset + i] = unchecked((sbyte) ((number >> (Const.BYTE_SIZE * i)) & 0xFF));
-
-				}
-
+			if(store.Length <= storeOffset) {
+				return;
 			}
-
+			fixed(sbyte* ptr = store.AsSpan().Slice(storeOffset, store.Length - storeOffset)) {
+				
+				TypeSerializer.Serialize(number, (byte*)ptr);
+			}
 		}
 
 		/// <summary>
@@ -205,21 +157,12 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.qtesla {
 		/// </returns>
 		public static void store32(sbyte[] store, int storeOffset, int number) {
 
-			if((store.Length - storeOffset) >= (Const.INT_SIZE / Const.BYTE_SIZE)) {
-
-				store[storeOffset + 0] = unchecked((sbyte) ((number >> (Const.BYTE_SIZE * 0)) & 0xFF));
-				store[storeOffset + 1] = unchecked((sbyte) ((number >> (Const.BYTE_SIZE * 1)) & 0xFF));
-				store[storeOffset + 2] = unchecked((sbyte) ((number >> (Const.BYTE_SIZE * 2)) & 0xFF));
-				store[storeOffset + 3] = unchecked((sbyte) ((number >> (Const.BYTE_SIZE * 3)) & 0xFF));
-
-			} else {
-
-				for(int i = 0; i < (store.Length - storeOffset); i++) {
-
-					store[storeOffset + i] = unchecked((sbyte) ((number >> (Const.BYTE_SIZE * i)) & 0xFF));
-
-				}
-
+			if(store.Length <= storeOffset) {
+				return;
+			}
+			fixed(sbyte* ptr = store.AsSpan().Slice(storeOffset, store.Length - storeOffset)) {
+				
+				TypeSerializer.Serialize(number, (byte*)ptr);
 			}
 
 		}
@@ -240,25 +183,12 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.qtesla {
 		/// </returns>
 		public static void store64(sbyte[] store, int storeOffset, long number) {
 
-			if((store.Length - storeOffset) >= (Const.LONG_SIZE / Const.BYTE_SIZE)) {
-
-				store[storeOffset + 0] = unchecked((sbyte) ((number >> (Const.BYTE_SIZE * 0)) & 0xFFL));
-				store[storeOffset + 1] = unchecked((sbyte) ((number >> (Const.BYTE_SIZE * 1)) & 0xFFL));
-				store[storeOffset + 2] = unchecked((sbyte) ((number >> (Const.BYTE_SIZE * 2)) & 0xFFL));
-				store[storeOffset + 3] = unchecked((sbyte) ((number >> (Const.BYTE_SIZE * 3)) & 0xFFL));
-				store[storeOffset + 4] = unchecked((sbyte) ((number >> (Const.BYTE_SIZE * 4)) & 0xFFL));
-				store[storeOffset + 5] = unchecked((sbyte) ((number >> (Const.BYTE_SIZE * 5)) & 0xFFL));
-				store[storeOffset + 6] = unchecked((sbyte) ((number >> (Const.BYTE_SIZE * 6)) & 0xFFL));
-				store[storeOffset + 7] = unchecked((sbyte) ((number >> (Const.BYTE_SIZE * 7)) & 0xFFL));
-
-			} else {
-
-				for(int i = 0; i < (store.Length - storeOffset); i++) {
-
-					store[storeOffset + i] = unchecked((sbyte) ((number >> (Const.BYTE_SIZE * i)) & 0xFFL));
-
-				}
-
+			if(store.Length <= storeOffset) {
+				return;
+			}
+			fixed(sbyte* ptr = store.AsSpan().Slice(storeOffset, store.Length - storeOffset)) {
+				
+				TypeSerializer.Serialize(number, (byte*)ptr);
 			}
 
 		}

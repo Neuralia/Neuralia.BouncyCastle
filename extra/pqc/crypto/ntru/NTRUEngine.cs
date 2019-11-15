@@ -1,6 +1,7 @@
 ﻿using System;
 using Neuralia.Blockchains.Tools;
 using Neuralia.Blockchains.Tools.Data;
+using Neuralia.Blockchains.Tools.Data.Arrays;
 using Neuralia.BouncyCastle.extra.pqc.math.ntru.polynomial;
 
 using Org.BouncyCastle.Crypto;
@@ -14,7 +15,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru {
 	///     <br>
 	///         The parameter p is hardcoded to 3.
 	/// </summary>
-	public class NTRUEngine : IDisposable2 {
+	public class NTRUEngine : IDisposableExtended {
 		private bool                               forEncryption;
 		private NTRUEncryptionParameters           @params;
 		private NTRUEncryptionPrivateKeyParameters privKey;

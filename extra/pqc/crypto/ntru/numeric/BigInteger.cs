@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 using Neuralia.Blockchains.Tools.Data;
+using Neuralia.Blockchains.Tools.Data.Arrays;
 using Org.BouncyCastle.Security;
 
 #region License Information

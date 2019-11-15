@@ -3,6 +3,7 @@ using System.IO;
 using System.Text;
 using Neuralia.Blockchains.Tools;
 using Neuralia.Blockchains.Tools.Data;
+using Neuralia.Blockchains.Tools.Data.Arrays;
 using Neuralia.Blockchains.Tools.Serialization;
 
 using Neuralia.BouncyCastle.extra.crypto.digests;
@@ -19,7 +20,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru {
 	///     A set of parameters for NtruEncrypt. Several predefined parameter sets are available and new ones can be created as
 	///     well.
 	/// </summary>
-	public class NTRUEncryptionKeyGenerationParameters : KeyGenerationParameters, ICloneable, IDisposable2 {
+	public class NTRUEncryptionKeyGenerationParameters : KeyGenerationParameters, ICloneable, IDisposableExtended {
 
 		public enum NTRUEncryptionKeyGenerationParametersTypes {
 			EES1087EP2, EES1171EP1, EES1499EP1,
@@ -34,52 +35,52 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru {
 			switch(type) {
 				//     A conservative (in terms of security) parameter set that gives 256 bits of security and is optimized for key size.
 				case NTRUEncryptionKeyGenerationParametersTypes.EES1087EP2:
-					return new NTRUEncryptionKeyGenerationParameters(1087, 2048, 120, 120, 256, 13, 25, 14, true, (ByteArray) new byte[] {0, 6, 3}, true, false, digest512Generator());
+					return new NTRUEncryptionKeyGenerationParameters(1087, 2048, 120, 120, 256, 13, 25, 14, true, ByteArray.WrapAndOwn(new byte[] {0, 6, 3}), true, false, digest512Generator());
 					break;
 				// A conservative (in terms of security) parameter set that gives 256 bits of security and is a tradeoff between key
 				//     size and encryption/decryption speed.
 				case NTRUEncryptionKeyGenerationParametersTypes.EES1171EP1:
-					return new NTRUEncryptionKeyGenerationParameters(1171, 2048, 106, 106, 256, 13, 20, 15, true, (ByteArray) new byte[] {0, 6, 4}, true, false, digest512Generator());
+					return new NTRUEncryptionKeyGenerationParameters(1171, 2048, 106, 106, 256, 13, 20, 15, true, ByteArray.WrapAndOwn(new byte[] {0, 6, 4}), true, false, digest512Generator());
 					break;
 				case NTRUEncryptionKeyGenerationParametersTypes.EES1499EP1:
 					//    A conservative (in terms of security) parameter set that gives 256 bits of security and is optimized for
 					//    encryption/decryption speed.
 
-					return new NTRUEncryptionKeyGenerationParameters(1499, 2048, 79, 79, 256, 13, 17, 19, true, (ByteArray) new byte[] {0, 6, 5}, true, false, digest512Generator());
+					return new NTRUEncryptionKeyGenerationParameters(1499, 2048, 79, 79, 256, 13, 17, 19, true, ByteArray.WrapAndOwn(new byte[] {0, 6, 5}), true, false, digest512Generator());
 					break;
 				case NTRUEncryptionKeyGenerationParametersTypes.EES1499EP1_EXT:
 					//    A conservative (in terms of security) parameter set that gives 512 bits of security and is optimized for
 					//    encryption/decryption speed.
 		
-					return new NTRUEncryptionKeyGenerationParameters(1499, 2048, 146, 146, 512, 13, 41, 19, true, (ByteArray) new byte[] {2, 20, 2, 1, 43, 54, 66}, true, true, digest512Generator());
+					return new NTRUEncryptionKeyGenerationParameters(1499, 2048, 146, 146, 512, 13, 41, 19, true, ByteArray.WrapAndOwn(new byte[] {2, 20, 2, 1, 43, 54, 66}), true, true, digest512Generator());
 
 					break;
 				case NTRUEncryptionKeyGenerationParametersTypes.APR2011_439:
 							
 					//    A parameter set that gives 128 bits of security and uses simple ternary polynomials.
 		
-					return new NTRUEncryptionKeyGenerationParameters(439, 2048, 146, 130, 128, 9, 32, 9, true, (ByteArray) new byte[] {0, 7, 101}, true, false, digest256Generator());
+					return new NTRUEncryptionKeyGenerationParameters(439, 2048, 146, 130, 128, 9, 32, 9, true, ByteArray.WrapAndOwn(new byte[] {0, 7, 101}), true, false, digest256Generator());
 
 					break;
 				case NTRUEncryptionKeyGenerationParametersTypes.APR2011_439_FAST:
 					//    Like <code>APR2011_439</code>, this parameter set gives 128 bits of security but uses product-form polynomials and
 					//    <code>f=1+pF</code>.
 		
-					return new NTRUEncryptionKeyGenerationParameters(439, 2048, 9, 8, 5, 130, 128, 9, 32, 9, true, (ByteArray) new byte[] {0, 7, 101}, true, true, digest256Generator());
+					return new NTRUEncryptionKeyGenerationParameters(439, 2048, 9, 8, 5, 130, 128, 9, 32, 9, true, ByteArray.WrapAndOwn(new byte[] {0, 7, 101}), true, true, digest256Generator());
 
 
 					break;
 				case NTRUEncryptionKeyGenerationParametersTypes.APR2011_743:
 					//    A parameter set that gives 256 bits of security and uses simple ternary polynomials.
 		
-					return new NTRUEncryptionKeyGenerationParameters(743, 2048, 248, 220, 512, 10, 27, 14, true, (ByteArray) new byte[] {0, 7, 105}, false, false, digest512Generator());
+					return new NTRUEncryptionKeyGenerationParameters(743, 2048, 248, 220, 512, 10, 27, 14, true, ByteArray.WrapAndOwn(new byte[] {0, 7, 105}), false, false, digest512Generator());
 
 					break;
 				case NTRUEncryptionKeyGenerationParametersTypes.APR2011_743_FAST:
 					//    Like <code>APR2011_743</code>, this parameter set gives 256 bits of security but uses product-form polynomials and
 					//    <code>f=1+pF</code>.
 		
-					return new NTRUEncryptionKeyGenerationParameters(743, 2048, 11, 11, 15, 220, 512, 10, 27, 14, true, (ByteArray) new byte[] {0, 7, 105}, false, true, digest512Generator());
+					return new NTRUEncryptionKeyGenerationParameters(743, 2048, 11, 11, 15, 220, 512, 10, 27, 14, true, ByteArray.WrapAndOwn(new byte[] {0, 7, 105}), false, true, digest512Generator());
 
 					break;
 				default:

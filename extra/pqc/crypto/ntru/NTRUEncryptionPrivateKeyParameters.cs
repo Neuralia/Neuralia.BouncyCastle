@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using Neuralia.Blockchains.Tools.Data;
 using Microsoft.IO;
+using Neuralia.Blockchains.Tools.Data.Arrays;
 using Neuralia.BouncyCastle.extra.pqc.math.ntru.polynomial;
 
 namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru {

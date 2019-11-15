@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using Neuralia.Blockchains.Tools.Data;
+using Neuralia.Blockchains.Tools.Data.Arrays;
 
 #region License Information
 

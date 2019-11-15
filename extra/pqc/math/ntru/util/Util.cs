@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using Neuralia.Blockchains.Tools.Data;
+using Neuralia.Blockchains.Tools.Data.Arrays;
 using Neuralia.BouncyCastle.extra.pqc.math.ntru.euclid;
 using Neuralia.BouncyCastle.extra.pqc.math.ntru.polynomial;
 using Org.BouncyCastle.Security;

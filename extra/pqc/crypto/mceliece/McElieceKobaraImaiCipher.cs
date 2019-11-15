@@ -1,5 +1,6 @@
 ﻿using System;
 using Neuralia.Blockchains.Tools.Data;
+using Neuralia.Blockchains.Tools.Data.Arrays;
 using Neuralia.BouncyCastle.extra.crypto.digests;
 using Neuralia.BouncyCastle.extra.pqc.crypto;
 using Neuralia.BouncyCastle.extra.pqc.math.linearalgebra;
@@ -32,7 +33,7 @@ namespace org.bouncycastle.pqc.crypto.mceliece
 		/// <summary>
 		/// A predetermined public constant.
 		/// </summary>
-		public static readonly SafeArrayHandle PUBLIC_CONSTANT = (ByteArray)System.Text.Encoding.UTF8.GetBytes("a predetermined public constant");
+		public static readonly SafeArrayHandle PUBLIC_CONSTANT = ByteArray.Wrap(System.Text.Encoding.UTF8.GetBytes("a predetermined public constant"));
 
 
 		private IDigest messDigest;

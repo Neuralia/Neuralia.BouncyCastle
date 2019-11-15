@@ -1,6 +1,7 @@
 ﻿using System;
 using Neuralia.Blockchains.Tools;
 using Neuralia.Blockchains.Tools.Data;
+using Neuralia.Blockchains.Tools.Data.Arrays;
 using Org.BouncyCastle.Crypto;
 
 namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru {
@@ -131,12 +132,12 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru {
 		/// <summary>
 		///     Represents a string of bits and supports appending, reading the head, and reading the tail.
 		/// </summary>
-		public class BitString : IDisposable2 {
+		public class BitString : IDisposableExtended {
 			internal SafeArrayHandle bytes = ByteArray.Create(4);
 			internal int        lastByteBits; // lastByteBits <= 8
 			internal int        numBytes;     // includes the last byte even if only some of its bits are used
 
-			public virtual SafeArrayHandle Bytes => (SafeArrayHandle) this.bytes.Branch();
+			public virtual SafeArrayHandle Bytes => (SafeArrayHandle) this.bytes.Clone();
 
 			/// <summary>
 			///     Appends all bits in a byte array to the end of the bit string.
