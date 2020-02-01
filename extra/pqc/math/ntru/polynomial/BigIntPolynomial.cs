@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Neuralia.BouncyCastle.extra.pqc.crypto.ntru.numeric;
 using Neuralia.BouncyCastle.extra.pqc.math.ntru.util;
+using Neuralia.BouncyCastle.extra.Security;
 using Org.BouncyCastle.Security;
 using Org.BouncyCastle.Utilities;
 
@@ -82,7 +83,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.ntru.polynomial {
 				coeffs.Add(Constants.BIGINT_ZERO);
 			}
 
-			coeffs.Shuffle(new SecureRandom());
+			coeffs.Shuffle(new BetterSecureRandom());
 
 			BigIntPolynomial poly = new BigIntPolynomial(N);
 

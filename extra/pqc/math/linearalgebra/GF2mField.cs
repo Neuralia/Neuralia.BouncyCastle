@@ -1,5 +1,6 @@
 ﻿using System;
 using Neuralia.Blockchains.Tools.Data;
+using Neuralia.BouncyCastle.extra.Security;
 using Org.BouncyCastle.Security;
 
 namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
@@ -104,7 +105,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 		///     create a random non-zero field element
 		/// </summary>
 		/// <returns> a random element </returns>
-		public virtual int RandomNonZeroElement => this.getRandomNonZeroElement(new SecureRandom());
+		public virtual int RandomNonZeroElement => this.getRandomNonZeroElement(new BetterSecureRandom());
 
 		/// <summary>
 		///     Return sum of two elements

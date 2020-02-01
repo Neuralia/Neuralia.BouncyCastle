@@ -1,5 +1,5 @@
 using System;
-
+using System.Diagnostics.CodeAnalysis;
 using Org.BouncyCastle.Utilities;
 
 namespace Org.BouncyCastle.Asn1
@@ -9,6 +9,7 @@ namespace Org.BouncyCastle.Asn1
      * a [n] where n is some number - these are assumed to follow the construction
      * rules (as with sequences).
      */
+    [SuppressMessage("ReSharper", "TailRecursiveCall")]
     public abstract class Asn1TaggedObject
 		: Asn1Object, Asn1TaggedObjectParser
     {

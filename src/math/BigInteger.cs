@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Text;
 
@@ -11,6 +12,7 @@ namespace Org.BouncyCastle.Math
 {
 #if !(NETCF_1_0 || NETCF_2_0 || SILVERLIGHT || PORTABLE)
     [Serializable]
+    [SuppressMessage("ReSharper", "TailRecursiveCall")]
 #endif
     public class BigInteger
     {

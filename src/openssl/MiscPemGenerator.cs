@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
 using Org.BouncyCastle.Asn1;
@@ -23,6 +24,7 @@ namespace Org.BouncyCastle.OpenSsl
     /**
     * PEM generator for the original set of PEM objects used in Open SSL.
     */
+    [SuppressMessage("ReSharper", "TailRecursiveCall")]
     public class MiscPemGenerator
         : PemObjectGenerator
     {

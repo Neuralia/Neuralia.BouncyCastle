@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 using Org.BouncyCastle.Utilities;
@@ -8,6 +9,7 @@ namespace Org.BouncyCastle.Asn1
     /**
      * Der VisibleString object.
      */
+    [SuppressMessage("ReSharper", "TailRecursiveCall")]
     public class DerVisibleString
         : DerStringBase
     {

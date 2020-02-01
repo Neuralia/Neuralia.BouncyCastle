@@ -1,12 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
 
-    <TargetLatestRuntimePatch>true</TargetLatestRuntimePatch>
+        <TargetLatestRuntimePatch>true</TargetLatestRuntimePatch>
     <AssemblyName>Neuralia.BouncyCastle</AssemblyName>
     <OutputType>Library</OutputType>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <LangVersion>latest</LangVersion>
-    <TargetFrameworks>netstandard2.0;netcoreapp3.0</TargetFrameworks>
+    <TargetFrameworks>netstandard2.1;netcoreapp3.1</TargetFrameworks>
     <DefineConstants>PARALLEL_1</DefineConstants>
     <RootNamespace>Neuralia.BouncyCastle</RootNamespace>
     <AssemblyName>Neuralia.BouncyCastle</AssemblyName>
@@ -22,6 +22,7 @@
   <ItemGroup>
     <PackageReference Include="Neuralia.Blockchains.Tools" Version="1.0.0" />
     <PackageReference Include="Neuralia.Data.HashFunction.xxHash" Version="1.0.0" />
+<PackageReference Include="Neuralia.Blockchains.Tools" Version="1.0.0" />
   </ItemGroup>
   
   <ItemGroup>

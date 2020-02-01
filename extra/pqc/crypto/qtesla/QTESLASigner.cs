@@ -1,5 +1,5 @@
 ﻿using System;
-
+using Neuralia.BouncyCastle.extra.Security;
 using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Parameters;
 using Org.BouncyCastle.Security;
@@ -40,7 +40,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.qtesla {
 					this.secureRandom = ((ParametersWithRandom) param).Random;
 					this.privateKey   = (QTESLAPrivateKeyParameters) ((ParametersWithRandom) param).Parameters;
 				} else {
-					this.secureRandom = new SecureRandom();
+					this.secureRandom = new BetterSecureRandom();
 					this.privateKey   = (QTESLAPrivateKeyParameters) param;
 				}
 

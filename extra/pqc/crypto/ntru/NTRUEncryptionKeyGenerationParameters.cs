@@ -8,8 +8,7 @@ using Neuralia.Blockchains.Tools.Serialization;
 
 using Neuralia.BouncyCastle.extra.crypto.digests;
 using Neuralia.BouncyCastle.extra.pqc.math.ntru.polynomial;
-
-
+using Neuralia.BouncyCastle.extra.Security;
 using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Security;
 using Org.BouncyCastle.Utilities;
@@ -141,7 +140,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru {
 		///     a valid identifier for a <code>java.security.MessageDigest</code> instance such as
 		///     <code>SHA-256</code>. The <code>MessageDigest</code> must support the <code>getDigestLength()</code> method.
 		/// </param>
-		public NTRUEncryptionKeyGenerationParameters(int N, int q, int df, int dm0, int db, int c, int minCallsR, int minCallsMask, bool hashSeed, SafeArrayHandle oid, bool sparse, bool fastFp, IDigest hashAlg) : base(new SecureRandom(), db) {
+		public NTRUEncryptionKeyGenerationParameters(int N, int q, int df, int dm0, int db, int c, int minCallsR, int minCallsMask, bool hashSeed, SafeArrayHandle oid, bool sparse, bool fastFp, IDigest hashAlg) : base(new BetterSecureRandom(), db) {
 			this.N            = N;
 			this.q            = q;
 			this.df           = df;
@@ -189,7 +188,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru {
 		///     a valid identifier for a <code>java.security.MessageDigest</code> instance such as
 		///     <code>SHA-256</code>
 		/// </param>
-		public NTRUEncryptionKeyGenerationParameters(int N, int q, int df1, int df2, int df3, int dm0, int db, int c, int minCallsR, int minCallsMask, bool hashSeed, SafeArrayHandle oid, bool sparse, bool fastFp, IDigest hashAlg) : base(new SecureRandom(), db) {
+		public NTRUEncryptionKeyGenerationParameters(int N, int q, int df1, int df2, int df3, int dm0, int db, int c, int minCallsR, int minCallsMask, bool hashSeed, SafeArrayHandle oid, bool sparse, bool fastFp, IDigest hashAlg) : base(new BetterSecureRandom(), db) {
 
 			this.N            = N;
 			this.q            = q;
@@ -215,7 +214,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru {
 		/// </summary>
 		/// <param name="is"> an input stream </param>
 		/// <exception cref="IOException"> </exception>
-		public NTRUEncryptionKeyGenerationParameters(IDataRehydrator rehydrator, Func<string, IDigest> digestGenerator) : base(new SecureRandom(), -1) {
+		public NTRUEncryptionKeyGenerationParameters(IDataRehydrator rehydrator, Func<string, IDigest> digestGenerator) : base(new BetterSecureRandom(), -1) {
 
 			this.N            = rehydrator.ReadInt();
 			this.q            = rehydrator.ReadInt();

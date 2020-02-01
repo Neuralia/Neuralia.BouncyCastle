@@ -1,4 +1,5 @@
 ﻿using Neuralia.BouncyCastle.extra.pqc.math.linearalgebra;
+using Neuralia.BouncyCastle.extra.Security;
 using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Security;
 
@@ -52,7 +53,7 @@ namespace org.bouncycastle.pqc.crypto.mceliece
 		/// </summary>
 		private void initializeDefault()
 		{
-			McElieceKeyGenerationParameters mcParams = new McElieceKeyGenerationParameters(new SecureRandom(), new McElieceParameters());
+			McElieceKeyGenerationParameters mcParams = new McElieceKeyGenerationParameters(new BetterSecureRandom(), new McElieceParameters());
 			this.initialize(mcParams);
 		}
 
@@ -64,7 +65,7 @@ namespace org.bouncycastle.pqc.crypto.mceliece
 			this.random = param.Random;
 			if (this.random == null)
 			{
-				this.random = new SecureRandom();
+				this.random = new BetterSecureRandom();
 			}
 
 			this.m = this.mcElieceParams.Parameters.M;

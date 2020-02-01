@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Numerics;
+using Neuralia.BouncyCastle.extra.Security;
 using Org.BouncyCastle.Security;
 
 namespace Neuralia.BouncyCastle.extra.pqc.math.ntru.util {
@@ -34,7 +35,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.ntru.util {
 		/// <typeparam name="T">Type of array</typeparam>
 		/// <param name="Source">The list instance</param>
 		public static void Shuffle<T>(this T[] Source) {
-			SecureRandom rnd = new SecureRandom();
+			SecureRandom rnd = new BetterSecureRandom();
 
 			Shuffle(Source, rnd);
 		}
@@ -47,7 +48,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.ntru.util {
 		/// <param name="Rng">The pseudo random generator</param>
 		public static void Shuffle<T>(this T[] Source, SecureRandom Rng) {
 			for(int i = 0; i < Source.Length; i++) {
-				int index = Rng.Next(0, Source.Length - 1);
+				int index = Rng.Next(0, Source.Length);
 				T   temp  = Source[i];
 				Source[i]     = Source[index];
 				Source[index] = temp;
@@ -56,7 +57,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.ntru.util {
 
 		public static void Shuffle<T>(this IList<T> Source, SecureRandom Rng) {
 			for(int i = 0; i < Source.Count; i++) {
-				int index = Rng.Next(0, Source.Count - 1);
+				int index = Rng.Next(0, Source.Count);
 				T   temp  = Source[i];
 				Source[i]     = Source[index];
 				Source[index] = temp;

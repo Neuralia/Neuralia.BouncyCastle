@@ -1,3 +1,5 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace Org.BouncyCastle.Asn1.X509
 {
     /**
@@ -17,6 +19,7 @@ namespace Org.BouncyCastle.Asn1.X509
      *         decipherOnly            (8) }
      * </pre>
      */
+    [SuppressMessage("ReSharper", "TailRecursiveCall")]
     public class KeyUsage
         : DerBitString
     {

@@ -2,6 +2,7 @@
 using System.Text;
 using Neuralia.Blockchains.Tools.Data;
 using Neuralia.Blockchains.Tools.Data.Arrays;
+using Neuralia.BouncyCastle.extra.Security;
 using Org.BouncyCastle.Security;
 
 namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
@@ -105,7 +106,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 		///     the martix type (see <seealso cref="Matrix" /> for predefined
 		///     constants)
 		/// </param>
-		public GF2Matrix(int n, char typeOfMatrix) : this(n, typeOfMatrix, new SecureRandom()) {
+		public GF2Matrix(int n, char typeOfMatrix) : this(n, typeOfMatrix, new BetterSecureRandom()) {
 		}
 
 		/// <summary>

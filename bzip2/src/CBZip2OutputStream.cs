@@ -23,6 +23,7 @@
  */
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
 using Org.BouncyCastle.Utilities;
@@ -39,6 +40,7 @@ namespace Org.BouncyCastle.Apache.Bzip2
     * <b>NB:</b> note this class has been modified to add a leading BZ to the
     * start of the BZIP2 stream to make it compatible with other PGP programs.
     */
+    [SuppressMessage("ReSharper", "TailRecursiveCall")]
     public class CBZip2OutputStream : Stream 
 	{
         protected const int SETMASK = (1 << 21);

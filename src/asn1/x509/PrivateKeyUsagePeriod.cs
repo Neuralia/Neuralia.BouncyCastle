@@ -1,5 +1,5 @@
 using System;
-
+using System.Diagnostics.CodeAnalysis;
 using Org.BouncyCastle.Utilities;
 
 namespace Org.BouncyCastle.Asn1.X509
@@ -12,6 +12,7 @@ namespace Org.BouncyCastle.Asn1.X509
 	/// notAfter        [1]     GeneralizedTime OPTIONAL }
 	/// </pre>
 	/// </remarks>
+	[SuppressMessage("ReSharper", "TailRecursiveCall")]
 	public class PrivateKeyUsagePeriod
 		: Asn1Encodable
 	{

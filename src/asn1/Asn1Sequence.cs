@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
 using Org.BouncyCastle.Utilities;
@@ -7,6 +8,7 @@ using Org.BouncyCastle.Utilities.Collections;
 
 namespace Org.BouncyCastle.Asn1
 {
+    [SuppressMessage("ReSharper", "TailRecursiveCall")]
     public abstract class Asn1Sequence
         : Asn1Object, IEnumerable
     {

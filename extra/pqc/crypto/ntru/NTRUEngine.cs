@@ -3,7 +3,7 @@ using Neuralia.Blockchains.Tools;
 using Neuralia.Blockchains.Tools.Data;
 using Neuralia.Blockchains.Tools.Data.Arrays;
 using Neuralia.BouncyCastle.extra.pqc.math.ntru.polynomial;
-
+using Neuralia.BouncyCastle.extra.Security;
 using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Parameters;
 using Org.BouncyCastle.Security;
@@ -35,7 +35,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru {
 					this.pubKey = (NTRUEncryptionPublicKeyParameters) p.Parameters;
 				} else {
 					
-					this.random = random ?? new SecureRandom();
+					this.random = random ?? new BetterSecureRandom();
 					this.pubKey = (NTRUEncryptionPublicKeyParameters) parameters;
 				}
 

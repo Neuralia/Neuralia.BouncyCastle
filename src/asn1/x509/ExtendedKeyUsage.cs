@@ -1,6 +1,6 @@
 using System;
 using System.Collections;
-
+using System.Diagnostics.CodeAnalysis;
 using Org.BouncyCastle.Utilities;
 
 namespace Org.BouncyCastle.Asn1.X509
@@ -11,6 +11,7 @@ namespace Org.BouncyCastle.Asn1.X509
      *      extendedKeyUsage ::= Sequence SIZE (1..MAX) OF KeyPurposeId
      * </pre>
      */
+    [SuppressMessage("ReSharper", "TailRecursiveCall")]
     public class ExtendedKeyUsage
         : Asn1Encodable
     {

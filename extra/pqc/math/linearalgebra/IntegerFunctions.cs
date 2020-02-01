@@ -2,6 +2,7 @@
 using Neuralia.Blockchains.Tools.Data;
 using Neuralia.Blockchains.Tools.Data.Arrays;
 using Neuralia.BouncyCastle.extra.pqc.crypto.ntru.numeric;
+using Neuralia.BouncyCastle.extra.Security;
 using Org.BouncyCastle.Security;
 
 namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
@@ -972,7 +973,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 
 		public static BigInteger randomize(BigInteger upperBound) {
 			if(sr == null) {
-				sr = new SecureRandom();
+				sr = new BetterSecureRandom();
 			}
 
 			return randomize(upperBound, sr);
@@ -983,7 +984,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 			BigInteger randomNum = BigInteger.ValueOf(0);
 
 			if(prng == null) {
-				prng = sr != null ? sr : new SecureRandom();
+				prng = sr ?? new BetterSecureRandom();
 			}
 
 			for(int i = 0; i < 20; i++) {

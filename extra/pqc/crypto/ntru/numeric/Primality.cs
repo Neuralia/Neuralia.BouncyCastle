@@ -1,5 +1,5 @@
 using System;
-
+using Neuralia.BouncyCastle.extra.Security;
 using Org.BouncyCastle.Security;
 
 #region License Information
@@ -48,7 +48,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru.numeric {
 			// (q,k) such that: n-1 = q * 2^k and q is odd
 			int          k   = n_minus_1.LowestSetBit;
 			BigInteger   q   = n_minus_1.ShiftRight(k);
-			SecureRandom rnd = new SecureRandom();
+			SecureRandom rnd = new BetterSecureRandom();
 
 			for(int i = 0; i < T; i++) {
 				// To generate a witness 'x', first it use the primes of table

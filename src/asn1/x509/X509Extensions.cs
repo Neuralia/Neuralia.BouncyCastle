@@ -1,11 +1,12 @@
 using System;
 using System.Collections;
-
+using System.Diagnostics.CodeAnalysis;
 using Org.BouncyCastle.Utilities;
 using Org.BouncyCastle.Utilities.Collections;
 
 namespace Org.BouncyCastle.Asn1.X509
 {
+    [SuppressMessage("ReSharper", "TailRecursiveCall")]
     public class X509Extensions
         : Asn1Encodable
     {

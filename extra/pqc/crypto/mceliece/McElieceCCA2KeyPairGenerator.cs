@@ -1,4 +1,5 @@
 ﻿using Neuralia.BouncyCastle.extra.pqc.math.linearalgebra;
+using Neuralia.BouncyCastle.extra.Security;
 using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Security;
 
@@ -43,7 +44,7 @@ namespace org.bouncycastle.pqc.crypto.mceliece
 		/// </summary>
 		private void initializeDefault()
 		{
-			McElieceCCA2KeyGenerationParameters mcCCA2Params = new McElieceCCA2KeyGenerationParameters(new SecureRandom(), new McElieceCCA2Parameters());
+			McElieceCCA2KeyGenerationParameters mcCCA2Params = new McElieceCCA2KeyGenerationParameters(new BetterSecureRandom(), new McElieceCCA2Parameters());
 			this.init(mcCCA2Params);
 		}
 

@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
 #if PORTABLE
@@ -12,6 +13,7 @@ using Org.BouncyCastle.Utilities.Collections;
 
 namespace Org.BouncyCastle.Asn1
 {
+    [SuppressMessage("ReSharper", "TailRecursiveCall")]
     abstract public class Asn1Set
         : Asn1Object, IEnumerable
     {

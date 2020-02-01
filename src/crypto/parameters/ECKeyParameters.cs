@@ -1,6 +1,6 @@
 using System;
 using System.Collections;
-
+using System.Diagnostics.CodeAnalysis;
 using Org.BouncyCastle.Asn1;
 using Org.BouncyCastle.Asn1.CryptoPro;
 using Org.BouncyCastle.Asn1.X9;
@@ -11,6 +11,7 @@ using Org.BouncyCastle.Utilities.Collections;
 
 namespace Org.BouncyCastle.Crypto.Parameters
 {
+    [SuppressMessage("ReSharper", "TailRecursiveCall")]
     public abstract class ECKeyParameters
         : AsymmetricKeyParameter
     {

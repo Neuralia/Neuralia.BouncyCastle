@@ -2,6 +2,7 @@
 using System.Runtime.Serialization;
 using Neuralia.Blockchains.Tools.Data;
 using Neuralia.Blockchains.Tools.Data.Arrays;
+using Neuralia.BouncyCastle.extra.Security;
 using Org.BouncyCastle.Security;
 
 #region License Information
@@ -121,7 +122,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru.numeric {
 
 	#region Private Fields
 
-		private static readonly SecureRandom _randomSource = new SecureRandom();
+		private static readonly SecureRandom _randomSource = new BetterSecureRandom();
 
 		// The magnitude of this big integer. This array holds unsigned little endian digits.
 		[NonSerialized] internal int[] _digits;

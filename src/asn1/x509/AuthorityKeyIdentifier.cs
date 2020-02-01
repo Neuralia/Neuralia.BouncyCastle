@@ -1,6 +1,6 @@
 using System;
 using System.Collections;
-
+using System.Diagnostics.CodeAnalysis;
 using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Digests;
 using Org.BouncyCastle.Math;
@@ -22,6 +22,7 @@ namespace Org.BouncyCastle.Asn1.X509
      * </pre>
      *
      */
+    [SuppressMessage("ReSharper", "TailRecursiveCall")]
     public class AuthorityKeyIdentifier
         : Asn1Encodable
     {

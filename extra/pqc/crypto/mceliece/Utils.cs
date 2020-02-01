@@ -11,6 +11,9 @@ namespace org.bouncycastle.pqc.crypto.mceliece
 		public const string SHA2_512 = "SHA2-512";
 		public const string SHA3_256 = "SHA3-256";
 		public const string SHA3_512 = "SHA3-512";
+		public const string BLAKE2_256 = "BLAKE2-256";
+		public const string BLAKE2_512 = "BLAKE2-512";
+		
 		
 		internal static IDigest getDigest(string digestName, Func<string, IDigest> digestGenerator) {
 			return digestGenerator(digestName);

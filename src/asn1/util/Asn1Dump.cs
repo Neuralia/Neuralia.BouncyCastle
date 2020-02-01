@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Text;
 
@@ -8,6 +9,7 @@ using Org.BouncyCastle.Utilities.Encoders;
 
 namespace Org.BouncyCastle.Asn1.Utilities
 {
+    [SuppressMessage("ReSharper", "TailRecursiveCall")]
     public sealed class Asn1Dump
     {
         private static readonly string NewLine = Platform.NewLine;

@@ -3,6 +3,7 @@ using Neuralia.Blockchains.Tools.Data;
 using Neuralia.Blockchains.Tools.Data.Arrays;
 using Neuralia.BouncyCastle.extra.pqc.crypto;
 using Neuralia.BouncyCastle.extra.pqc.math.linearalgebra;
+using Neuralia.BouncyCastle.extra.Security;
 using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Parameters;
 using Org.BouncyCastle.Security;
@@ -60,7 +61,7 @@ namespace org.bouncycastle.pqc.crypto.mceliece
 				}
 				else
 				{
-					this.sr = new SecureRandom();
+					this.sr = new BetterSecureRandom();
 					this.key = (McEliecePublicKeyParameters)param;
 					this.initCipherEncrypt((McEliecePublicKeyParameters) this.key);
 				}
@@ -98,7 +99,7 @@ namespace org.bouncycastle.pqc.crypto.mceliece
 
 		private void initCipherEncrypt(McEliecePublicKeyParameters pubKey)
 		{
-			this.sr = this.sr != null ? this.sr : new SecureRandom();
+			this.sr = this.sr != null ? this.sr : new BetterSecureRandom();
 			this.n = pubKey.N;
 			this.k = pubKey.K;
 			this.t = pubKey.T;

@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
+	[SuppressMessage("ReSharper", "TailRecursiveCall")]
 	public sealed class IntUtils {
 
 		/// <summary>

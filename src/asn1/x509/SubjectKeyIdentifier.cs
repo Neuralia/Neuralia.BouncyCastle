@@ -1,5 +1,5 @@
 using System;
-
+using System.Diagnostics.CodeAnalysis;
 using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Digests;
 using Org.BouncyCastle.Utilities;
@@ -12,6 +12,7 @@ namespace Org.BouncyCastle.Asn1.X509
      * SubjectKeyIdentifier::= OCTET STRING
      * </pre>
      */
+    [SuppressMessage("ReSharper", "TailRecursiveCall")]
     public class SubjectKeyIdentifier
         : Asn1Encodable
     {
