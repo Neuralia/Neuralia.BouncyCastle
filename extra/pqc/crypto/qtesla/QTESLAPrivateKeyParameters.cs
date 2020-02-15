@@ -51,7 +51,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.qtesla {
 		public sbyte[] Secret => ArraysExtensions.Clone(this.privateKey);
 
 		public SafeArrayHandle Dehydrate() {
-			IDataDehydrator dehydrator = DataSerializationFactory.CreateDehydrator();
+			using IDataDehydrator dehydrator = DataSerializationFactory.CreateDehydrator();
 
 			dehydrator.Write((byte) this.securityCategory);
 			dehydrator.WriteNonNullable((byte[]) (Array) this.privateKey);
