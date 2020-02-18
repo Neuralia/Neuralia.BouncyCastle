@@ -1,6 +1,6 @@
 # Neuralia.BouncyCastle
 
-##### Version:  Release Candidate II
+##### Version:  Release Candidate III
 
 Neuralia modified bouncy castle implementation
 

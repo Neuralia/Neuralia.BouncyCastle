@@ -1,4 +1,6 @@
 using System;
+using Neuralia.Blockchains.Tools.Cryptography;
+using Neuralia.Blockchains.Tools.Serialization;
 using Org.BouncyCastle.Crypto.Prng;
 using Org.BouncyCastle.Security;
 
@@ -17,41 +19,39 @@ namespace Neuralia.BouncyCastle.extra.Security {
 		public BetterSecureRandom(IRandomGenerator generator) : base(generator) {
 		}
 
+		public override int Next(int maxValue) {
+
+			return GlobalRandom.GetNext(maxValue);
+		}
+		
 		/// <summary>
 		/// fix bugs in the parent version when a number can be negative and thus smaller than minValue
 		/// </summary>
 		/// <param name="minValue"></param>
-		/// <param name="maxValue"></param>
+		/// <param name="maxValue"></param>SSSS
 		/// <returns></returns>
 		/// <exception cref="ArgumentException"></exception>
 		public override int Next(int minValue, int maxValue) {
-			if (maxValue <= minValue)
-			{
-				if (maxValue == minValue)
-					return minValue;
+			return GlobalRandom.GetNext(minValue, maxValue);
+		}
 
-				throw new ArgumentException("maxValue cannot be less than minValue");
-			}
+		public override int NextInt() {
 
-			int diff = maxValue - minValue;
+			byte[] bytes = new byte[sizeof(int)];
+			this.NextBytes(bytes);
 
-			if(diff > 0) {
+			TypeSerializer.Deserialize(bytes, out int result);
+			
+			return result;
+		}
 
-				int result = 0;
-				do {
-					result = minValue + this.Next(diff);
-				} while(result < minValue);
+		public override long NextLong() {
+			byte[] bytes = new byte[sizeof(long)];
+			this.NextBytes(bytes);
 
-				return result;
-			}
-
-			for (;;)
-			{
-				int i = this.NextInt();
-
-				if (i >= minValue && i < maxValue)
-					return i;
-			}
+			TypeSerializer.Deserialize(bytes, out long result);
+			
+			return result;
 		}
 	}
 }
