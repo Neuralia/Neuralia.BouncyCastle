@@ -235,7 +235,7 @@ namespace Org.BouncyCastle.Security
                 throw new ArgumentException("Specified size too small", "size");
 
             byte[] padded = new byte[size];
-            System.Array.Copy(bs, 0, padded, size - bs.Length, bs.Length);
+            Array.Copy(bs, 0, padded, size - bs.Length, bs.Length);
             return padded;
         }
 

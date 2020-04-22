@@ -13,7 +13,7 @@ namespace Org.BouncyCastle.Bcpg.OpenPgp
         {
             byte[] result = new byte[40];
 
-            System.Array.Copy(sessionInfo, 0, result, 0, sessionInfo.Length);
+            Array.Copy(sessionInfo, 0, result, 0, sessionInfo.Length);
 
             byte padValue = (byte)(result.Length - sessionInfo.Length);
 
@@ -37,7 +37,7 @@ namespace Org.BouncyCastle.Bcpg.OpenPgp
 
             byte[] taggedKey = new byte[encoded.Length - padValue];
 
-            System.Array.Copy(encoded, 0, taggedKey, 0, taggedKey.Length);
+            Array.Copy(encoded, 0, taggedKey, 0, taggedKey.Length);
 
             return taggedKey;
         }

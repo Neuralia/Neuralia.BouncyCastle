@@ -377,12 +377,12 @@ namespace Org.BouncyCastle.Crypto.Generators
          */
         private void InitState()
         {
-            System.Array.Copy(KS0, 0, S, 0, SBOX_SK);
-            System.Array.Copy(KS1, 0, S, SBOX_SK, SBOX_SK);
-            System.Array.Copy(KS2, 0, S, SBOX_SK2, SBOX_SK);
-            System.Array.Copy(KS3, 0, S, SBOX_SK3, SBOX_SK);
+            Array.Copy(KS0, 0, S, 0, SBOX_SK);
+            Array.Copy(KS1, 0, S, SBOX_SK, SBOX_SK);
+            Array.Copy(KS2, 0, S, SBOX_SK2, SBOX_SK);
+            Array.Copy(KS3, 0, S, SBOX_SK3, SBOX_SK);
 
-            System.Array.Copy(KP, 0, P, 0, P_SZ);
+            Array.Copy(KP, 0, P, 0, P_SZ);
         }
 
         /*

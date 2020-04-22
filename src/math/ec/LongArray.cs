@@ -314,7 +314,7 @@ namespace Org.BouncyCastle.Math.EC
             else
             {
                 m_ints = new long[len];
-                System.Array.Copy(ints, off, m_ints, 0, len);
+                Array.Copy(ints, off, m_ints, 0, len);
             }
         }
 
@@ -374,7 +374,7 @@ namespace Org.BouncyCastle.Math.EC
 
         internal void CopyTo(long[] z, int zOff)
         {
-            System.Array.Copy(m_ints, 0, z, zOff, m_ints.Length);
+            Array.Copy(m_ints, 0, z, zOff, m_ints.Length);
         }
 
         public bool IsOne()
@@ -532,7 +532,7 @@ namespace Org.BouncyCastle.Math.EC
         private long[] ResizedInts(int newLen)
         {
             long[] newInts = new long[newLen];
-            System.Array.Copy(m_ints, 0, newInts, 0, System.Math.Min(m_ints.Length, newLen));
+            Array.Copy(m_ints, 0, newInts, 0, System.Math.Min(m_ints.Length, newLen));
             return newInts;
         }
 
@@ -928,7 +928,7 @@ namespace Org.BouncyCastle.Math.EC
             long[] T0 = new long[bMax << 4];
             int tOff = bMax;
             ti[1] = tOff;
-            System.Array.Copy(B.m_ints, 0, T0, tOff, bLen);
+            Array.Copy(B.m_ints, 0, T0, tOff, bLen);
             for (int i = 2; i < 16; ++i)
             {
                 ti[i] = (tOff += bMax);
@@ -1060,7 +1060,7 @@ namespace Org.BouncyCastle.Math.EC
             long[] T0 = new long[bMax << 4];
             int tOff = bMax;
             ti[1] = tOff;
-            System.Array.Copy(B.m_ints, 0, T0, tOff, bLen);
+            Array.Copy(B.m_ints, 0, T0, tOff, bLen);
             for (int i = 2; i < 16; ++i)
             {
                 ti[i] = (tOff += bMax);
@@ -1249,7 +1249,7 @@ namespace Org.BouncyCastle.Math.EC
             // Make a working copy of B, since we will be shifting it
             {
                 int bOff = aLen;
-                System.Array.Copy(B.m_ints, 0, c, bOff, bLen);
+                Array.Copy(B.m_ints, 0, c, bOff, bLen);
                 for (int bank = 1; bank < banks; ++bank)
                 {
                     ShiftUp(c, aLen, c, bOff += bMax, bMax, bank);
@@ -1417,7 +1417,7 @@ namespace Org.BouncyCastle.Math.EC
             long[] T0 = new long[bMax << 4];
             int tOff = bMax;
             ti[1] = tOff;
-            System.Array.Copy(B.m_ints, 0, T0, tOff, bLen);
+            Array.Copy(B.m_ints, 0, T0, tOff, bLen);
             for (int i = 2; i < 16; ++i)
             {
                 ti[i] = (tOff += bMax);
@@ -1488,7 +1488,7 @@ namespace Org.BouncyCastle.Math.EC
             if (rLen < buf.Length)
             {
                 m_ints = new long[rLen];
-                System.Array.Copy(buf, 0, m_ints, 0, rLen);
+                Array.Copy(buf, 0, m_ints, 0, rLen);
             }
         }
 
@@ -1692,7 +1692,7 @@ namespace Org.BouncyCastle.Math.EC
     
             int mLen = (m + 63) >> 6;
             long[] r = new long[mLen << 1];
-            System.Array.Copy(m_ints, 0, r, 0, len);
+            Array.Copy(m_ints, 0, r, 0, len);
     
             while (--n >= 0)
             {

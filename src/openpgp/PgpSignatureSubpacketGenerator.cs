@@ -151,7 +151,7 @@ namespace Org.BouncyCastle.Bcpg.OpenPgp
 				data = new byte[sig.Length - 2];
 			}
 
-			System.Array.Copy(sig, sig.Length - data.Length, data, 0, data.Length);
+			Array.Copy(sig, sig.Length - data.Length, data, 0, data.Length);
 
 			list.Add(new EmbeddedSignature(isCritical, false, data));
 		}

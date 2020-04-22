@@ -8,6 +8,7 @@ using Org.BouncyCastle.Utilities;
 namespace Neuralia.BouncyCastle.extra {
 	/// <summary> General array utilities.</summary>
 	public abstract class ArraysExtensions {
+		
 		public static SafeArrayHandle Concatenate(SafeArrayHandle a, SafeArrayHandle b) {
 			return FastArrays.Concatenate(a, b);
 		}

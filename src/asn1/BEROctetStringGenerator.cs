@@ -87,7 +87,7 @@ namespace Org.BouncyCastle.Asn1
 					}
 					else
 					{
-						System.Array.Copy(buf, offset, _buf, _off, numToCopy);
+						Array.Copy(buf, offset, _buf, _off, numToCopy);
 
 						_off += numToCopy;
 						if (_off < _buf.Length)

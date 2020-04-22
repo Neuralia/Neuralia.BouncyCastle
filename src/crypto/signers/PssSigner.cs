@@ -3,6 +3,7 @@ using System;
 using Org.BouncyCastle.Crypto.Digests;
 using Org.BouncyCastle.Crypto.Parameters;
 using Org.BouncyCastle.Security;
+using Org.BouncyCastle.Utilities;
 
 namespace Org.BouncyCastle.Crypto.Signers
 {
@@ -103,7 +104,7 @@ namespace Org.BouncyCastle.Crypto.Signers
 			IDigest					digest,
 			int						saltLen,
 			byte					trailer)
-			: this(cipher, digest, digest, saltLen, TrailerImplicit)
+			: this(cipher, digest, digest, saltLen, trailer)
 		{
 		}
 
@@ -250,11 +251,12 @@ namespace Org.BouncyCastle.Crypto.Signers
 				block[i] ^= dbMask[i];
 			}
 
-			block[0] &= (byte) ((0xff >> ((block.Length * 8) - emBits)));
+            h.CopyTo(block, block.Length - hLen - 1);
 
-			h.CopyTo(block, block.Length - hLen - 1);
+            uint firstByteMask = 0xFFU >> ((block.Length * 8) - emBits);
 
-			block[block.Length - 1] = trailer;
+            block[0] &= (byte)firstByteMask;
+            block[block.Length - 1] = trailer;
 
 			byte[] b = cipher.ProcessBlock(block, 0, block.Length);
 
@@ -269,12 +271,16 @@ namespace Org.BouncyCastle.Crypto.Signers
 		public virtual bool VerifySignature(
 			byte[] signature)
 		{
-			contentDigest1.DoFinal(mDash, mDash.Length - hLen - sLen);
+            contentDigest1.DoFinal(mDash, mDash.Length - hLen - sLen);
 
-			byte[] b = cipher.ProcessBlock(signature, 0, signature.Length);
+            byte[] b = cipher.ProcessBlock(signature, 0, signature.Length);
+            Arrays.Fill(block, 0, block.Length - b.Length, 0);
 			b.CopyTo(block, block.Length - b.Length);
 
-			if (block[block.Length - 1] != trailer)
+            uint firstByteMask = 0xFFU >> ((block.Length * 8) - emBits);
+
+			if (block[0] != (byte)(block[0] & firstByteMask)
+                || block[block.Length - 1] != trailer)
 			{
 				ClearBlock(block);
 				return false;
@@ -287,7 +293,7 @@ namespace Org.BouncyCastle.Crypto.Signers
 				block[i] ^= dbMask[i];
 			}
 
-			block[0] &= (byte) ((0xff >> ((block.Length * 8) - emBits)));
+            block[0] &= (byte)firstByteMask;
 
 			for (int i = 0; i != block.Length - hLen - sLen - 2; i++)
 			{
@@ -306,11 +312,11 @@ namespace Org.BouncyCastle.Crypto.Signers
 
             if (sSet)
             {
-                System.Array.Copy(salt, 0, mDash, mDash.Length - sLen, sLen);
+                Array.Copy(salt, 0, mDash, mDash.Length - sLen, sLen);
             }
             else
             {
-                System.Array.Copy(block, block.Length - sLen - hLen - 1, mDash, mDash.Length - sLen, sLen);
+                Array.Copy(block, block.Length - sLen - hLen - 1, mDash, mDash.Length - sLen, sLen);
             }
 
 			contentDigest2.BlockUpdate(mDash, 0, mDash.Length);
@@ -377,7 +383,7 @@ namespace Org.BouncyCastle.Crypto.Signers
 				mgfDigest.BlockUpdate(C, 0, C.Length);
 				mgfDigest.DoFinal(hashBuf, 0);
 
-				System.Array.Copy(hashBuf, 0, mask, counter * mgfhLen, mask.Length - (counter * mgfhLen));
+				Array.Copy(hashBuf, 0, mask, counter * mgfhLen, mask.Length - (counter * mgfhLen));
 			}
 
 			return mask;

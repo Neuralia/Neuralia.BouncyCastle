@@ -430,7 +430,7 @@ namespace Org.BouncyCastle.Crypto.Digests
                     }
 
                     int toCopy = System.Math.Min((len - copied), currentBlock.Length - currentOffset);
-                    System.Array.Copy(value, offset + copied, currentBlock, currentOffset, toCopy);
+                    Array.Copy(value, offset + copied, currentBlock, currentOffset, toCopy);
                     copied += toCopy;
                     currentOffset += toCopy;
                     tweak.AdvancePosition(toCopy);
@@ -561,7 +561,7 @@ namespace Org.BouncyCastle.Crypto.Digests
             {
                 existing = new Parameter[data.Length];
             }
-            System.Array.Copy(data, 0, existing, 0, existing.Length);
+            Array.Copy(data, 0, existing, 0, existing.Length);
             return existing;
         }
 
@@ -694,7 +694,7 @@ namespace Org.BouncyCastle.Crypto.Digests
         /// </summary>
         public void Reset()
         {
-            System.Array.Copy(initialState, 0, chain, 0, chain.Length);
+            Array.Copy(initialState, 0, chain, 0, chain.Length);
 
             UbiInit(PARAM_TYPE_MESSAGE);
         }
@@ -794,7 +794,7 @@ namespace Org.BouncyCastle.Crypto.Digests
                 else
                 {
                     ThreefishEngine.WordToBytes(outputWords[i], currentBytes, 0);
-                    System.Array.Copy(currentBytes, 0, outBytes, outOff + (i * 8), toWrite);
+                    Array.Copy(currentBytes, 0, outBytes, outOff + (i * 8), toWrite);
                 }
             }
         }

@@ -17,9 +17,6 @@ namespace Org.BouncyCastle.Crypto.Prng.Drbg
 	        maxSecurityStrengths.Add("SHA-256", 256);
 	        maxSecurityStrengths.Add("SHA-384", 256);
 	        maxSecurityStrengths.Add("SHA-512", 256);
-	        
-	        maxSecurityStrengths.Add("SHA3-256", 256);
-	        maxSecurityStrengths.Add("SHA3-512", 256);
 
 	        maxSecurityStrengths.Add("SHA-512/224", 192);
 	        maxSecurityStrengths.Add("SHA-512/256", 256);
@@ -76,7 +73,7 @@ namespace Org.BouncyCastle.Crypto.Prng.Drbg
 	            int bytesToCopy = ((temp.Length - i * dig.Length) > dig.Length)
 	                    ? dig.Length
 	                    : (temp.Length - i * dig.Length);
-	            System.Array.Copy(dig, 0, temp, i * dig.Length, bytesToCopy);
+	            Array.Copy(dig, 0, temp, i * dig.Length, bytesToCopy);
 
 	            counter++;
 	        }

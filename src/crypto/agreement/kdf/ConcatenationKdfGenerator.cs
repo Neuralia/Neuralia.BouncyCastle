@@ -75,7 +75,7 @@ namespace Org.BouncyCastle.Crypto.Agreement.Kdf
 
                     mDigest.DoFinal(hashBuf, 0);
 
-                    System.Array.Copy(hashBuf, 0, outBytes, outOff + outputLen, mHLen);
+                    Array.Copy(hashBuf, 0, outBytes, outOff + outputLen, mHLen);
                     outputLen += mHLen;
                 }
                 while ((counter++) < (len / mHLen));
@@ -91,7 +91,7 @@ namespace Org.BouncyCastle.Crypto.Agreement.Kdf
 
                 mDigest.DoFinal(hashBuf, 0);
 
-                System.Array.Copy(hashBuf, 0, outBytes, outOff + outputLen, len - outputLen);
+                Array.Copy(hashBuf, 0, outBytes, outOff + outputLen, len - outputLen);
             }
 
             return len;

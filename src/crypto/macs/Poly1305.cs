@@ -126,7 +126,6 @@ namespace Org.BouncyCastle.Crypto.Macs
             s2 = r2 * 5;
             s3 = r3 * 5;
             s4 = r4 * 5;
-            s4 = r4 * 5;
 
             byte[] kBytes;
             int kOff;
@@ -180,7 +179,7 @@ namespace Org.BouncyCastle.Crypto.Macs
                 }
 
                 int toCopy = System.Math.Min((len - copied), BlockSize - currentBlockOffset);
-                System.Array.Copy(input, copied + inOff, currentBlock, currentBlockOffset, toCopy);
+                Array.Copy(input, copied + inOff, currentBlock, currentBlockOffset, toCopy);
                 copied += toCopy;
                 currentBlockOffset += toCopy;
             }

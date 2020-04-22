@@ -106,7 +106,7 @@ namespace Org.BouncyCastle.Crypto
 			if (bufOff + length > buffer.Length)
 				throw new DataLengthException("attempt to process message to long for cipher");
 
-			System.Array.Copy(input, inOff, buffer, bufOff, length);
+			Array.Copy(input, inOff, buffer, bufOff, length);
 			bufOff += length;
 			return null;
 		}

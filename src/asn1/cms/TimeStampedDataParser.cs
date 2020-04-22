@@ -25,6 +25,7 @@ namespace Org.BouncyCastle.Asn1.Cms
 			}
 
             if (//obj is MetaData ||
+	            // ReSharper disable once SuspiciousTypeConversion.Global
                 obj is Asn1SequenceParser)
 			{
 				this.metaData = MetaData.GetInstance(obj.ToAsn1Object());

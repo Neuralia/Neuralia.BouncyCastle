@@ -139,7 +139,7 @@ namespace Org.BouncyCastle.Asn1.Cmp
 		 *   badTime          (3), -- messageTime was not sufficiently close to the system time, as defined by local policy
 		 *   badCertId        (4), -- no certificate could be found matching the provided criteria
 		 *   badDataFormat    (5), -- the data submitted has the wrong format
-		 *   wrongAuthority   (6), -- the authority indicated in the request is different from the one creating the response neuralium
+		 *   wrongAuthority   (6), -- the authority indicated in the request is different from the one creating the response token
 		 *   incorrectData    (7), -- the requester's data is incorrect (for notary services)
 		 *   missingTimeStamp (8), -- when the timestamp is missing but should be there (by policy)
 		 *   badPOP           (9)  -- the proof-of-possession failed
@@ -149,17 +149,7 @@ namespace Org.BouncyCastle.Asn1.Cmp
 		public override Asn1Object ToAsn1Object()
 		{
 			Asn1EncodableVector v = new Asn1EncodableVector(status);
-
-			if (statusString != null)
-			{
-				v.Add(statusString);
-			}
-
-			if (failInfo!= null)
-			{
-				v.Add(failInfo);
-			}
-
+            v.AddOptional(statusString, failInfo);
 			return new DerSequence(v);
 		}
 	}

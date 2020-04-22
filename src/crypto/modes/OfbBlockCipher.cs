@@ -69,7 +69,7 @@ namespace Org.BouncyCastle.Crypto.Modes
                 if (iv.Length < IV.Length)
                 {
                     // prepend the supplied IV with zeros (per FIPS PUB 81)
-                    System.Array.Copy(iv, 0, IV, IV.Length - iv.Length, iv.Length);
+                    Array.Copy(iv, 0, IV, IV.Length - iv.Length, iv.Length);
                     for (int i = 0; i < IV.Length - iv.Length; i++)
                     {
                         IV[i] = 0;
@@ -77,7 +77,7 @@ namespace Org.BouncyCastle.Crypto.Modes
                 }
                 else
                 {
-                    System.Array.Copy(iv, 0, IV, 0, IV.Length);
+                    Array.Copy(iv, 0, IV, 0, IV.Length);
                 }
 
 				parameters = ivParam.Parameters;
@@ -161,8 +161,8 @@ namespace Org.BouncyCastle.Crypto.Modes
             //
             // change over the input block.
             //
-            System.Array.Copy(ofbV, blockSize, ofbV, 0, ofbV.Length - blockSize);
-            System.Array.Copy(ofbOutV, 0, ofbV, ofbV.Length - blockSize, blockSize);
+            Array.Copy(ofbV, blockSize, ofbV, 0, ofbV.Length - blockSize);
+            Array.Copy(ofbOutV, 0, ofbV, ofbV.Length - blockSize, blockSize);
 
             return blockSize;
         }
@@ -173,7 +173,7 @@ namespace Org.BouncyCastle.Crypto.Modes
         */
         public void Reset()
         {
-            System.Array.Copy(IV, 0, ofbV, 0, IV.Length);
+            Array.Copy(IV, 0, ofbV, 0, IV.Length);
 
             cipher.Reset();
         }

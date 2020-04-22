@@ -56,7 +56,7 @@ namespace Org.BouncyCastle.Crypto.Generators
             hMac.BlockUpdate(iBuf, 0, iBuf.Length);
             hMac.DoFinal(state, 0);
 
-            System.Array.Copy(state, 0, outBytes, outOff, state.Length);
+            Array.Copy(state, 0, outBytes, outOff, state.Length);
 
             for (int count = 1; count < c; ++count)
             {

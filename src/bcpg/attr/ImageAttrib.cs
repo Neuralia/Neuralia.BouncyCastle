@@ -32,7 +32,7 @@ namespace Org.BouncyCastle.Bcpg.Attr
             _encoding = data[3] & 0xff;
 
             imageData = new byte[data.Length - hdrLength];
-            System.Array.Copy(data, hdrLength, imageData, 0, imageData.Length);
+            Array.Copy(data, hdrLength, imageData, 0, imageData.Length);
         }
 
         public ImageAttrib(

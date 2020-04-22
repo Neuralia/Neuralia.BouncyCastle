@@ -82,7 +82,7 @@ namespace Org.BouncyCastle.Crypto.Engines
 
 			cekBlock[0] = (byte)inLen;
 
-			System.Array.Copy(inBytes, inOff, cekBlock, 4, inLen);
+			Array.Copy(inBytes, inOff, cekBlock, 4, inLen);
 
 			rand.NextBytes(cekBlock, inLen + 4, cekBlock.Length - inLen - 4);
 
@@ -123,8 +123,8 @@ namespace Org.BouncyCastle.Crypto.Engines
 			byte[] cekBlock = new byte[inLen];
 			byte[] iv = new byte[blockSize];
 
-			System.Array.Copy(inBytes, inOff, cekBlock, 0, inLen);
-			System.Array.Copy(inBytes, inOff, iv, 0, iv.Length);
+			Array.Copy(inBytes, inOff, cekBlock, 0, inLen);
+			Array.Copy(inBytes, inOff, iv, 0, iv.Length);
 
 			engine.Init(false, new ParametersWithIV(param.Parameters, iv));
 
@@ -133,7 +133,7 @@ namespace Org.BouncyCastle.Crypto.Engines
 				engine.ProcessBlock(cekBlock, i, cekBlock, i);    
 			}
 
-			System.Array.Copy(cekBlock, cekBlock.Length - iv.Length, iv, 0, iv.Length);
+			Array.Copy(cekBlock, cekBlock.Length - iv.Length, iv, 0, iv.Length);
 
 			engine.Init(false, new ParametersWithIV(param.Parameters, iv));
 
@@ -158,7 +158,7 @@ namespace Org.BouncyCastle.Crypto.Engines
                 key = new byte[cekBlock[0]];
             }
 
-            System.Array.Copy(cekBlock, 4, key, 0, key.Length);
+            Array.Copy(cekBlock, 4, key, 0, key.Length);
 
 			// Note: Using constant time comparison
 			int nonEqual = 0;

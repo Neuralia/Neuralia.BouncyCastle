@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Text;
-
+using Neuralia.BouncyCastle;
 #if PORTABLE
 using System.Linq;
 #endif

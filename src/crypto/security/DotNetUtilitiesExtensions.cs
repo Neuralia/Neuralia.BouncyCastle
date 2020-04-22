@@ -1,7 +1,10 @@
 using System;
+using System.IO;
 using System.Security.Cryptography;
+using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Parameters;
 using Org.BouncyCastle.Math;
+using Org.BouncyCastle.OpenSsl;
 
 namespace Neuralia.BouncyCastle.extra.security {
 	public class DotNetUtilitiesExtensions {
@@ -39,6 +42,17 @@ namespace Neuralia.BouncyCastle.extra.security {
 			return padded;
 		}
 
+		public static RSA LoadParameters(string file)
+		{
+			using(TextReader privateKeyTextReader = new StringReader(File.ReadAllText(file))) {
+				AsymmetricCipherKeyPair readKeyPair = (AsymmetricCipherKeyPair) new PemReader(privateKeyTextReader).ReadObject();
+
+				RsaPrivateCrtKeyParameters privateKeyParams = ((RsaPrivateCrtKeyParameters)readKeyPair.Private);
+
+				return ToRSA(privateKeyParams);
+			}
+		}
+		
 		private static RSA CreateRSAProvider(RSAParameters rp)
 		{
 			RSA rsa = RSA.Create();

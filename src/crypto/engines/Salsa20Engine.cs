@@ -226,7 +226,7 @@ namespace Org.BouncyCastle.Crypto.Engines
 			Pack.UInt32_To_LE(x, output, 0);
 		}
 
-		public static void SalsaCore(int rounds, uint[] input, uint[] x)
+        public static void SalsaCore(int rounds, uint[] input, uint[] x)
 		{
 			if (input.Length != 16)
 				throw new ArgumentException();

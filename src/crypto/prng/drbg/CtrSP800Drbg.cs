@@ -97,14 +97,14 @@ namespace Org.BouncyCastle.Crypto.Prng.Drbg
 	            int bytesToCopy = ((temp.Length - i * outLen) > outLen)
 	                    ? outLen : (temp.Length - i * outLen);
 	            
-	            System.Array.Copy(outputBlock, 0, temp, i * outLen, bytesToCopy);
+	            Array.Copy(outputBlock, 0, temp, i * outLen, bytesToCopy);
 	            ++i;
 	        }
 
 	        XOR(temp, seed, temp, 0);
 
-	        System.Array.Copy(temp, 0, key, 0, key.Length);
-	        System.Array.Copy(temp, key.Length, v, 0, v.Length);
+	        Array.Copy(temp, 0, key, 0, key.Length);
+	        Array.Copy(temp, key.Length, v, 0, v.Length);
 	    }
 	    
 	    private void CTR_DRBG_Reseed_algorithm(byte[] additionalInput)
@@ -148,7 +148,7 @@ namespace Org.BouncyCastle.Crypto.Prng.Drbg
 
 	    // -- Internal state migration ---
 
-        private static readonly byte[] K_BITS = Hex.Decode("000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F");
+        private static readonly byte[] K_BITS = Hex.DecodeStrict("000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F");
 
         // 1. If (number_of_bits_to_return > max_number_of_bits), then return an
 	    // ERROR_FLAG.
@@ -221,7 +221,7 @@ namespace Org.BouncyCastle.Crypto.Prng.Drbg
 	        byte[] S = new byte[blockLen];
 	        copyIntToByteArray(S, L, 0);
 	        copyIntToByteArray(S, N, 4);
-	        System.Array.Copy(inputString, 0, S, 8, L);
+	        Array.Copy(inputString, 0, S, 8, L);
 	        S[8 + L] = (byte)0x80;
 	        // S already padded with zeros
 
@@ -232,7 +232,7 @@ namespace Org.BouncyCastle.Crypto.Prng.Drbg
 	        
 	        int i = 0;
 	        byte[] K = new byte[mKeySizeInBits / 8];
-	        System.Array.Copy(K_BITS, 0, K, 0, K.Length);
+	        Array.Copy(K_BITS, 0, K, 0, K.Length);
 
 	        while (i*outLen*8 < mKeySizeInBits + outLen *8)
 	        {
@@ -243,13 +243,13 @@ namespace Org.BouncyCastle.Crypto.Prng.Drbg
 	                    ? outLen
 	                    : (temp.Length - i * outLen);
 	            
-	            System.Array.Copy(bccOut, 0, temp, i * outLen, bytesToCopy);
+	            Array.Copy(bccOut, 0, temp, i * outLen, bytesToCopy);
 	            ++i;
 	        }
 
 	        byte[] X = new byte[outLen];
-	        System.Array.Copy(temp, 0, K, 0, K.Length);
-	        System.Array.Copy(temp, K.Length, X, 0, X.Length);
+	        Array.Copy(temp, 0, K, 0, K.Length);
+	        Array.Copy(temp, K.Length, X, 0, X.Length);
 
 	        temp = new byte[bitLength / 2];
 
@@ -264,7 +264,7 @@ namespace Org.BouncyCastle.Crypto.Prng.Drbg
 	                    ? outLen
 	                    : (temp.Length - i * outLen);
 
-	            System.Array.Copy(X, 0, temp, i * outLen, bytesToCopy);
+	            Array.Copy(X, 0, temp, i * outLen, bytesToCopy);
 	            i++;
 	        }
 
@@ -301,7 +301,7 @@ namespace Org.BouncyCastle.Crypto.Prng.Drbg
 	            mEngine.ProcessBlock(inputBlock, 0, chainingValue, 0);
 	        }
 
-            System.Array.Copy(chainingValue, 0, bccOut, 0, bccOut.Length);
+            Array.Copy(chainingValue, 0, bccOut, 0, bccOut.Length);
 	    }
 
 	    private void copyIntToByteArray(byte[] buf, int value, int offSet)
@@ -382,7 +382,7 @@ namespace Org.BouncyCastle.Crypto.Prng.Drbg
 
                     mEngine.ProcessBlock(mV, 0, tmp, 0);
 
-                    System.Array.Copy(tmp, 0, output, i * tmp.Length, bytesToCopy);
+                    Array.Copy(tmp, 0, output, i * tmp.Length, bytesToCopy);
 	            }
 	        }
 

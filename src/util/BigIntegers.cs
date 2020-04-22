@@ -42,7 +42,7 @@ namespace Org.BouncyCastle.Utilities
                 return bytes;
 
             byte[] tmp = new byte[length];
-            System.Array.Copy(bytes, 0, tmp, tmp.Length - bytes.Length, bytes.Length);
+            Array.Copy(bytes, 0, tmp, tmp.Length - bytes.Length, bytes.Length);
             return tmp;
         }
 

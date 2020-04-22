@@ -246,13 +246,13 @@ namespace Org.BouncyCastle.Crypto.Modes
 
                 cipher.ProcessBlock(bufBlock, 0, tmp, 0);
 
-                System.Array.Copy(tmp, 0, outBytes, outOff, extra);
+                Array.Copy(tmp, 0, outBytes, outOff, extra);
 
 				mac.BlockUpdate(tmp, 0, extra);
 
 				CalculateMac();
 
-				System.Array.Copy(macBlock, 0, outBytes, outOff + extra, macSize);
+				Array.Copy(macBlock, 0, outBytes, outOff + extra, macSize);
 
 				Reset(false);
 
@@ -271,7 +271,7 @@ namespace Org.BouncyCastle.Crypto.Modes
 
 					cipher.ProcessBlock(bufBlock, 0, tmp, 0);
 
-                    System.Array.Copy(tmp, 0, outBytes, outOff, extra - macSize);
+                    Array.Copy(tmp, 0, outBytes, outOff, extra - macSize);
 				}
 
 				CalculateMac();
@@ -289,7 +289,7 @@ namespace Org.BouncyCastle.Crypto.Modes
 		{
 			byte[] mac = new byte[macSize];
 
-			System.Array.Copy(macBlock, 0, mac, 0, macSize);
+			Array.Copy(macBlock, 0, mac, 0, macSize);
 
 			return mac;
 		}
@@ -354,7 +354,7 @@ namespace Org.BouncyCastle.Crypto.Modes
                 bufOff = 0;
                 if (!forEncryption)
                 {
-                    System.Array.Copy(bufBlock, blockSize, bufBlock, 0, macSize);
+                    Array.Copy(bufBlock, blockSize, bufBlock, 0, macSize);
                     bufOff = macSize;
                 }
 

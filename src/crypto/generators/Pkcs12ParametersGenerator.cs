@@ -114,8 +114,8 @@ namespace Org.BouncyCastle.Crypto.Generators
 
             byte[]  I = new byte[S.Length + P.Length];
 
-            System.Array.Copy(S, 0, I, 0, S.Length);
-            System.Array.Copy(P, 0, I, S.Length, P.Length);
+            Array.Copy(S, 0, I, 0, S.Length);
+            Array.Copy(P, 0, I, S.Length, P.Length);
 
             byte[]  B = new byte[v];
             int     c = (n + u - 1) / u;
@@ -145,11 +145,11 @@ namespace Org.BouncyCastle.Crypto.Generators
 
                 if (i == c)
                 {
-                    System.Array.Copy(A, 0, dKey, (i - 1) * u, dKey.Length - ((i - 1) * u));
+                    Array.Copy(A, 0, dKey, (i - 1) * u, dKey.Length - ((i - 1) * u));
                 }
                 else
                 {
-                    System.Array.Copy(A, 0, dKey, (i - 1) * u, A.Length);
+                    Array.Copy(A, 0, dKey, (i - 1) * u, A.Length);
                 }
             }
 

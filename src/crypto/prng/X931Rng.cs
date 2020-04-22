@@ -32,7 +32,7 @@ namespace Org.BouncyCastle.Crypto.Prng
 
             this.mDT = new byte[engine.GetBlockSize()];
 
-            System.Array.Copy(dateTimeVector, 0, mDT, 0, mDT.Length);
+            Array.Copy(dateTimeVector, 0, mDT, 0, mDT.Length);
 
             this.mI = new byte[engine.GetBlockSize()];
             this.mR = new byte[engine.GetBlockSize()];
@@ -80,7 +80,7 @@ namespace Org.BouncyCastle.Crypto.Prng
                 Process(mR, mI, mV);
                 Process(mV, mR, mI);
 
-                System.Array.Copy(mR, 0, output, i * mR.Length, mR.Length);
+                Array.Copy(mR, 0, output, i * mR.Length, mR.Length);
 
                 Increment(mDT);
             }
@@ -93,7 +93,7 @@ namespace Org.BouncyCastle.Crypto.Prng
                 Process(mR, mI, mV);
                 Process(mV, mR, mI);
 
-                System.Array.Copy(mR, 0, output, m * mR.Length, bytesToCopy);
+                Array.Copy(mR, 0, output, m * mR.Length, bytesToCopy);
 
                 Increment(mDT);
             }

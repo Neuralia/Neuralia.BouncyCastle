@@ -220,14 +220,14 @@ namespace Org.BouncyCastle.Crypto.Signers
                 fullMessage = true;
 
                 recoveredMessage = new byte[off - mStart];
-                System.Array.Copy(block, mStart, recoveredMessage, 0, recoveredMessage.Length);
+                Array.Copy(block, mStart, recoveredMessage, 0, recoveredMessage.Length);
             }
             else
             {
                 fullMessage = false;
 
                 recoveredMessage = new byte[off - mStart];
-                System.Array.Copy(block, mStart, recoveredMessage, 0, recoveredMessage.Length);
+                Array.Copy(block, mStart, recoveredMessage, 0, recoveredMessage.Length);
             }
 
             preSig = signature;
@@ -332,14 +332,14 @@ namespace Org.BouncyCastle.Crypto.Signers
 
                 delta -= mR;
 
-                System.Array.Copy(mBuf, 0, block, delta, mR);
+                Array.Copy(mBuf, 0, block, delta, mR);
             }
             else
             {
                 header = (byte) (0x40);
                 delta -= messageLength;
 
-                System.Array.Copy(mBuf, 0, block, delta, messageLength);
+                Array.Copy(mBuf, 0, block, delta, messageLength);
             }
 
             if ((delta - 1) > 0)
@@ -485,7 +485,7 @@ namespace Org.BouncyCastle.Crypto.Signers
                 }
 
                 recoveredMessage = new byte[off - mStart];
-                System.Array.Copy(block, mStart, recoveredMessage, 0, recoveredMessage.Length);
+                Array.Copy(block, mStart, recoveredMessage, 0, recoveredMessage.Length);
             }
             else
             {
@@ -510,7 +510,7 @@ namespace Org.BouncyCastle.Crypto.Signers
                 }
 
                 recoveredMessage = new byte[off - mStart];
-                System.Array.Copy(block, mStart, recoveredMessage, 0, recoveredMessage.Length);
+                Array.Copy(block, mStart, recoveredMessage, 0, recoveredMessage.Length);
             }
 
             //

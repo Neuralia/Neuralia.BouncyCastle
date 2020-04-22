@@ -47,6 +47,11 @@ namespace Org.BouncyCastle.Crypto.Tls
             SetPlaintextLimit(MAX_FRAGMENT_LENGTH);
         }
 
+        internal bool IsClosed
+        {
+            get { return mClosed; }
+        }
+
         internal virtual void SetPlaintextLimit(int plaintextLimit)
         {
             this.mPlaintextLimit = plaintextLimit;
@@ -316,7 +321,7 @@ namespace Org.BouncyCastle.Crypto.Tls
                         this.mRetransmitEpoch = null;
                     }
 
-                    System.Array.Copy(plaintext, 0, buf, off, plaintext.Length);
+                    Array.Copy(plaintext, 0, buf, off, plaintext.Length);
                     return plaintext.Length;
                 }
                 catch (IOException e)
@@ -517,7 +522,7 @@ namespace Org.BouncyCastle.Crypto.Tls
             TlsUtilities.WriteUint16(recordEpoch, record, 3);
             TlsUtilities.WriteUint48(recordSequenceNumber, record, 5);
             TlsUtilities.WriteUint16(ciphertext.Length, record, 11);
-            System.Array.Copy(ciphertext, 0, record, RECORD_HEADER_LENGTH, ciphertext.Length);
+            Array.Copy(ciphertext, 0, record, RECORD_HEADER_LENGTH, ciphertext.Length);
 
             mTransport.Send(record, 0, record.Length);
         }

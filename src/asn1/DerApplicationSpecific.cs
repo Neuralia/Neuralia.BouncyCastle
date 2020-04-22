@@ -59,7 +59,7 @@ namespace Org.BouncyCastle.Asn1
 			{
 				int lenBytes = GetLengthOfHeader(data);
 				byte[] tmp = new byte[data.Length - lenBytes];
-				System.Array.Copy(data, lenBytes, tmp, 0, tmp.Length);
+				Array.Copy(data, lenBytes, tmp, 0, tmp.Length);
 				this.octets = tmp;
 			}
 		}
@@ -219,7 +219,7 @@ namespace Org.BouncyCastle.Asn1
             int remaining = input.Length - index;
             byte[] tmp = new byte[1 + remaining];
             tmp[0] = (byte)newTag;
-			System.Array.Copy(input, index, tmp, 1, remaining);
+			Array.Copy(input, index, tmp, 1, remaining);
 			return tmp;
 		}
     }

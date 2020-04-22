@@ -35,6 +35,7 @@ namespace Org.BouncyCastle.Crypto.Tls
             client.Init(state.clientContext);
 
             DtlsRecordLayer recordLayer = new DtlsRecordLayer(transport, state.clientContext, client, ContentType.handshake);
+            client.NotifyCloseHandle(recordLayer);
 
             TlsSession sessionToResume = state.client.GetSessionToResume();
             if (sessionToResume != null && sessionToResume.IsResumable)
@@ -828,11 +829,11 @@ namespace Org.BouncyCastle.Crypto.Tls
             int cookiePos = cookieLengthPos + 1;
 
             byte[] patched = new byte[clientHelloBody.Length + cookie.Length];
-            System.Array.Copy(clientHelloBody, 0, patched, 0, cookieLengthPos);
+            Array.Copy(clientHelloBody, 0, patched, 0, cookieLengthPos);
             TlsUtilities.CheckUint8(cookie.Length);
             TlsUtilities.WriteUint8((byte)cookie.Length, patched, cookieLengthPos);
-            System.Array.Copy(cookie, 0, patched, cookiePos, cookie.Length);
-            System.Array.Copy(clientHelloBody, cookiePos, patched, cookiePos + cookie.Length, clientHelloBody.Length - cookiePos);
+            Array.Copy(cookie, 0, patched, cookiePos, cookie.Length);
+            Array.Copy(clientHelloBody, cookiePos, patched, cookiePos + cookie.Length, clientHelloBody.Length - cookiePos);
 
             return patched;
         }

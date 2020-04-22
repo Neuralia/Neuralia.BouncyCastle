@@ -45,7 +45,7 @@ namespace Org.BouncyCastle.Crypto
         /// <param name="offset">The offset into destination to start copying the result at.</param>
         public int Collect(byte[] destination, int offset)
         {
-            System.Array.Copy(result, 0, destination, offset, result.Length);
+            Array.Copy(result, 0, destination, offset, result.Length);
 
             return result.Length;
         }

@@ -160,7 +160,7 @@ namespace Org.BouncyCastle.Crypto.Engines
 			state[2] = Pack.BE_To_UInt32(input, inOff+8);
 			state[3] = Pack.BE_To_UInt32(input, inOff+12);
 
-			System.Array.Copy(subKeys, 0, decryptKeys, 0, subKeys.Length);
+			Array.Copy(subKeys, 0, decryptKeys, 0, subKeys.Length);
 			theta(decryptKeys, nullVector);
 
 			int i;

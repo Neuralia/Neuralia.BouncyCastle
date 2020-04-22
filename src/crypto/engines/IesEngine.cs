@@ -187,7 +187,7 @@ namespace Org.BouncyCastle.Crypto.Engines
                 C = new byte[len + mac.GetMacSize()];
                 c_text_length = len;
 
-                System.Array.Copy(tmp, 0, C, 0, len);
+                Array.Copy(tmp, 0, C, 0, len);
 
                 macKey = new KeyParameter(Buffer, (cipherKeySize / 8), (macKeySize / 8));
             }

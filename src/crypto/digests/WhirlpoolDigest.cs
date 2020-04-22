@@ -257,7 +257,7 @@ namespace Org.BouncyCastle.Crypto.Digests
 					_L[i] ^= C7[(int)(_K[(i - 7) & 7]) & 0xff];
 				}
 
-				System.Array.Copy(_L, 0, _K, 0, _K.Length);
+				Array.Copy(_L, 0, _K, 0, _K.Length);
 
 				_K[0] ^= _rc[round];
 
@@ -277,7 +277,7 @@ namespace Org.BouncyCastle.Crypto.Digests
 				}
 
 				// save the current state
-				System.Array.Copy(_L, 0, _state, 0, _state.Length);
+				Array.Copy(_L, 0, _state, 0, _state.Length);
 			}
 
 			// apply Miuaguchi-Preneel compression
@@ -364,7 +364,7 @@ namespace Org.BouncyCastle.Crypto.Digests
 
 			// copy the length information to the final 32 bytes of the
 			// 64 byte block....
-			System.Array.Copy(bitLength, 0, _buffer, 32, bitLength.Length);
+			Array.Copy(bitLength, 0, _buffer, 32, bitLength.Length);
 
 			processFilledBuffer();
 		}
@@ -393,19 +393,19 @@ namespace Org.BouncyCastle.Crypto.Digests
 		{
 			WhirlpoolDigest originalDigest = (WhirlpoolDigest)other;
 
-			System.Array.Copy(originalDigest._rc, 0, _rc, 0, _rc.Length);
+			Array.Copy(originalDigest._rc, 0, _rc, 0, _rc.Length);
 
-			System.Array.Copy(originalDigest._buffer, 0, _buffer, 0, _buffer.Length);
+			Array.Copy(originalDigest._buffer, 0, _buffer, 0, _buffer.Length);
 
 			this._bufferPos = originalDigest._bufferPos;
-			System.Array.Copy(originalDigest._bitCount, 0, _bitCount, 0, _bitCount.Length);
+			Array.Copy(originalDigest._bitCount, 0, _bitCount, 0, _bitCount.Length);
 
 			// -- internal hash state --
-			System.Array.Copy(originalDigest._hash, 0, _hash, 0, _hash.Length);
-			System.Array.Copy(originalDigest._K, 0, _K, 0, _K.Length);
-			System.Array.Copy(originalDigest._L, 0, _L, 0, _L.Length);
-			System.Array.Copy(originalDigest._block, 0, _block, 0, _block.Length);
-			System.Array.Copy(originalDigest._state, 0, _state, 0, _state.Length);
+			Array.Copy(originalDigest._hash, 0, _hash, 0, _hash.Length);
+			Array.Copy(originalDigest._K, 0, _K, 0, _K.Length);
+			Array.Copy(originalDigest._L, 0, _L, 0, _L.Length);
+			Array.Copy(originalDigest._block, 0, _block, 0, _block.Length);
+			Array.Copy(originalDigest._state, 0, _state, 0, _state.Length);
 		}
 
 

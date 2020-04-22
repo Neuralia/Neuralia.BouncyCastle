@@ -144,7 +144,7 @@ namespace Org.BouncyCastle.Crypto.Agreement.Srp
 			if (bs.Length < length)
 			{
 				byte[] tmp = new byte[length];
-				System.Array.Copy(bs, 0, tmp, length - bs.Length, bs.Length);
+				Array.Copy(bs, 0, tmp, length - bs.Length, bs.Length);
 				bs = tmp;
 			}
 			return bs;

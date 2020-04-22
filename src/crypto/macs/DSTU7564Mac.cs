@@ -132,7 +132,7 @@ namespace Org.BouncyCastle.Crypto.Macs
 
             byte[] padded = new byte[paddedLen];
 
-            System.Array.Copy(input, 0, padded, 0, input.Length);
+            Array.Copy(input, 0, padded, 0, input.Length);
 
             padded[input.Length] = (byte)0x80; // Defined in standard;
             Pack.UInt32_To_LE((uint)(input.Length * 8), padded, padded.Length - 12); // Defined in standard;

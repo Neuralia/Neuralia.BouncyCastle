@@ -67,7 +67,7 @@ namespace Org.BouncyCastle.Crypto.Tls
                     int copyEnd = System.Math.Min(range.End, fragment_end);
                     int copyLength = copyEnd - copyStart;
 
-                    System.Array.Copy(buf, off + copyStart - fragment_offset, mBody, copyStart,
+                    Array.Copy(buf, off + copyStart - fragment_offset, mBody, copyStart,
                         copyLength);
 
                     if (copyStart == range.Start)

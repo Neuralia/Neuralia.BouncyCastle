@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Text;
 
@@ -9,7 +8,6 @@ using Org.BouncyCastle.Utilities.Encoders;
 
 namespace Org.BouncyCastle.Asn1.Utilities
 {
-    [SuppressMessage("ReSharper", "TailRecursiveCall")]
     public sealed class Asn1Dump
     {
         private static readonly string NewLine = Platform.NewLine;
@@ -65,7 +63,7 @@ namespace Org.BouncyCastle.Asn1.Utilities
                     }
                 }
             }
-            else if (obj is DerTaggedObject)
+            else if (obj is Asn1TaggedObject)
             {
                 string tab = indent + Tab;
                 buf.Append(indent);
@@ -78,7 +76,7 @@ namespace Org.BouncyCastle.Asn1.Utilities
                     buf.Append("Tagged [");
                 }
 
-                DerTaggedObject o = (DerTaggedObject)obj;
+                Asn1TaggedObject o = (Asn1TaggedObject)obj;
 
                 buf.Append(((int)o.TagNo).ToString());
                 buf.Append(']');

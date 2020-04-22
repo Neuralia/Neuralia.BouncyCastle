@@ -131,7 +131,7 @@ namespace Org.BouncyCastle.Crypto.Generators
             int posInT = generatedBytes % hashLen;
             int leftInT = hashLen - generatedBytes % hashLen;
             int toCopy = System.Math.Min(leftInT, toGenerate);
-            System.Array.Copy(currentT, posInT, output, outOff, toCopy);
+            Array.Copy(currentT, posInT, output, outOff, toCopy);
             generatedBytes += toCopy;
             toGenerate -= toCopy;
             outOff += toCopy;
@@ -140,7 +140,7 @@ namespace Org.BouncyCastle.Crypto.Generators
             {
                 ExpandNext();
                 toCopy = System.Math.Min(hashLen, toGenerate);
-                System.Array.Copy(currentT, 0, output, outOff, toCopy);
+                Array.Copy(currentT, 0, output, outOff, toCopy);
                 generatedBytes += toCopy;
                 toGenerate -= toCopy;
                 outOff += toCopy;

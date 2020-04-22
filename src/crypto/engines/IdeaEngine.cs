@@ -182,7 +182,7 @@ namespace Org.BouncyCastle.Crypto.Engines
             if (uKey.Length < 16)
             {
                 byte[]  tmp = new byte[16];
-                System.Array.Copy(uKey, 0, tmp, tmp.Length - uKey.Length, uKey.Length);
+                Array.Copy(uKey, 0, tmp, tmp.Length - uKey.Length, uKey.Length);
                 uKey = tmp;
             }
             for (int i = 0; i < 8; i++)

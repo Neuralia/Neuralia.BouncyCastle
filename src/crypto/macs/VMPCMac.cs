@@ -64,7 +64,7 @@ namespace Org.BouncyCastle.Crypto.Macs
 				P[s & 0xff] = temp;
 			}
 
-			System.Array.Copy(M, 0, output, outOff, M.Length);
+			Array.Copy(M, 0, output, outOff, M.Length);
 			Reset();
 
 			return M.Length;

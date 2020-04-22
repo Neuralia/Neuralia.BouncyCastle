@@ -61,9 +61,9 @@ namespace Org.BouncyCastle.Crypto.Generators
 			{
 				// extension array t
 				int[] tmp_t = new int[t.Length + 1];             ///////////////
-					System.Array.Copy(t,0,tmp_t,0,t.Length);          //  extension
+					Array.Copy(t,0,tmp_t,0,t.Length);          //  extension
 				t = new int[tmp_t.Length];                       //  array t
-				System.Array.Copy(tmp_t, 0, t, 0, tmp_t.Length);  ///////////////
+				Array.Copy(tmp_t, 0, t, 0, tmp_t.Length);  ///////////////
 
 				t[i+1] = t[i]/2;
 				s = i+1;
@@ -83,9 +83,9 @@ namespace Org.BouncyCastle.Crypto.Generators
 				   {
 					   //step 6
 					   BigInteger[] tmp_y = new BigInteger[y.Length];  ////////////////
-					   System.Array.Copy(y,0,tmp_y,0,y.Length);         //  extension
+					   Array.Copy(y,0,tmp_y,0,y.Length);         //  extension
 					   y = new BigInteger[rm+1];                       //  array y
-					   System.Array.Copy(tmp_y,0,y,0,tmp_y.Length);     ////////////////
+					   Array.Copy(tmp_y,0,y,0,tmp_y.Length);     ////////////////
 
 					   for (int j=0; j<rm; j++)
 					   {
@@ -176,9 +176,9 @@ namespace Org.BouncyCastle.Crypto.Generators
 			{
 				// extension array t
 				int[] tmp_t = new int[t.Length + 1];             ///////////////
-					System.Array.Copy(t,0,tmp_t,0,t.Length);          //  extension
+					Array.Copy(t,0,tmp_t,0,t.Length);          //  extension
 				t = new int[tmp_t.Length];                       //  array t
-				System.Array.Copy(tmp_t, 0, t, 0, tmp_t.Length);  ///////////////
+				Array.Copy(tmp_t, 0, t, 0, tmp_t.Length);  ///////////////
 
 				t[i+1] = t[i]/2;
 				s = i+1;
@@ -198,9 +198,9 @@ namespace Org.BouncyCastle.Crypto.Generators
 				   {
 					   //step 6
 					   BigInteger[] tmp_y = new BigInteger[y.Length];  ////////////////
-						   System.Array.Copy(y,0,tmp_y,0,y.Length);         //  extension
+						   Array.Copy(y,0,tmp_y,0,y.Length);         //  extension
 					   y = new BigInteger[rm+1];                       //  array y
-					   System.Array.Copy(tmp_y,0,y,0,tmp_y.Length);     ////////////////
+					   Array.Copy(tmp_y,0,y,0,tmp_y.Length);     ////////////////
 
 					   for (int j=0; j<rm; j++)
 					   {

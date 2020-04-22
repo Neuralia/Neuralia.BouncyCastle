@@ -16,16 +16,16 @@ namespace Org.BouncyCastle.Tsp
 	public class TimeStampResponse
 	{
 		private TimeStampResp	resp;
-		private TimeStampNeuralium	timeStampNeuralium;
+		private TimeStampToken	timeStampToken;
 
 		public TimeStampResponse(
 			TimeStampResp resp)
 		{
 			this.resp = resp;
 
-			if (resp.TimeStampNeuralium != null)
+			if (resp.TimeStampToken != null)
 			{
-				timeStampNeuralium = new TimeStampNeuralium(resp.TimeStampNeuralium);
+				timeStampToken = new TimeStampToken(resp.TimeStampToken);
 			}
 		}
 
@@ -104,15 +104,15 @@ namespace Org.BouncyCastle.Tsp
 			return new PkiFailureInfo(resp.Status.FailInfo);
 		}
 
-		public TimeStampNeuralium TimeStampNeuralium
+		public TimeStampToken TimeStampToken
 		{
-			get { return timeStampNeuralium; }
+			get { return timeStampToken; }
 		}
 
 		/**
 		 * Check this response against to see if it a well formed response for
 		 * the passed in request. Validation will include checking the time stamp
-		 * neuralium if the response status is GRANTED or GRANTED_WITH_MODS.
+		 * token if the response status is GRANTED or GRANTED_WITH_MODS.
 		 *
 		 * @param request the request to be checked against
 		 * @throws TspException if the request can not match this response.
@@ -120,11 +120,11 @@ namespace Org.BouncyCastle.Tsp
 		public void Validate(
 			TimeStampRequest request)
 		{
-			TimeStampNeuralium tok = this.TimeStampNeuralium;
+			TimeStampToken tok = this.TimeStampToken;
 
 			if (tok != null)
 			{
-				TimeStampNeuraliumInfo tstInfo = tok.TimeStampInfo;
+				TimeStampTokenInfo tstInfo = tok.TimeStampInfo;
 
 				if (request.Nonce != null && !request.Nonce.Equals(tstInfo.Nonce))
 				{
@@ -133,7 +133,7 @@ namespace Org.BouncyCastle.Tsp
 
 				if (this.Status != (int) PkiStatus.Granted && this.Status != (int) PkiStatus.GrantedWithMods)
 				{
-					throw new TspValidationException("time stamp neuralium found in failed request.");
+					throw new TspValidationException("time stamp token found in failed request.");
 				}
 
 				if (!Arrays.ConstantTimeAreEqual(request.GetMessageImprintDigest(), tstInfo.GetMessageImprintDigest()))
@@ -169,7 +169,7 @@ namespace Org.BouncyCastle.Tsp
 			}
 			else if (this.Status == (int) PkiStatus.Granted || this.Status == (int) PkiStatus.GrantedWithMods)
 			{
-				throw new TspValidationException("no time stamp neuralium found and one expected.");
+				throw new TspValidationException("no time stamp token found and one expected.");
 			}
 		}
 

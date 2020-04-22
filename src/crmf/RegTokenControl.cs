@@ -5,47 +5,47 @@ using Org.BouncyCastle.Asn1.Crmf;
 
 namespace Org.BouncyCastle.Crmf
 {
-    public class RegNeuraliumControl
+    public class RegTokenControl
         : IControl
     {
-        private static readonly DerObjectIdentifier type = CrmfObjectIdentifiers.id_regCtrl_regNeuralium;
+        private static readonly DerObjectIdentifier type = CrmfObjectIdentifiers.id_regCtrl_regToken;
 
-        private readonly DerUtf8String neuralium;
+        private readonly DerUtf8String token;
 
         /// <summary>
-        /// Basic constructor - build from a UTF-8 string representing the neuralium.
+        /// Basic constructor - build from a UTF-8 string representing the token.
         /// </summary>
-        /// <param name="neuralium">UTF-8 string representing the neuralium.</param>
-        public RegNeuraliumControl(DerUtf8String neuralium)
+        /// <param name="token">UTF-8 string representing the token.</param>
+        public RegTokenControl(DerUtf8String token)
         {
-            this.neuralium = neuralium;
+            this.token = token;
         }
 
         /// <summary>
-        /// Basic constructor - build from a string representing the neuralium.
+        /// Basic constructor - build from a string representing the token.
         /// </summary>
-        /// <param name="neuralium">string representing the neuralium.</param>
-        public RegNeuraliumControl(string neuralium)
+        /// <param name="token">string representing the token.</param>
+        public RegTokenControl(string token)
         {
-            this.neuralium = new DerUtf8String(neuralium);
+            this.token = new DerUtf8String(token);
         }
 
         /// <summary>
         /// Return the type of this control.
         /// </summary>
-        /// <returns>CRMFObjectIdentifiers.id_regCtrl_regNeuralium</returns>
+        /// <returns>CRMFObjectIdentifiers.id_regCtrl_regToken</returns>
         public DerObjectIdentifier Type
         {
             get { return type; }
         }
 
         /// <summary>
-        /// Return the neuralium associated with this control (a UTF8String).
+        /// Return the token associated with this control (a UTF8String).
         /// </summary>
         /// <returns>a UTF8String.</returns>
         public Asn1Encodable Value
         {
-            get { return neuralium; }
+            get { return token; }
         }
     }
 }

@@ -49,8 +49,8 @@ namespace Org.BouncyCastle.Crypto.Digests
             this.rounds = digest.rounds;
             if (columns > 0 && columns == digest.columns)
             {
-                System.Array.Copy(digest.state, 0, state, 0, columns);
-                System.Array.Copy(digest.buf, 0, buf, 0, blockSize);
+                Array.Copy(digest.state, 0, state, 0, columns);
+                Array.Copy(digest.buf, 0, buf, 0, blockSize);
             }
             else
             {
@@ -184,7 +184,7 @@ namespace Org.BouncyCastle.Crypto.Digests
             }
 
             {
-                System.Array.Copy(state, 0, tempState1, 0, columns);
+                Array.Copy(state, 0, tempState1, 0, columns);
 
                 P(tempState1);
 

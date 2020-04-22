@@ -21,8 +21,8 @@ namespace Org.BouncyCastle.Crypto.Digests
 
         protected Gost3411_2012Digest(byte[] IV)
         {
-            System.Array.Copy(IV, 0,this.IV, 0,64);
-            System.Array.Copy(IV, 0, h, 0, 64);
+            System.Array.Copy(IV,this.IV,64);
+            System.Array.Copy(IV, h, 64);
         }
 
         public abstract string AlgorithmName { get; }
@@ -54,7 +54,7 @@ namespace Org.BouncyCastle.Crypto.Digests
 
             reverse(h, tmp);
             
-            System.Array.Copy(tmp, 0, output, outOff, 64);
+            Array.Copy(tmp, 0, output, outOff, 64);
 
             Reset();
             return 64;

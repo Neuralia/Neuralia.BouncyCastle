@@ -20,7 +20,7 @@ namespace Org.BouncyCastle.Crypto.Parameters
             this.salt = new byte[saltLen];
             this.parameters = parameters;
 
-            System.Array.Copy(salt, saltOff, this.salt, 0, saltLen);
+            Array.Copy(salt, saltOff, this.salt, 0, saltLen);
         }
 
         public byte[] GetSalt()

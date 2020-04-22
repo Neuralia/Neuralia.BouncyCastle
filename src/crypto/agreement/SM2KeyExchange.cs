@@ -198,7 +198,7 @@ namespace Org.BouncyCastle.Crypto.Agreement
                 mDigest.DoFinal(buf, 0);
 
                 int copyLen = System.Math.Min(digestSize, rv.Length - off);
-                System.Array.Copy(buf, 0, rv, off, copyLen);
+                Array.Copy(buf, 0, rv, off, copyLen);
                 off += copyLen;
             }
 

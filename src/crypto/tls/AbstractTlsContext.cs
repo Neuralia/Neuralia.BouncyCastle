@@ -133,15 +133,15 @@ namespace Org.BouncyCastle.Crypto.Tls
             byte[] seed = new byte[seedLength];
             int seedPos = 0;
 
-            System.Array.Copy(cr, 0, seed, seedPos, cr.Length);
+            Array.Copy(cr, 0, seed, seedPos, cr.Length);
             seedPos += cr.Length;
-            System.Array.Copy(sr, 0, seed, seedPos, sr.Length);
+            Array.Copy(sr, 0, seed, seedPos, sr.Length);
             seedPos += sr.Length;
             if (context_value != null)
             {
                 TlsUtilities.WriteUint16(context_value.Length, seed, seedPos);
                 seedPos += 2;
-                System.Array.Copy(context_value, 0, seed, seedPos, context_value.Length);
+                Array.Copy(context_value, 0, seed, seedPos, context_value.Length);
                 seedPos += context_value.Length;
             }
 

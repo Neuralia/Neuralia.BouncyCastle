@@ -50,7 +50,7 @@ namespace Org.BouncyCastle.Crypto.Digests
 
 		protected void CopyIn(LongDigest t)
 		{
-            System.Array.Copy(t.xBuf, 0, xBuf, 0, t.xBuf.Length);
+            Array.Copy(t.xBuf, 0, xBuf, 0, t.xBuf.Length);
 
             xBufOff = t.xBufOff;
             byteCount1 = t.byteCount1;
@@ -65,7 +65,7 @@ namespace Org.BouncyCastle.Crypto.Digests
             H7 = t.H7;
             H8 = t.H8;
 
-            System.Array.Copy(t.W, 0, W, 0, t.W.Length);
+            Array.Copy(t.W, 0, W, 0, t.W.Length);
             wOff = t.wOff;
         }
 

@@ -278,7 +278,7 @@ namespace Org.BouncyCastle.Pkcs
             if (val.Length < size)
             {
                 byte[] tmp = new byte[size];
-                System.Array.Copy(val, 0, tmp, tmp.Length - val.Length, val.Length);
+                Array.Copy(val, 0, tmp, tmp.Length - val.Length, val.Length);
                 val = tmp;
             }
 

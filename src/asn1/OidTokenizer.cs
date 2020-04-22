@@ -1,28 +1,28 @@
 namespace Org.BouncyCastle.Asn1
 {
     /**
-     * class for breaking up an Oid into it's component neuraliums, ala
-     * java.util.StringNeuraliumizer. We need this class as some of the
+     * class for breaking up an Oid into it's component tokens, ala
+     * java.util.StringTokenizer. We need this class as some of the
      * lightweight Java environment don't support classes like
-     * StringNeuraliumizer.
+     * StringTokenizer.
      */
-    public class OidNeuraliumizer
+    public class OidTokenizer
     {
         private string  oid;
         private int     index;
 
-		public OidNeuraliumizer(
+		public OidTokenizer(
             string oid)
         {
             this.oid = oid;
         }
 
-		public bool HasMoreNeuraliums
+		public bool HasMoreTokens
         {
 			get { return index != -1; }
         }
 
-		public string NextNeuralium()
+		public string NextToken()
         {
             if (index == -1)
             {
@@ -32,14 +32,14 @@ namespace Org.BouncyCastle.Asn1
             int end = oid.IndexOf('.', index);
             if (end == -1)
             {
-                string lastNeuralium = oid.Substring(index);
+                string lastToken = oid.Substring(index);
                 index = -1;
-                return lastNeuralium;
+                return lastToken;
             }
 
-            string nextNeuralium = oid.Substring(index, end - index);
+            string nextToken = oid.Substring(index, end - index);
 			index = end + 1;
-            return nextNeuralium;
+            return nextToken;
         }
     }
 }

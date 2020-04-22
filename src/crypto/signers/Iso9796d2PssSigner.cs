@@ -225,7 +225,7 @@ namespace Org.BouncyCastle.Crypto.Signers
             {
                 byte[] tmp = new byte[(keyBits + 7) / 8];
 
-                System.Array.Copy(block, 0, tmp, tmp.Length - block.Length, block.Length);
+                Array.Copy(block, 0, tmp, tmp.Length - block.Length, block.Length);
                 ClearBlock(block);
                 block = tmp;
             }
@@ -286,7 +286,7 @@ namespace Org.BouncyCastle.Crypto.Signers
 
             recoveredMessage = new byte[dbMask.Length - mStart - saltLength];
 
-            System.Array.Copy(block, mStart, recoveredMessage, 0, recoveredMessage.Length);
+            Array.Copy(block, mStart, recoveredMessage, 0, recoveredMessage.Length);
             recoveredMessage.CopyTo(mBuf, 0);
 
             preSig = signature;
@@ -396,8 +396,8 @@ namespace Org.BouncyCastle.Crypto.Signers
 
             block[off] = (byte) (0x01);
 
-            System.Array.Copy(mBuf, 0, block, off + 1, messageLength);
-            System.Array.Copy(salt, 0, block, off + 1 + messageLength, salt.Length);
+            Array.Copy(mBuf, 0, block, off + 1, messageLength);
+            Array.Copy(salt, 0, block, off + 1 + messageLength, salt.Length);
 
             byte[] dbMask = MaskGeneratorFunction1(hash, 0, hash.Length, block.Length - hLen - tLength);
             for (int i = 0; i != dbMask.Length; i++)
@@ -405,7 +405,7 @@ namespace Org.BouncyCastle.Crypto.Signers
                 block[i] ^= dbMask[i];
             }
 
-            System.Array.Copy(hash, 0, block, block.Length - hLen - tLength, hLen);
+            Array.Copy(hash, 0, block, block.Length - hLen - tLength, hLen);
 
             if (trailer == IsoTrailers.TRAILER_IMPLICIT)
             {
@@ -598,7 +598,7 @@ namespace Org.BouncyCastle.Crypto.Signers
                 digest.BlockUpdate(C, 0, C.Length);
                 digest.DoFinal(hashBuf, 0);
 
-                System.Array.Copy(hashBuf, 0, mask, counter * hLen, hLen);
+                Array.Copy(hashBuf, 0, mask, counter * hLen, hLen);
             }
             while (++counter < (length / hLen));
 
@@ -610,7 +610,7 @@ namespace Org.BouncyCastle.Crypto.Signers
                 digest.BlockUpdate(C, 0, C.Length);
                 digest.DoFinal(hashBuf, 0);
 
-                System.Array.Copy(hashBuf, 0, mask, counter * hLen, mask.Length - (counter * hLen));
+                Array.Copy(hashBuf, 0, mask, counter * hLen, mask.Length - (counter * hLen));
             }
 
             return mask;

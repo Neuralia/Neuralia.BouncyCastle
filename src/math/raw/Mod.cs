@@ -18,7 +18,7 @@ namespace Org.BouncyCastle.Math.Raw
                 throw new ArgumentException("cannot be 0", "x");
             if (Nat.IsOne(len, x))
             {
-                System.Array.Copy(x, 0, z, 0, len);
+                Array.Copy(x, 0, z, 0, len);
                 return;
             }
 
@@ -129,7 +129,7 @@ namespace Org.BouncyCastle.Math.Raw
             }
             else
             {
-                System.Array.Copy(a, 0, z, 0, p.Length);
+                Array.Copy(a, 0, z, 0, p.Length);
             }
         }
 

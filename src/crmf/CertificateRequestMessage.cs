@@ -89,9 +89,9 @@ namespace Org.BouncyCastle.Crmf
                     return new PkiArchiveControl(PkiArchiveOptions.GetInstance(found.Value));
                 }
 
-                if (found.Type.Equals(CrmfObjectIdentifiers.id_regCtrl_regNeuralium))
+                if (found.Type.Equals(CrmfObjectIdentifiers.id_regCtrl_regToken))
                 {
-                    return new RegNeuraliumControl(DerUtf8String.GetInstance(found.Value));
+                    return new RegTokenControl(DerUtf8String.GetInstance(found.Value));
                 }
 
                 if (found.Type.Equals(CrmfObjectIdentifiers.id_regCtrl_authenticator))

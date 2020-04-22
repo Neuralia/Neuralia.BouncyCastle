@@ -186,7 +186,7 @@ namespace Org.BouncyCastle.Crypto.Paddings
 
 			if (length > gapLen)
 			{
-				System.Array.Copy(input, inOff, buf, bufOff, gapLen);
+				Array.Copy(input, inOff, buf, bufOff, gapLen);
 
 				resultLen += cipher.ProcessBlock(buf, 0, output, outOff);
 
@@ -203,7 +203,7 @@ namespace Org.BouncyCastle.Crypto.Paddings
 				}
 			}
 
-			System.Array.Copy(input, inOff, buf, bufOff, length);
+			Array.Copy(input, inOff, buf, bufOff, length);
 
 			bufOff += length;
 
@@ -270,7 +270,7 @@ namespace Org.BouncyCastle.Crypto.Paddings
 				{
 					resultLen -= padding.PadCount(buf);
 
-					System.Array.Copy(buf, 0, output, outOff, resultLen);
+					Array.Copy(buf, 0, output, outOff, resultLen);
 				}
 				finally
 				{

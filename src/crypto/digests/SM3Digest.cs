@@ -71,8 +71,8 @@ namespace Org.BouncyCastle.Crypto.Digests
 
 		private void CopyIn(SM3Digest t)
 		{
-			System.Array.Copy(t.V, 0, this.V, 0, this.V.Length);
-			System.Array.Copy(t.inwords, 0, this.inwords, 0, this.inwords.Length);
+			Array.Copy(t.V, 0, this.V, 0, this.V.Length);
+			Array.Copy(t.inwords, 0, this.inwords, 0, this.inwords.Length);
 			xOff = t.xOff;
 		}
 

@@ -103,7 +103,7 @@ namespace Org.BouncyCastle.Crypto.Generators
                 random.NextBytes(seed);
 
                 Hash(digest, seed, part1);
-                System.Array.Copy(seed, 0, part2, 0, seed.Length);
+                Array.Copy(seed, 0, part2, 0, seed.Length);
                 Inc(part2);
                 Hash(digest, part2, part2);
 
@@ -129,12 +129,12 @@ namespace Org.BouncyCastle.Crypto.Generators
                     {
                         Inc(offset);
                         Hash(digest, offset, part1);
-                        System.Array.Copy(part1, 0, w, w.Length - (k + 1) * part1.Length, part1.Length);
+                        Array.Copy(part1, 0, w, w.Length - (k + 1) * part1.Length, part1.Length);
                     }
 
                     Inc(offset);
                     Hash(digest, offset, part1);
-                    System.Array.Copy(part1, part1.Length - ((w.Length - (n) * part1.Length)), w, 0, w.Length - n * part1.Length);
+                    Array.Copy(part1, part1.Length - ((w.Length - (n) * part1.Length)), w, 0, w.Length - n * part1.Length);
 
                     w[0] |= (byte)0x80;
 
@@ -300,12 +300,12 @@ namespace Org.BouncyCastle.Crypto.Generators
         {
             // A.2.3 Verifiable Canonical Generation of the Generator g
             BigInteger e = p.Subtract(BigInteger.One).Divide(q);
-            byte[] ggen = Hex.Decode("6767656E");
+            byte[] ggen = Hex.DecodeStrict("6767656E");
 
             // 7. U = domain_parameter_seed || "ggen" || index || count.
             byte[] U = new byte[seed.Length + ggen.Length + 1 + 2];
-            System.Array.Copy(seed, 0, U, 0, seed.Length);
-            System.Array.Copy(ggen, 0, U, seed.Length, ggen.Length);
+            Array.Copy(seed, 0, U, 0, seed.Length);
+            Array.Copy(ggen, 0, U, seed.Length, ggen.Length);
             U[U.Length - 3] = (byte)index; 
 
             byte[] w = new byte[d.GetDigestSize()];

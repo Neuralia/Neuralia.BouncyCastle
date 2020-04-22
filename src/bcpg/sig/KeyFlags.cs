@@ -34,7 +34,7 @@ namespace Org.BouncyCastle.Bcpg.Sig
 			}
 
 			byte[] data = new byte[size + 1];
-			System.Array.Copy(tmp, 0, data, 0, data.Length);
+			Array.Copy(tmp, 0, data, 0, data.Length);
 			return data;
 		}
 

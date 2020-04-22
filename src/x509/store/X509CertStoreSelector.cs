@@ -296,6 +296,7 @@ namespace Org.BouncyCastle.X509.Store
 				return false;
 
 			if (subjectPublicKeyAlgID != null
+			    // ReSharper disable once SuspiciousTypeConversion.Global
 				&& !subjectPublicKeyAlgID.Equals(GetSubjectPublicKey(c).AlgorithmID))
 				return false;
 

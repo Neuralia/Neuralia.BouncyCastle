@@ -109,7 +109,7 @@ namespace Org.BouncyCastle.Crypto.Modes
         {
             count = 0;
 
-			System.Array.Copy(IV, 0, FR, 0, FR.Length);
+			Array.Copy(IV, 0, FR, 0, FR.Length);
 
 			cipher.Reset();
         }
@@ -139,7 +139,7 @@ namespace Org.BouncyCastle.Crypto.Modes
                 if (iv.Length < IV.Length)
                 {
                     // prepend the supplied IV with zeros (per FIPS PUB 81)
-                    System.Array.Copy(iv, 0, IV, IV.Length - iv.Length, iv.Length);
+                    Array.Copy(iv, 0, IV, IV.Length - iv.Length, iv.Length);
                     for (int i = 0; i < IV.Length - iv.Length; i++)
                     {
                         IV[i] = 0;
@@ -147,7 +147,7 @@ namespace Org.BouncyCastle.Crypto.Modes
                 }
                 else
                 {
-                    System.Array.Copy(iv, 0, IV, 0, IV.Length);
+                    Array.Copy(iv, 0, IV, 0, IV.Length);
                 }
 
                 parameters = ivParam.Parameters;
@@ -230,8 +230,8 @@ namespace Org.BouncyCastle.Crypto.Modes
                 //
                 // do reset
                 //
-                System.Array.Copy(FR, 2, FR, 0, blockSize - 2);
-                System.Array.Copy(outBytes, outOff, FR, blockSize - 2, 2);
+                Array.Copy(FR, 2, FR, 0, blockSize - 2);
+                Array.Copy(outBytes, outOff, FR, blockSize - 2, 2);
 
                 cipher.ProcessBlock(FR, 0, FRE, 0);
 
@@ -314,7 +314,7 @@ namespace Org.BouncyCastle.Crypto.Modes
 				outBytes[outOff    ] = EncryptByte(inVal1, 0);
 				outBytes[outOff + 1] = EncryptByte(inVal2, 1);
 
-                System.Array.Copy(FR, 2, FR, 0, blockSize - 2);
+                Array.Copy(FR, 2, FR, 0, blockSize - 2);
 
 				FR[blockSize - 2] = inVal1;
 				FR[blockSize - 1] = inVal2;

@@ -86,17 +86,17 @@ namespace Org.BouncyCastle.Crypto.Tls
                 if (desiredSize > databuf.Length)
                 {
                     byte[] tmp = new byte[desiredSize];
-                    System.Array.Copy(databuf, skipped, tmp, 0, available);
+                    Array.Copy(databuf, skipped, tmp, 0, available);
                     databuf = tmp;
                 }
                 else
                 {
-                    System.Array.Copy(databuf, skipped, databuf, 0, available);
+                    Array.Copy(databuf, skipped, databuf, 0, available);
                 }
                 skipped = 0;
             }
 
-            System.Array.Copy(data, offset, databuf, skipped + available, len);
+            Array.Copy(data, offset, databuf, skipped + available, len);
             available += len;
         }
 
@@ -138,7 +138,7 @@ namespace Org.BouncyCastle.Crypto.Tls
             {
                 throw new InvalidOperationException("Not enough data to read");
             }
-            System.Array.Copy(databuf, skipped + skip, buf, offset, len);
+            Array.Copy(databuf, skipped + skip, buf, offset, len);
         }
 
         /// <summary>Return a <c cref="MemoryStream">MemoryStream</c> over some bytes at the beginning of the data.</summary>
@@ -201,7 +201,7 @@ namespace Org.BouncyCastle.Crypto.Tls
                 if (desiredSize < databuf.Length)
                 {
                     byte[] tmp = new byte[desiredSize];
-                    System.Array.Copy(databuf, skipped, tmp, 0, available);
+                    Array.Copy(databuf, skipped, tmp, 0, available);
                     databuf = tmp;
                     skipped = 0;
                 }

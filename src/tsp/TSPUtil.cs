@@ -75,7 +75,7 @@ namespace Org.BouncyCastle.Tsp
 	     * (see RFC 3161 Appendix A).
 	     *
 	     * @param signerInfo a SignerInformation to search for time-stamps
-	     * @return a collection of TimeStampNeuralium objects
+	     * @return a collection of TimeStampToken objects
 	     * @throws TSPValidationException
 	     */
 		public static ICollection GetSignatureTimestamps(
@@ -87,7 +87,7 @@ namespace Org.BouncyCastle.Tsp
 			if (unsignedAttrs != null)
 			{
 				foreach (Asn1.Cms.Attribute tsAttr in unsignedAttrs.GetAll(
-					PkcsObjectIdentifiers.IdAASignatureTimeStampNeuralium))
+					PkcsObjectIdentifiers.IdAASignatureTimeStampToken))
 				{
 					foreach (Asn1Encodable asn1 in tsAttr.AttrValues)
 					{
@@ -95,8 +95,8 @@ namespace Org.BouncyCastle.Tsp
 						{
 							Asn1.Cms.ContentInfo contentInfo = Asn1.Cms.ContentInfo.GetInstance(
 								asn1.ToAsn1Object());
-							TimeStampNeuralium timeStampNeuralium = new TimeStampNeuralium(contentInfo);
-							TimeStampNeuraliumInfo tstInfo = timeStampNeuralium.TimeStampInfo;
+							TimeStampToken timeStampToken = new TimeStampToken(contentInfo);
+							TimeStampTokenInfo tstInfo = timeStampToken.TimeStampInfo;
 
 							byte[] expectedDigest = DigestUtilities.CalculateDigest(
 								GetDigestAlgName(tstInfo.MessageImprintAlgOid),
@@ -105,7 +105,7 @@ namespace Org.BouncyCastle.Tsp
 							if (!Arrays.ConstantTimeAreEqual(expectedDigest, tstInfo.GetMessageImprintDigest()))
 								throw new TspValidationException("Incorrect digest in message imprint");
 
-							timestamps.Add(timeStampNeuralium);
+							timestamps.Add(timeStampToken);
 						}
 						catch (SecurityUtilityException)
 						{

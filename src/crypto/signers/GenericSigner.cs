@@ -110,7 +110,7 @@ namespace Org.BouncyCastle.Crypto.Signers
                 if (sig.Length < hash.Length)
                 {
                     byte[] tmp = new byte[hash.Length];
-                    System.Array.Copy(sig, 0, tmp, tmp.Length - sig.Length, sig.Length);
+                    Array.Copy(sig, 0, tmp, tmp.Length - sig.Length, sig.Length);
                     sig = tmp;
                 }
 

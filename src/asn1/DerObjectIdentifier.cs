@@ -24,8 +24,18 @@ namespace Org.BouncyCastle.Asn1
         {
             if (obj == null || obj is DerObjectIdentifier)
                 return (DerObjectIdentifier) obj;
+
+            if (obj is Asn1Encodable)
+            {
+                Asn1Object asn1Obj = ((Asn1Encodable)obj).ToAsn1Object();
+
+                if (asn1Obj is DerObjectIdentifier)
+                    return (DerObjectIdentifier)asn1Obj;
+            }
+
             if (obj is byte[])
                 return FromOctetString((byte[])obj);
+
             throw new ArgumentException("illegal object in GetInstance: " + Platform.GetTypeName(obj), "obj");
         }
 
@@ -139,31 +149,31 @@ namespace Org.BouncyCastle.Asn1
 
         private void DoOutput(MemoryStream bOut)
         {
-            OidNeuraliumizer tok = new OidNeuraliumizer(identifier);
+            OidTokenizer tok = new OidTokenizer(identifier);
 
-            string neuralium = tok.NextNeuralium();
-            int first = int.Parse(neuralium) * 40;
+            string token = tok.NextToken();
+            int first = int.Parse(token) * 40;
 
-            neuralium = tok.NextNeuralium();
-            if (neuralium.Length <= 18)
+            token = tok.NextToken();
+            if (token.Length <= 18)
             {
-                WriteField(bOut, first + Int64.Parse(neuralium));
+                WriteField(bOut, first + Int64.Parse(token));
             }
             else
             {
-                WriteField(bOut, new BigInteger(neuralium).Add(BigInteger.ValueOf(first)));
+                WriteField(bOut, new BigInteger(token).Add(BigInteger.ValueOf(first)));
             }
 
-            while (tok.HasMoreNeuraliums)
+            while (tok.HasMoreTokens)
             {
-                neuralium = tok.NextNeuralium();
-                if (neuralium.Length <= 18)
+                token = tok.NextToken();
+                if (token.Length <= 18)
                 {
-                    WriteField(bOut, Int64.Parse(neuralium));
+                    WriteField(bOut, Int64.Parse(token));
                 }
                 else
                 {
-                    WriteField(bOut, new BigInteger(neuralium));
+                    WriteField(bOut, new BigInteger(token));
                 }
             }
         }
@@ -210,36 +220,36 @@ namespace Org.BouncyCastle.Asn1
             return identifier;
         }
 
-        private static bool IsValidBranchID(
-            string branchID, int start)
+        private static bool IsValidBranchID(string branchID, int start)
         {
-            bool periodAllowed = false;
+            int digitCount = 0;
 
             int pos = branchID.Length;
             while (--pos >= start)
             {
                 char ch = branchID[pos];
 
-                // TODO Leading zeroes?
-                if ('0' <= ch && ch <= '9')
-                {
-                    periodAllowed = true;
-                    continue;
-                }
-
                 if (ch == '.')
                 {
-                    if (!periodAllowed)
+                    if (0 == digitCount || (digitCount > 1 && branchID[pos + 1] == '0'))
                         return false;
 
-                    periodAllowed = false;
-                    continue;
+                    digitCount = 0;
                 }
-
-                return false;
+                else if ('0' <= ch && ch <= '9')
+                {
+                    ++digitCount;
+                }
+                else
+                {
+                    return false;
+                }
             }
 
-            return periodAllowed;
+            if (0 == digitCount || (digitCount > 1 && branchID[pos + 1] == '0'))
+                return false;
+
+            return true;
         }
 
         private static bool IsValidIdentifier(string identifier)

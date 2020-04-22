@@ -188,7 +188,7 @@ namespace Org.BouncyCastle.Crypto.Agreement.JPake
             // The caller is responsible for clearing the original password array
             // given as input to this constructor.
             this.password = new char[password.Length];
-            System.Array.Copy(password, 0, this.password, 0, password.Length);
+            Array.Copy(password, this.password, password.Length);
 
             this.p = group.P;
             this.q = group.Q;

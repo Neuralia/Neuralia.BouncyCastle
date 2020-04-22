@@ -145,7 +145,7 @@ namespace Org.BouncyCastle.Crypto.Encodings
             //
             // copy in the message
             //
-            System.Array.Copy(inBytes, inOff, block, block.Length - inLen, inLen);
+            Array.Copy(inBytes, inOff, block, block.Length - inLen, inLen);
 
             //
             // add sentinel
@@ -159,7 +159,7 @@ namespace Org.BouncyCastle.Crypto.Encodings
             //
             // add the hash of the encoding params.
             //
-            System.Array.Copy(defHash, 0, block, defHash.Length, defHash.Length);
+            Array.Copy(defHash, 0, block, defHash.Length, defHash.Length);
 
             //
             // generate the seed.
@@ -179,7 +179,7 @@ namespace Org.BouncyCastle.Crypto.Encodings
             //
             // add in the seed
             //
-            System.Array.Copy(seed, 0, block, 0, defHash.Length);
+            Array.Copy(seed, 0, block, 0, defHash.Length);
 
             //
             // mask the seed.
@@ -216,11 +216,11 @@ namespace Org.BouncyCastle.Crypto.Encodings
 
             if (data.Length <= block.Length)
             {
-                System.Array.Copy(data, 0, block, block.Length - data.Length, data.Length);
+                Array.Copy(data, 0, block, block.Length - data.Length, data.Length);
             }
             else
             {
-                System.Array.Copy(data, 0, block, 0, block.Length);
+                Array.Copy(data, 0, block, 0, block.Length);
                 wrongData = true;
             }
 
@@ -287,7 +287,7 @@ namespace Org.BouncyCastle.Crypto.Encodings
             //
             byte[] output = new byte[block.Length - start];
 
-            System.Array.Copy(block, start, output, 0, output.Length);
+            Array.Copy(block, start, output, 0, output.Length);
 
             return output;
         }
@@ -329,7 +329,7 @@ namespace Org.BouncyCastle.Crypto.Encodings
                 mgf1Hash.BlockUpdate(C, 0, C.Length);
                 mgf1Hash.DoFinal(hashBuf, 0);
 
-                System.Array.Copy(hashBuf, 0, mask, counter * hashBuf.Length, hashBuf.Length);
+                Array.Copy(hashBuf, 0, mask, counter * hashBuf.Length, hashBuf.Length);
 
                 counter++;
             }
@@ -342,7 +342,7 @@ namespace Org.BouncyCastle.Crypto.Encodings
                 mgf1Hash.BlockUpdate(C, 0, C.Length);
                 mgf1Hash.DoFinal(hashBuf, 0);
 
-                System.Array.Copy(hashBuf, 0, mask, counter * hashBuf.Length, mask.Length - (counter * hashBuf.Length));
+                Array.Copy(hashBuf, 0, mask, counter * hashBuf.Length, mask.Length - (counter * hashBuf.Length));
             }
 
             return mask;

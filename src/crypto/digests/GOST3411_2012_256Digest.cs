@@ -41,7 +41,7 @@ namespace Org.BouncyCastle.Crypto.Digests
 			byte[] result = new byte[64];
 			base.DoFinal(result, 0);
 
-			System.Array.Copy(result, 32, output, outOff, 32);
+			Array.Copy(result, 32, output, outOff, 32);
 
 			return 32;
         }

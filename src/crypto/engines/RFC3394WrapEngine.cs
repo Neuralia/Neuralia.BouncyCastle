@@ -89,8 +89,8 @@ namespace Org.BouncyCastle.Crypto.Engines
 			byte[] block = new byte[inLen + iv.Length];
 			byte[] buf = new byte[8 + iv.Length];
 
-			System.Array.Copy(iv, 0, block, 0, iv.Length);
-			System.Array.Copy(input, inOff, block, iv.Length, inLen);
+			Array.Copy(iv, 0, block, 0, iv.Length);
+			Array.Copy(input, inOff, block, iv.Length, inLen);
 
 			engine.Init(true, param);
 
@@ -98,8 +98,8 @@ namespace Org.BouncyCastle.Crypto.Engines
 			{
 				for (int i = 1; i <= n; i++)
 				{
-					System.Array.Copy(block, 0, buf, 0, iv.Length);
-					System.Array.Copy(block, 8 * i, buf, iv.Length, 8);
+					Array.Copy(block, 0, buf, 0, iv.Length);
+					Array.Copy(block, 8 * i, buf, iv.Length, 8);
 					engine.ProcessBlock(buf, 0, buf, 0);
 
 					int t = n * j + i;
@@ -111,8 +111,8 @@ namespace Org.BouncyCastle.Crypto.Engines
 						t = (int) ((uint)t >> 8);
 					}
 
-					System.Array.Copy(buf, 0, block, 0, 8);
-					System.Array.Copy(buf, 8, block, 8 * i, 8);
+					Array.Copy(buf, 0, block, 0, 8);
+					Array.Copy(buf, 8, block, 8 * i, 8);
 				}
 			}
 
@@ -140,8 +140,8 @@ namespace Org.BouncyCastle.Crypto.Engines
 			byte[]  a = new byte[iv.Length];
 			byte[]  buf = new byte[8 + iv.Length];
 
-			System.Array.Copy(input, inOff, a, 0, iv.Length);
-            System.Array.Copy(input, inOff + iv.Length, block, 0, inLen - iv.Length);
+			Array.Copy(input, inOff, a, 0, iv.Length);
+            Array.Copy(input, inOff + iv.Length, block, 0, inLen - iv.Length);
 
 			engine.Init(false, param);
 
@@ -151,8 +151,8 @@ namespace Org.BouncyCastle.Crypto.Engines
 			{
 				for (int i = n; i >= 1; i--)
 				{
-					System.Array.Copy(a, 0, buf, 0, iv.Length);
-					System.Array.Copy(block, 8 * (i - 1), buf, iv.Length, 8);
+					Array.Copy(a, 0, buf, 0, iv.Length);
+					Array.Copy(block, 8 * (i - 1), buf, iv.Length, 8);
 
 					int t = n * j + i;
 					for (int k = 1; t != 0; k++)
@@ -164,8 +164,8 @@ namespace Org.BouncyCastle.Crypto.Engines
 					}
 
 					engine.ProcessBlock(buf, 0, buf, 0);
-					System.Array.Copy(buf, 0, a, 0, 8);
-					System.Array.Copy(buf, 8, block, 8 * (i - 1), 8);
+					Array.Copy(buf, 0, a, 0, 8);
+					Array.Copy(buf, 8, block, 8 * (i - 1), 8);
 				}
 			}
 

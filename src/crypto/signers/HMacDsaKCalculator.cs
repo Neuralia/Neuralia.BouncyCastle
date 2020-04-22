@@ -53,7 +53,7 @@ namespace Org.BouncyCastle.Crypto.Signers
             byte[] x = new byte[size];
             byte[] dVal = BigIntegers.AsUnsignedByteArray(d);
 
-            System.Array.Copy(dVal, 0, x, x.Length - dVal.Length, dVal.Length);
+            Array.Copy(dVal, 0, x, x.Length - dVal.Length, dVal.Length);
 
             byte[] m = new byte[size];
 
@@ -66,7 +66,7 @@ namespace Org.BouncyCastle.Crypto.Signers
 
             byte[] mVal = BigIntegers.AsUnsignedByteArray(mInt);
 
-            System.Array.Copy(mVal, 0, m, m.Length - mVal.Length, mVal.Length);
+            Array.Copy(mVal, 0, m, m.Length - mVal.Length, mVal.Length);
 
             hMac.Init(new KeyParameter(K));
 
@@ -112,7 +112,7 @@ namespace Org.BouncyCastle.Crypto.Signers
                     hMac.DoFinal(V, 0);
 
                     int len = System.Math.Min(t.Length - tOff, V.Length);
-                    System.Array.Copy(V, 0, t, tOff, len);
+                    Array.Copy(V, 0, t, tOff, len);
                     tOff += len;
                 }
 

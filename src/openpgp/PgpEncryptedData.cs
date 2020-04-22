@@ -44,7 +44,7 @@ namespace Org.BouncyCastle.Bcpg.OpenPgp
 				Debug.Assert(bufStart == LookAheadBufLimit);
 				Debug.Assert(bufEnd == LookAheadBufLimit);
 
-				System.Array.Copy(lookAhead, LookAheadBufLimit, lookAhead, 0, LookAheadSize);
+				Array.Copy(lookAhead, LookAheadBufLimit, lookAhead, 0, LookAheadSize);
 				bufEnd = Streams.ReadFully(inStr, lookAhead, LookAheadSize, LookAheadBufLimit);
 				bufStart = 0;
 				return bufEnd;
@@ -68,7 +68,7 @@ namespace Org.BouncyCastle.Bcpg.OpenPgp
 				int pos = off;
 				while (len > avail)
 				{
-					System.Array.Copy(lookAhead, bufStart, buf, pos, avail);
+					Array.Copy(lookAhead, bufStart, buf, pos, avail);
 
 					bufStart += avail;
 					pos += avail;
@@ -78,7 +78,7 @@ namespace Org.BouncyCastle.Bcpg.OpenPgp
 						return pos - off;
 				}
 
-				System.Array.Copy(lookAhead, bufStart, buf, pos, len);
+				Array.Copy(lookAhead, bufStart, buf, pos, len);
 				bufStart += len;
 
 				return pos + len - off;
@@ -87,7 +87,7 @@ namespace Org.BouncyCastle.Bcpg.OpenPgp
 			internal byte[] GetLookAhead()
 			{
 				byte[] temp = new byte[LookAheadSize];
-				System.Array.Copy(lookAhead, bufStart, temp, 0, LookAheadSize);
+				Array.Copy(lookAhead, bufStart, temp, 0, LookAheadSize);
 				return temp;
 			}
 		}
@@ -143,7 +143,7 @@ namespace Org.BouncyCastle.Bcpg.OpenPgp
 			byte[] digest = DigestUtilities.DoFinal(hash);
 
 			byte[] streamDigest = new byte[digest.Length];
-			System.Array.Copy(lookAhead, 2, streamDigest, 0, streamDigest.Length);
+			Array.Copy(lookAhead, 2, streamDigest, 0, streamDigest.Length);
 
 			return Arrays.ConstantTimeAreEqual(digest, streamDigest);
         }

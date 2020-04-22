@@ -38,7 +38,7 @@ namespace Org.BouncyCastle.Bcpg
 			byte[] data = new byte[2 + fingerprint.Length];
 			data[0] = (byte)signatureClass;
 			data[1] = (byte)keyAlgorithm;
-			System.Array.Copy(fingerprint, 0, data, 2, fingerprint.Length);
+			Array.Copy(fingerprint, 0, data, 2, fingerprint.Length);
 			return data;
 		}
 
@@ -56,7 +56,7 @@ namespace Org.BouncyCastle.Bcpg
 		{
 			byte[] data = this.GetData();
 			byte[] fingerprint = new byte[data.Length - 2];
-			System.Array.Copy(data, 2, fingerprint, 0, fingerprint.Length);
+			Array.Copy(data, 2, fingerprint, 0, fingerprint.Length);
 			return fingerprint;
 		}
     }

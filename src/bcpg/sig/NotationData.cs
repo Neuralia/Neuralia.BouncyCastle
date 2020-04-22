@@ -106,7 +106,7 @@ namespace Org.BouncyCastle.Bcpg.Sig
 			int valuePos = HeaderFlagLength + HeaderNameLength + HeaderValueLength + nameLength;
 
 			byte[] bytes = new byte[valueLength];
-			System.Array.Copy(data, valuePos, bytes, 0, valueLength);
+			Array.Copy(data, valuePos, bytes, 0, valueLength);
 			return bytes;
 		}
 	}

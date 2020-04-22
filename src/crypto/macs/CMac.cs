@@ -184,7 +184,7 @@ namespace Org.BouncyCastle.Crypto.Macs
 
             if (len > gapLen)
             {
-                System.Array.Copy(inBytes, inOff, buf, bufOff, gapLen);
+                Array.Copy(inBytes, inOff, buf, bufOff, gapLen);
 
                 cipher.ProcessBlock(buf, 0, mac, 0);
 
@@ -201,7 +201,7 @@ namespace Org.BouncyCastle.Crypto.Macs
                 }
             }
 
-            System.Array.Copy(inBytes, inOff, buf, bufOff, len);
+            Array.Copy(inBytes, inOff, buf, bufOff, len);
 
             bufOff += len;
         }
@@ -230,7 +230,7 @@ namespace Org.BouncyCastle.Crypto.Macs
 
             cipher.ProcessBlock(buf, 0, mac, 0);
 
-            System.Array.Copy(mac, 0, outBytes, outOff, macSize);
+            Array.Copy(mac, 0, outBytes, outOff, macSize);
 
             Reset();
 

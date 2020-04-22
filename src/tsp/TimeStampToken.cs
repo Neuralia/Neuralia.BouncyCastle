@@ -19,35 +19,35 @@ using Org.BouncyCastle.X509.Store;
 
 namespace Org.BouncyCastle.Tsp
 {
-	public class TimeStampNeuralium
+	public class TimeStampToken
 	{
-		private readonly CmsSignedData		tsNeuralium;
+		private readonly CmsSignedData		tsToken;
 		private readonly SignerInformation	tsaSignerInfo;
 //		private readonly DateTime			genTime;
-		private readonly TimeStampNeuraliumInfo	tstInfo;
+		private readonly TimeStampTokenInfo	tstInfo;
 		private readonly CertID				certID;
 
-		public TimeStampNeuralium(
+		public TimeStampToken(
 			Asn1.Cms.ContentInfo contentInfo)
 			: this(new CmsSignedData(contentInfo))
 		{
 		}
 
-		public TimeStampNeuralium(
+		public TimeStampToken(
 			CmsSignedData signedData)
 		{
-			this.tsNeuralium = signedData;
+			this.tsToken = signedData;
 
-			if (!this.tsNeuralium.SignedContentType.Equals(PkcsObjectIdentifiers.IdCTTstInfo))
+			if (!this.tsToken.SignedContentType.Equals(PkcsObjectIdentifiers.IdCTTstInfo))
 			{
 				throw new TspValidationException("ContentInfo object not for a time stamp.");
 			}
 
-			ICollection signers = tsNeuralium.GetSignerInfos().GetSigners();
+			ICollection signers = tsToken.GetSignerInfos().GetSigners();
 
 			if (signers.Count != 1)
 			{
-				throw new ArgumentException("Time-stamp neuralium signed by "
+				throw new ArgumentException("Time-stamp token signed by "
 					+ signers.Count
 					+ " signers, but it must contain just the TSA signature.");
 			}
@@ -60,12 +60,12 @@ namespace Org.BouncyCastle.Tsp
 
 			try
 			{
-				CmsProcessable content = tsNeuralium.SignedContent;
+				CmsProcessable content = tsToken.SignedContent;
 				MemoryStream bOut = new MemoryStream();
 
 				content.Write(bOut);
 
-				this.tstInfo = new TimeStampNeuraliumInfo(
+				this.tstInfo = new TimeStampTokenInfo(
 					TstInfo.GetInstance(
 						Asn1Object.FromByteArray(bOut.ToArray())));
 
@@ -107,7 +107,7 @@ namespace Org.BouncyCastle.Tsp
 			}
 		}
 
-		public TimeStampNeuraliumInfo TimeStampInfo
+		public TimeStampTokenInfo TimeStampInfo
 		{
 			get { return tstInfo; }
 		}
@@ -130,27 +130,27 @@ namespace Org.BouncyCastle.Tsp
 		public IX509Store GetCertificates(
 			string type)
 		{
-			return tsNeuralium.GetCertificates(type);
+			return tsToken.GetCertificates(type);
 		}
 
 		public IX509Store GetCrls(
 			string type)
 		{
-			return tsNeuralium.GetCrls(type);
+			return tsToken.GetCrls(type);
 		}
 
 	    public IX509Store GetAttributeCertificates(
 			string type)
 	    {
-	        return tsNeuralium.GetAttributeCertificates(type);
+	        return tsToken.GetAttributeCertificates(type);
 	    }
 
 		/**
-		 * Validate the time stamp neuralium.
+		 * Validate the time stamp token.
 		 * <p>
-		 * To be valid the neuralium must be signed by the passed in certificate and
+		 * To be valid the token must be signed by the passed in certificate and
 		 * the certificate must be the one referred to by the SigningCertificate
-		 * attribute included in the hashed attributes of the neuralium. The
+		 * attribute included in the hashed attributes of the token. The
 		 * certificate must also have the ExtendedKeyUsageExtension with only
 		 * KeyPurposeID.IdKPTimeStamping and have been valid at the time the
 		 * timestamp was created.
@@ -234,7 +234,7 @@ namespace Org.BouncyCastle.Tsp
 		 */
 		public CmsSignedData ToCmsSignedData()
 		{
-			return tsNeuralium;
+			return tsToken;
 		}
 
 		/**
@@ -244,9 +244,18 @@ namespace Org.BouncyCastle.Tsp
 		 */
 		public byte[] GetEncoded()
 		{
-			return tsNeuralium.GetEncoded();
-		}
+            return tsToken.GetEncoded(Asn1Encodable.Der);
+        }
 
+        /**
+         * return the ASN.1 encoded representation of this object using the specified encoding.
+         *
+         * @param encoding the ASN.1 encoding format to use ("BER" or "DER").
+         */
+        public byte[] GetEncoded(string encoding)
+        {
+            return tsToken.GetEncoded(encoding);
+        }
 
 		// perhaps this should be done using an interface on the ASN.1 classes...
 		private class CertID

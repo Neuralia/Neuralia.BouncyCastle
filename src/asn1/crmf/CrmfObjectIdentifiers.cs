@@ -13,7 +13,7 @@ namespace Org.BouncyCastle.Asn1.Crmf
         public static readonly DerObjectIdentifier id_pkip  = id_pkix.Branch("5");
 
         public static readonly DerObjectIdentifier id_regCtrl = id_pkip.Branch("1");
-        public static readonly DerObjectIdentifier id_regCtrl_regNeuralium = id_regCtrl.Branch("1");
+        public static readonly DerObjectIdentifier id_regCtrl_regToken = id_regCtrl.Branch("1");
         public static readonly DerObjectIdentifier id_regCtrl_authenticator = id_regCtrl.Branch("2");
         public static readonly DerObjectIdentifier id_regCtrl_pkiPublicationInfo = id_regCtrl.Branch("3");
         public static readonly DerObjectIdentifier id_regCtrl_pkiArchiveOptions = id_regCtrl.Branch("4");

@@ -430,12 +430,12 @@ namespace Org.BouncyCastle.Crypto.Engines
             * Initialise the S-boxes and the P-array, with a fixed string
             * This string contains the hexadecimal digits of pi (3.141...)
             */
-            System.Array.Copy(KS0, 0, S0, 0, SBOX_SK);
-            System.Array.Copy(KS1, 0, S1, 0, SBOX_SK);
-            System.Array.Copy(KS2, 0, S2, 0, SBOX_SK);
-            System.Array.Copy(KS3, 0, S3, 0, SBOX_SK);
+            Array.Copy(KS0, 0, S0, 0, SBOX_SK);
+            Array.Copy(KS1, 0, S1, 0, SBOX_SK);
+            Array.Copy(KS2, 0, S2, 0, SBOX_SK);
+            Array.Copy(KS3, 0, S3, 0, SBOX_SK);
 
-            System.Array.Copy(KP, 0, P, 0, P_SZ);
+            Array.Copy(KP, 0, P, 0, P_SZ);
 
             /*
             * (2)

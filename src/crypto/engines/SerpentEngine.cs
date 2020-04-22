@@ -67,7 +67,7 @@ namespace Org.BouncyCastle.Crypto.Engines
                 kPad[i] = RotateLeft(kPad[i - 8] ^ kPad[i - 5] ^ kPad[i - 3] ^ kPad[i - 1] ^ PHI ^ (i - 8), 11);
             }
 
-            System.Array.Copy(kPad, 8, w, 0, 8);
+            Array.Copy(kPad, 8, w, 0, 8);
 
             //
             // compute w8 to w136

@@ -134,7 +134,7 @@ namespace Org.BouncyCastle.Crypto.Engines
 
             // Convert the key bytes to ints and put them into results[] for initialization
             byte[] t = new byte[keyBytes.Length + (keyBytes.Length & 3)];
-            System.Array.Copy(keyBytes, 0, t, 0, keyBytes.Length);
+            Array.Copy(keyBytes, 0, t, 0, keyBytes.Length);
             for (i = 0; i < t.Length; i+=4)
             {
                 results[i >> 2] = Pack.LE_To_UInt32(t, i);

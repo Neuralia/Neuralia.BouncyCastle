@@ -21,33 +21,33 @@ namespace Org.BouncyCastle.Tsp
         private Asn1EncodableVector statusStrings;
 
         private int failInfo;
-        private TimeStampNeuraliumGenerator neuraliumGenerator;
+        private TimeStampTokenGenerator tokenGenerator;
         private IList acceptedAlgorithms;
         private IList acceptedPolicies;
         private IList acceptedExtensions;
 
         public TimeStampResponseGenerator(
-            TimeStampNeuraliumGenerator neuraliumGenerator,
+            TimeStampTokenGenerator tokenGenerator,
             IList acceptedAlgorithms)
-            : this(neuraliumGenerator, acceptedAlgorithms, null, null)
+            : this(tokenGenerator, acceptedAlgorithms, null, null)
         {
         }
 
         public TimeStampResponseGenerator(
-            TimeStampNeuraliumGenerator neuraliumGenerator,
+            TimeStampTokenGenerator tokenGenerator,
             IList acceptedAlgorithms,
             IList acceptedPolicy)
-            : this(neuraliumGenerator, acceptedAlgorithms, acceptedPolicy, null)
+            : this(tokenGenerator, acceptedAlgorithms, acceptedPolicy, null)
         {
         }
 
         public TimeStampResponseGenerator(
-            TimeStampNeuraliumGenerator neuraliumGenerator,
+            TimeStampTokenGenerator tokenGenerator,
             IList acceptedAlgorithms,
             IList acceptedPolicies,
             IList acceptedExtensions)
         {
-            this.neuraliumGenerator = neuraliumGenerator;
+            this.tokenGenerator = tokenGenerator;
             this.acceptedAlgorithms = acceptedAlgorithms;
             this.acceptedPolicies = acceptedPolicies;
             this.acceptedExtensions = acceptedExtensions;
@@ -97,8 +97,8 @@ namespace Org.BouncyCastle.Tsp
          * If genTime is null a timeNotAvailable error response will be returned.
          *
          * @param request the request this response is for.
-         * @param serialNumber serial number for the response neuralium.
-         * @param genTime generation time for the response neuralium.
+         * @param serialNumber serial number for the response token.
+         * @param genTime generation time for the response token.
          * @param provider provider to use for signature calculation.
          * @return
          * @throws NoSuchAlgorithmException
@@ -126,20 +126,20 @@ namespace Org.BouncyCastle.Tsp
 
                 PkiStatusInfo pkiStatusInfo = GetPkiStatusInfo();
 
-                ContentInfo tstNeuraliumContentInfo;
+                ContentInfo tstTokenContentInfo;
                 try
                 {
-                    TimeStampNeuralium neuralium = neuraliumGenerator.Generate(request, serialNumber, genTime.Value);
-                    byte[] encoded = neuralium.ToCmsSignedData().GetEncoded();
+                    TimeStampToken token = tokenGenerator.Generate(request, serialNumber, genTime.Value);
+                    byte[] encoded = token.ToCmsSignedData().GetEncoded();
 
-                    tstNeuraliumContentInfo = ContentInfo.GetInstance(Asn1Object.FromByteArray(encoded));
+                    tstTokenContentInfo = ContentInfo.GetInstance(Asn1Object.FromByteArray(encoded));
                 }
                 catch (IOException e)
                 {
-                    throw new TspException("Timestamp neuralium received cannot be converted to ContentInfo", e);
+                    throw new TspException("Timestamp token received cannot be converted to ContentInfo", e);
                 }
 
-                resp = new TimeStampResp(pkiStatusInfo, tstNeuraliumContentInfo);
+                resp = new TimeStampResp(pkiStatusInfo, tstTokenContentInfo);
             }
             catch (TspValidationException e)
             {

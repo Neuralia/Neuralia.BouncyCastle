@@ -53,9 +53,7 @@ namespace Org.BouncyCastle.Utilities
         /// <param name="a">Left side.</param>
         /// <param name="b">Right side.</param>
         /// <returns>True if equal.</returns>
-        public static bool AreEqual(
-            byte[]	a,
-            byte[]	b)
+        public static bool AreEqual(byte[] a, byte[] b)
         {
             if (a == b)
                 return true;
@@ -64,6 +62,23 @@ namespace Org.BouncyCastle.Utilities
                 return false;
 
             return HaveSameContents(a, b);
+        }
+
+        public static bool AreEqual(byte[] a, int aFromIndex, int aToIndex, byte[] b, int bFromIndex, int bToIndex)
+        {
+            int aLength = aToIndex - aFromIndex;
+            int bLength = bToIndex - bFromIndex;
+
+            if (aLength != bLength)
+                return false;
+
+            for (int i = 0; i < aLength; ++i)
+            {
+                if (a[aFromIndex + i] != b[bFromIndex + i])
+                    return false;
+            }
+
+            return true;
         }
 
         [Obsolete("Use 'AreEqual' method instead")]
@@ -81,20 +96,45 @@ namespace Org.BouncyCastle.Utilities
         /// <param name="a">first array</param>
         /// <param name="b">second array</param>
         /// <returns>true if arrays equal, false otherwise.</returns>
-        public static bool ConstantTimeAreEqual(
-            byte[]	a,
-            byte[]	b)
+        public static bool ConstantTimeAreEqual(byte[] a, byte[] b)
         {
-            int i = a.Length;
-            if (i != b.Length)
+            if (null == a || null == b)
                 return false;
-            int cmp = 0;
-            while (i != 0)
+            if (a == b)
+                return true;
+
+            int len = System.Math.Min(a.Length, b.Length);
+            int nonEqual = a.Length ^ b.Length;
+            for (int i = 0; i < len; ++i)
             {
-                --i;
-                cmp |= (a[i] ^ b[i]);
+                nonEqual |= (a[i] ^ b[i]);
             }
-            return cmp == 0;
+            for (int i = len; i < b.Length; ++i)
+            {
+                nonEqual |= (b[i] ^ ~b[i]);
+            }
+            return 0 == nonEqual;
+        }
+
+        public static bool ConstantTimeAreEqual(int len, byte[] a, int aOff, byte[] b, int bOff)
+        {
+            if (null == a)
+                throw new ArgumentNullException("a");
+            if (null == b)
+                throw new ArgumentNullException("b");
+            if (len < 0)
+                throw new ArgumentException("cannot be negative", "len");
+            if (aOff > (a.Length - len))
+                throw new IndexOutOfRangeException("'aOff' value invalid for specified length");
+            if (bOff > (b.Length - len))
+                throw new IndexOutOfRangeException("'bOff' value invalid for specified length");
+
+            int d = 0;
+            for (int i = 0; i < len; ++i)
+            {
+                d |= (a[aOff + i] ^ b[bOff + i]);
+            }
+            return 0 == d;
         }
 
         public static bool AreEqual(
@@ -203,7 +243,7 @@ namespace Org.BouncyCastle.Utilities
         public static string ToString(
             object[] a)
         {
-            StringBuilder sb = new StringBuilder('[');
+            StringBuilder sb = new StringBuilder("[");
             if (a.Length > 0)
             {
                 sb.Append(a[0]);
@@ -366,65 +406,56 @@ namespace Org.BouncyCastle.Utilities
             return hc;
         }
 
-        public static byte[] Clone(
-            byte[] data)
+        public static bool[] Clone(bool[] data)
         {
-            return (byte[]) data?.Clone();
+            return data == null ? null : (bool[])data.Clone();
         }
 
-        public static byte[] Clone(
-            byte[] data, 
-            byte[] existing)
+        public static byte[] Clone(byte[] data)
         {
-            if (data == null)
-            {
-                return null;
-            }
-            if ((existing == null) || (existing.Length != data.Length))
-            {
-                return Clone(data);
-            }
-            System.Buffer.BlockCopy(data, 0, existing, 0, existing.Length);
-            return existing;
+            return data == null ? null : (byte[])data.Clone();
         }
 
-        public static int[] Clone(
-            int[] data)
+        public static int[] Clone(int[] data)
         {
-            return (int[]) data?.Clone();
+            return data == null ? null : (int[])data.Clone();
         }
 
-        internal static uint[] Clone(uint[] data)
+        [CLSCompliantAttribute(false)]
+        public static uint[] Clone(uint[] data)
         {
-            return (uint[]) data?.Clone();
+            return data == null ? null : (uint[])data.Clone();
         }
 
         public static long[] Clone(long[] data)
         {
-            return (long[]) data?.Clone();
+            return data == null ? null : (long[])data.Clone();
         }
 
         [CLSCompliantAttribute(false)]
-        public static ulong[] Clone(
-            ulong[] data)
+        public static ulong[] Clone(ulong[] data)
         {
-            return (ulong[]) data?.Clone();
+            return data == null ? null : (ulong[])data.Clone();
         }
 
-        [CLSCompliantAttribute(false)]
-        public static ulong[] Clone(
-            ulong[] data, 
-            ulong[] existing)
+        public static byte[] Clone(byte[] data, byte[] existing)
         {
             if (data == null)
-            {
                 return null;
-            }
-            if ((existing == null) || (existing.Length != data.Length))
-            {
+            if (existing == null || existing.Length != data.Length)
                 return Clone(data);
-            }
-            System.Array.Copy(data, 0, existing, 0, existing.Length);
+            Array.Copy(data, 0, existing, 0, existing.Length);
+            return existing;
+        }
+
+        [CLSCompliantAttribute(false)]
+        public static ulong[] Clone(ulong[] data, ulong[] existing)
+        {
+            if (data == null)
+                return null;
+            if (existing == null || existing.Length != data.Length)
+                return Clone(data);
+            Array.Copy(data, 0, existing, 0, existing.Length);
             return existing;
         }
 
@@ -480,35 +511,35 @@ namespace Org.BouncyCastle.Utilities
         public static byte[] CopyOf(byte[] data, int newLength)
         {
             byte[] tmp = new byte[newLength];
-            System.Buffer.BlockCopy(data, 0, tmp, 0, System.Math.Min(newLength, data.Length));
+            Array.Copy(data, 0, tmp, 0, System.Math.Min(newLength, data.Length));
             return tmp;
         }
 
         public static char[] CopyOf(char[] data, int newLength)
         {
             char[] tmp = new char[newLength];
-            System.Array.Copy(data, 0, tmp, 0, System.Math.Min(newLength, data.Length));
+            Array.Copy(data, 0, tmp, 0, System.Math.Min(newLength, data.Length));
             return tmp;
         }
 
         public static int[] CopyOf(int[] data, int newLength)
         {
             int[] tmp = new int[newLength];
-            System.Array.Copy(data, 0, tmp, 0, System.Math.Min(newLength, data.Length));
+            Array.Copy(data, 0, tmp, 0, System.Math.Min(newLength, data.Length));
             return tmp;
         }
 
         public static long[] CopyOf(long[] data, int newLength)
         {
             long[] tmp = new long[newLength];
-            System.Array.Copy(data, 0, tmp, 0, System.Math.Min(newLength, data.Length));
+            Array.Copy(data, 0, tmp, 0, System.Math.Min(newLength, data.Length));
             return tmp;
         }
 
         public static BigInteger[] CopyOf(BigInteger[] data, int newLength)
         {
             BigInteger[] tmp = new BigInteger[newLength];
-            System.Array.Copy(data, 0, tmp, 0, System.Math.Min(newLength, data.Length));
+            Array.Copy(data, 0, tmp, 0, System.Math.Min(newLength, data.Length));
             return tmp;
         }
 
@@ -527,7 +558,7 @@ namespace Org.BouncyCastle.Utilities
         {
             int newLength = GetLength(from, to);
             byte[] tmp = new byte[newLength];
-            System.Buffer.BlockCopy(data, from, tmp, 0, System.Math.Min(newLength, data.Length - from));
+            Array.Copy(data, from, tmp, 0, System.Math.Min(newLength, data.Length - from));
             return tmp;
         }
 
@@ -535,7 +566,7 @@ namespace Org.BouncyCastle.Utilities
         {
             int newLength = GetLength(from, to);
             int[] tmp = new int[newLength];
-            System.Array.Copy(data, from, tmp, 0, System.Math.Min(newLength, data.Length - from));
+            Array.Copy(data, from, tmp, 0, System.Math.Min(newLength, data.Length - from));
             return tmp;
         }
 
@@ -543,7 +574,7 @@ namespace Org.BouncyCastle.Utilities
         {
             int newLength = GetLength(from, to);
             long[] tmp = new long[newLength];
-            System.Array.Copy(data, from, tmp, 0, System.Math.Min(newLength, data.Length - from));
+            Array.Copy(data, from, tmp, 0, System.Math.Min(newLength, data.Length - from));
             return tmp;
         }
 
@@ -551,7 +582,7 @@ namespace Org.BouncyCastle.Utilities
         {
             int newLength = GetLength(from, to);
             BigInteger[] tmp = new BigInteger[newLength];
-            System.Array.Copy(data, from, tmp, 0, System.Math.Min(newLength, data.Length - from));
+            Array.Copy(data, from, tmp, 0, System.Math.Min(newLength, data.Length - from));
             return tmp;
         }
 
@@ -570,7 +601,7 @@ namespace Org.BouncyCastle.Utilities
 
             int length = a.Length;
             byte[] result = new byte[length + 1];
-            System.Buffer.BlockCopy(a, 0, result, 0, length);
+            Array.Copy(a, 0, result, 0, length);
             result[length] = b;
             return result;
         }
@@ -582,7 +613,7 @@ namespace Org.BouncyCastle.Utilities
 
             int length = a.Length;
             short[] result = new short[length + 1];
-            System.Array.Copy(a, 0, result, 0, length);
+            Array.Copy(a, 0, result, 0, length);
             result[length] = b;
             return result;
         }
@@ -594,7 +625,7 @@ namespace Org.BouncyCastle.Utilities
 
             int length = a.Length;
             int[] result = new int[length + 1];
-            System.Array.Copy(a, 0, result, 0, length);
+            Array.Copy(a, 0, result, 0, length);
             result[length] = b;
             return result;
         }
@@ -607,8 +638,8 @@ namespace Org.BouncyCastle.Utilities
                 return Clone(a);
 
             byte[] rv = new byte[a.Length + b.Length];
-            System.Buffer.BlockCopy(a, 0, rv, 0, a.Length);
-            System.Buffer.BlockCopy(b, 0, rv, a.Length, b.Length);
+            Array.Copy(a, 0, rv, 0, a.Length);
+            Array.Copy(b, 0, rv, a.Length, b.Length);
             return rv;
         }
 
@@ -634,7 +665,7 @@ namespace Org.BouncyCastle.Utilities
             for (int j = 0; j < count; ++j)
             {
                 byte[] v = nonNull[j];
-                System.Buffer.BlockCopy(v, 0, result, pos, v.Length);
+                Array.Copy(v, 0, result, pos, v.Length);
                 pos += v.Length;
             }
 
@@ -649,8 +680,8 @@ namespace Org.BouncyCastle.Utilities
                 return Clone(a);
 
             int[] rv = new int[a.Length + b.Length];
-            System.Array.Copy(a, 0, rv, 0, a.Length);
-            System.Array.Copy(b, 0, rv, a.Length, b.Length);
+            Array.Copy(a, 0, rv, 0, a.Length);
+            Array.Copy(b, 0, rv, a.Length, b.Length);
             return rv;
         }
 
@@ -661,7 +692,7 @@ namespace Org.BouncyCastle.Utilities
 
             int length = a.Length;
             byte[] result = new byte[length + 1];
-            System.Buffer.BlockCopy(a, 0, result, 1, length);
+            Array.Copy(a, 0, result, 1, length);
             result[0] = b;
             return result;
         }
@@ -673,7 +704,7 @@ namespace Org.BouncyCastle.Utilities
 
             int length = a.Length;
             short[] result = new short[length + 1];
-            System.Array.Copy(a, 0, result, 1, length);
+            Array.Copy(a, 0, result, 1, length);
             result[0] = b;
             return result;
         }
@@ -685,7 +716,7 @@ namespace Org.BouncyCastle.Utilities
 
             int length = a.Length;
             int[] result = new int[length + 1];
-            System.Array.Copy(a, 0, result, 1, length);
+            Array.Copy(a, 0, result, 1, length);
             result[0] = b;
             return result;
         }
@@ -720,6 +751,36 @@ namespace Org.BouncyCastle.Utilities
             }
 
             return result;
+        }
+
+        public static void Clear(byte[] data)
+        {
+            if (null != data)
+            {
+                Array.Clear(data, 0, data.Length);
+            }
+        }
+
+        public static void Clear(int[] data)
+        {
+            if (null != data)
+            {
+                Array.Clear(data, 0, data.Length);
+            }
+        }
+
+        public static bool IsNullOrContainsNull(object[] array)
+        {
+            if (null == array)
+                return true;
+
+            int count = array.Length;
+            for (int i = 0; i < count; ++i)
+            {
+                if (null == array[i])
+                    return true;
+            }
+            return false;
         }
     }
 }

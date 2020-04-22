@@ -116,21 +116,21 @@ namespace Org.BouncyCastle.Crypto.Engines
 			{
 				w[i >> 2] |= ((uint)key[i] << (8 * (i & 0x3)));
 			}
-			System.Array.Copy(w, 0, w, 4, 4);
+			Array.Copy(w, 0, w, 4, 4);
 
 			for (int i = 0; i < iv.Length && i < 16; i++)
 			{
 				w[(i >> 2) + 8] |= ((uint)iv[i] << (8 * (i & 0x3)));
 			}
-			System.Array.Copy(w, 8, w, 12, 4);
+			Array.Copy(w, 8, w, 12, 4);
 
 			for (uint i = 16; i < 1280; i++)
 			{
 				w[i] = F2(w[i - 2]) + w[i - 7] + F1(w[i - 15]) + w[i - 16] + i;
 			}
 
-			System.Array.Copy(w, 256, p, 0, 512);
-			System.Array.Copy(w, 768, q, 0, 512);
+			Array.Copy(w, 256, p, 0, 512);
+			Array.Copy(w, 768, q, 0, 512);
 
 			for (int i = 0; i < 512; i++)
 			{

@@ -118,13 +118,13 @@ namespace Org.BouncyCastle.Crypto.Engines
 
             if (wordsInBlock == wordsInKey)
             {
-                System.Array.Copy(workingKey, 0, k0, 0, k0.Length);
-                System.Array.Copy(workingKey, 0, k1, 0, k1.Length);
+                Array.Copy(workingKey, 0, k0, 0, k0.Length);
+                Array.Copy(workingKey, 0, k1, 0, k1.Length);
             }
             else
             {
-                System.Array.Copy(workingKey, 0, k0, 0, wordsInBlock);
-                System.Array.Copy(workingKey, wordsInBlock, k1, 0, wordsInBlock);
+                Array.Copy(workingKey, 0, k0, 0, wordsInBlock);
+                Array.Copy(workingKey, wordsInBlock, k1, 0, wordsInBlock);
             }
 
             
@@ -149,7 +149,7 @@ namespace Org.BouncyCastle.Crypto.Engines
 
             EncryptionRound();
 
-            System.Array.Copy(internalState, 0, tempKeys, 0, wordsInBlock);
+            Array.Copy(internalState, 0, tempKeys, 0, wordsInBlock);
         }
 
         private void WorkingKeyExpandEven(ulong[] workingKey, ulong[] tempKey)
@@ -159,7 +159,7 @@ namespace Org.BouncyCastle.Crypto.Engines
 
             int round = 0;
 
-            System.Array.Copy(workingKey, 0, initialData, 0, wordsInKey);
+            Array.Copy(workingKey, 0, initialData, 0, wordsInKey);
 
             ulong tmv = 0x0001000100010001UL;
 
@@ -189,7 +189,7 @@ namespace Org.BouncyCastle.Crypto.Engines
                     internalState[wordIndex] += tempRoundKey[wordIndex];
                 }
 
-                System.Array.Copy(internalState, 0, roundKeys[round], 0, wordsInBlock);
+                Array.Copy(internalState, 0, roundKeys[round], 0, wordsInBlock);
 
                 if (roundsAmount == round)
                 {
@@ -225,7 +225,7 @@ namespace Org.BouncyCastle.Crypto.Engines
                         internalState[wordIndex] += tempRoundKey[wordIndex];
                     }
 
-                    System.Array.Copy(internalState, 0, roundKeys[round], 0, wordsInBlock);
+                    Array.Copy(internalState, 0, roundKeys[round], 0, wordsInBlock);
 
                     if (roundsAmount == round)
                     {

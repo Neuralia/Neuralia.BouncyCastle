@@ -247,7 +247,7 @@ namespace Org.BouncyCastle.Crypto.Engines
 				knw = knw ^ kw[i];
 			}
 			kw[blocksizeWords] = knw;
-			System.Array.Copy(kw, 0, kw, blocksizeWords + 1, blocksizeWords);
+			Array.Copy(kw, 0, kw, blocksizeWords + 1, blocksizeWords);
 		}
 
 		private void SetTweak(ulong[] tweak)

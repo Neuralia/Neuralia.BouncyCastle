@@ -2,22 +2,22 @@ using System;
 
 namespace Org.BouncyCastle.Asn1.Cms
 {
-	public class TimeStampNeuraliumEvidence
+	public class TimeStampTokenEvidence
 		: Asn1Encodable
 	{
 		private TimeStampAndCrl[] timeStampAndCrls;
 
-		public TimeStampNeuraliumEvidence(TimeStampAndCrl[] timeStampAndCrls)
+		public TimeStampTokenEvidence(TimeStampAndCrl[] timeStampAndCrls)
 		{
 			this.timeStampAndCrls = timeStampAndCrls;
 		}
 
-		public TimeStampNeuraliumEvidence(TimeStampAndCrl timeStampAndCrl)
+		public TimeStampTokenEvidence(TimeStampAndCrl timeStampAndCrl)
 		{
 			this.timeStampAndCrls = new TimeStampAndCrl[]{ timeStampAndCrl };
 		}
 
-		private TimeStampNeuraliumEvidence(Asn1Sequence seq)
+		private TimeStampTokenEvidence(Asn1Sequence seq)
 		{
 			this.timeStampAndCrls = new TimeStampAndCrl[seq.Count];
 
@@ -29,18 +29,18 @@ namespace Org.BouncyCastle.Asn1.Cms
 			}
 		}
 
-		public static TimeStampNeuraliumEvidence GetInstance(Asn1TaggedObject tagged, bool isExplicit)
+		public static TimeStampTokenEvidence GetInstance(Asn1TaggedObject tagged, bool isExplicit)
 		{
 			return GetInstance(Asn1Sequence.GetInstance(tagged, isExplicit));
 		}
 
-		public static TimeStampNeuraliumEvidence GetInstance(object obj)
+		public static TimeStampTokenEvidence GetInstance(object obj)
 		{
-			if (obj is TimeStampNeuraliumEvidence)
-				return (TimeStampNeuraliumEvidence)obj;
+			if (obj is TimeStampTokenEvidence)
+				return (TimeStampTokenEvidence)obj;
 
 			if (obj != null)
-				return new TimeStampNeuraliumEvidence(Asn1Sequence.GetInstance(obj));
+				return new TimeStampTokenEvidence(Asn1Sequence.GetInstance(obj));
 
 			return null;
 		}
@@ -52,7 +52,7 @@ namespace Org.BouncyCastle.Asn1.Cms
 
 		/**
 		 * <pre>
-		 * TimeStampNeuraliumEvidence ::=
+		 * TimeStampTokenEvidence ::=
 		 *    SEQUENCE SIZE(1..MAX) OF TimeStampAndCrl
 		 * </pre>
 		 * @return

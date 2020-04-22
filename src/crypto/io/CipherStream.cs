@@ -76,7 +76,7 @@ namespace Org.BouncyCastle.Crypto.IO
 				}
 
 				int numToCopy = System.Math.Min(count - num, mInBuf.Length - mInPos);
-				System.Array.Copy(mInBuf, mInPos, buffer, offset + num, numToCopy);
+				Array.Copy(mInBuf, mInPos, buffer, offset + num, numToCopy);
 				mInPos += numToCopy;
 				num += numToCopy;
 			}

@@ -65,7 +65,7 @@ namespace Org.BouncyCastle.Crypto.Modes
                 ParametersWithIV ivParam = (ParametersWithIV) parameters;
                 byte[] iv = ivParam.GetIV();
                 int diff = IV.Length - iv.Length;
-                System.Array.Copy(iv, 0, IV, diff, iv.Length);
+                Array.Copy(iv, 0, IV, diff, iv.Length);
                 Array.Clear(IV, 0, diff);
 
                 parameters = ivParam.Parameters;
@@ -166,8 +166,8 @@ namespace Org.BouncyCastle.Crypto.Modes
             //
             // change over the input block.
             //
-            System.Array.Copy(cfbV, blockSize, cfbV, 0, cfbV.Length - blockSize);
-            System.Array.Copy(outBytes, outOff, cfbV, cfbV.Length - blockSize, blockSize);
+            Array.Copy(cfbV, blockSize, cfbV, 0, cfbV.Length - blockSize);
+            Array.Copy(outBytes, outOff, cfbV, cfbV.Length - blockSize, blockSize);
             return blockSize;
         }
         /**
@@ -200,8 +200,8 @@ namespace Org.BouncyCastle.Crypto.Modes
             //
             // change over the input block.
             //
-            System.Array.Copy(cfbV, blockSize, cfbV, 0, cfbV.Length - blockSize);
-            System.Array.Copy(input, inOff, cfbV, cfbV.Length - blockSize, blockSize);
+            Array.Copy(cfbV, blockSize, cfbV, 0, cfbV.Length - blockSize);
+            Array.Copy(input, inOff, cfbV, cfbV.Length - blockSize, blockSize);
             //
             // XOR the cfbV with the ciphertext producing the plaintext
             //
@@ -217,7 +217,7 @@ namespace Org.BouncyCastle.Crypto.Modes
         */
         public void Reset()
         {
-            System.Array.Copy(IV, 0, cfbV, 0, IV.Length);
+            Array.Copy(IV, 0, cfbV, 0, IV.Length);
             cipher.Reset();
         }
     }

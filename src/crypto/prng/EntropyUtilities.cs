@@ -21,7 +21,7 @@ namespace Org.BouncyCastle.Crypto.Prng
             {
                 byte[] entropy = entropySource.GetEntropy();
                 int toCopy = System.Math.Min(bytes.Length, numBytes - count);
-                System.Array.Copy(entropy, 0, bytes, count, toCopy);
+                Array.Copy(entropy, 0, bytes, count, toCopy);
                 count += toCopy;
             }
             return bytes;

@@ -49,7 +49,8 @@ namespace Org.BouncyCastle.Asn1.CryptoPro
             this.encryptionParamSet = encryptionParamSet;
         }
 
-		public Gost3410PublicKeyAlgParameters(
+        [Obsolete("Use 'GetInstance' instead")]
+        public Gost3410PublicKeyAlgParameters(
             Asn1Sequence seq)
         {
             this.publicKeyParamSet = (DerObjectIdentifier) seq[0];
@@ -78,14 +79,8 @@ namespace Org.BouncyCastle.Asn1.CryptoPro
 
 		public override Asn1Object ToAsn1Object()
         {
-            Asn1EncodableVector v = new Asn1EncodableVector(
-				publicKeyParamSet, digestParamSet);
-
-			if (encryptionParamSet != null)
-            {
-                v.Add(encryptionParamSet);
-            }
-
+            Asn1EncodableVector v = new Asn1EncodableVector(publicKeyParamSet, digestParamSet);
+            v.AddOptional(encryptionParamSet);
 			return new DerSequence(v);
         }
     }

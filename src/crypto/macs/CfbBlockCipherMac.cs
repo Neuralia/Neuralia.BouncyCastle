@@ -58,11 +58,11 @@ namespace Org.BouncyCastle.Crypto.Macs
 
                 if (iv.Length < IV.Length)
                 {
-                    System.Array.Copy(iv, 0, IV, IV.Length - iv.Length, iv.Length);
+                    Array.Copy(iv, 0, IV, IV.Length - iv.Length, iv.Length);
                 }
                 else
                 {
-                    System.Array.Copy(iv, 0, IV, 0, IV.Length);
+                    Array.Copy(iv, 0, IV, 0, IV.Length);
                 }
 
 				parameters = ivParam.Parameters;
@@ -137,8 +137,8 @@ namespace Org.BouncyCastle.Crypto.Macs
 			//
             // change over the input block.
             //
-            System.Array.Copy(cfbV, blockSize, cfbV, 0, cfbV.Length - blockSize);
-            System.Array.Copy(outBytes, outOff, cfbV, cfbV.Length - blockSize, blockSize);
+            Array.Copy(cfbV, blockSize, cfbV, 0, cfbV.Length - blockSize);
+            Array.Copy(outBytes, outOff, cfbV, cfbV.Length - blockSize, blockSize);
 
 			return blockSize;
         }
@@ -299,7 +299,7 @@ namespace Org.BouncyCastle.Crypto.Macs
 
 			if (len > gapLen)
             {
-                System.Array.Copy(input, inOff, Buffer, bufOff, gapLen);
+                Array.Copy(input, inOff, Buffer, bufOff, gapLen);
 
 				resultLen += cipher.ProcessBlock(Buffer, 0, mac, 0);
 
@@ -316,7 +316,7 @@ namespace Org.BouncyCastle.Crypto.Macs
                 }
             }
 
-			System.Array.Copy(input, inOff, Buffer, bufOff, len);
+			Array.Copy(input, inOff, Buffer, bufOff, len);
 
 			bufOff += len;
         }
@@ -344,7 +344,7 @@ namespace Org.BouncyCastle.Crypto.Macs
 
 			cipher.GetMacBlock(mac);
 
-			System.Array.Copy(mac, 0, output, outOff, macSize);
+			Array.Copy(mac, 0, output, outOff, macSize);
 
 			Reset();
 

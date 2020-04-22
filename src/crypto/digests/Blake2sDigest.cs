@@ -183,10 +183,10 @@ namespace Org.BouncyCastle.Crypto.Digests
                     throw new ArgumentException("Keys > 32 are not supported");
 
                 this.key = new byte[key.Length];
-                System.Array.Copy(key, 0, this.key, 0, key.Length);
+                Array.Copy(key, 0, this.key, 0, key.Length);
 
                 keyLength = key.Length;
-                System.Array.Copy(key, 0, buffer, 0, key.Length);
+                Array.Copy(key, 0, buffer, 0, key.Length);
                 bufferPos = BLOCK_LENGTH_BYTES; // zero padding
             }
             digestLength = 32;
@@ -221,7 +221,7 @@ namespace Org.BouncyCastle.Crypto.Digests
                     throw new ArgumentException("Salt length must be exactly 8 bytes");
 
                 this.salt = new byte[8];
-                System.Array.Copy(salt, 0, this.salt, 0, salt.Length);
+                Array.Copy(salt, 0, this.salt, 0, salt.Length);
             }
             if (personalization != null)
             {
@@ -229,7 +229,7 @@ namespace Org.BouncyCastle.Crypto.Digests
                     throw new ArgumentException("Personalization length must be exactly 8 bytes");
 
                 this.personalization = new byte[8];
-                System.Array.Copy(personalization, 0, this.personalization, 0, personalization.Length);
+                Array.Copy(personalization, 0, this.personalization, 0, personalization.Length);
             }
             if (key != null)
             {
@@ -237,10 +237,10 @@ namespace Org.BouncyCastle.Crypto.Digests
                     throw new ArgumentException("Keys > 32 bytes are not supported");
 
                 this.key = new byte[key.Length];
-                System.Array.Copy(key, 0, this.key, 0, key.Length);
+                Array.Copy(key, 0, this.key, 0, key.Length);
 
                 keyLength = key.Length;
-                System.Array.Copy(key, 0, buffer, 0, key.Length);
+                Array.Copy(key, 0, buffer, 0, key.Length);
                 bufferPos = BLOCK_LENGTH_BYTES; // zero padding
             }
             Init();
@@ -282,8 +282,8 @@ namespace Org.BouncyCastle.Crypto.Digests
         private void InitializeInternalState()
         {
             // initialize v:
-            System.Array.Copy(chainValue, 0, internalState, 0, chainValue.Length);
-            System.Array.Copy(blake2s_IV, 0, internalState, chainValue.Length, 4);
+            Array.Copy(chainValue, 0, internalState, 0, chainValue.Length);
+            Array.Copy(blake2s_IV, 0, internalState, chainValue.Length, 4);
             internalState[12] = t0 ^ blake2s_IV[4];
             internalState[13] = t1 ^ blake2s_IV[5];
             internalState[14] = f0 ^ blake2s_IV[6];
@@ -341,7 +341,7 @@ namespace Org.BouncyCastle.Crypto.Digests
                 remainingLength = BLOCK_LENGTH_BYTES - bufferPos;
                 if (remainingLength < len)
                 { // full buffer + at least 1 byte
-                    System.Array.Copy(message, offset, buffer, bufferPos, remainingLength);
+                    Array.Copy(message, offset, buffer, bufferPos, remainingLength);
                     t0 += BLOCK_LENGTH_BYTES;
                     if (t0 == 0)
                     { // if message > 2^32
@@ -353,7 +353,7 @@ namespace Org.BouncyCastle.Crypto.Digests
                 }
                 else
                 {
-                    System.Array.Copy(message, offset, buffer, bufferPos, len);
+                    Array.Copy(message, offset, buffer, bufferPos, len);
                     bufferPos += len;
                     return;
                 }
@@ -376,7 +376,7 @@ namespace Org.BouncyCastle.Crypto.Digests
             }
 
             // fill the buffer with left bytes, this might be a full block
-            System.Array.Copy(message, messagePos, buffer, 0, offset + len
+            Array.Copy(message, messagePos, buffer, 0, offset + len
                 - messagePos);
             bufferPos += offset + len - messagePos;
         }
@@ -408,11 +408,11 @@ namespace Org.BouncyCastle.Crypto.Digests
 
                 if (i * 4 < digestLength - 4)
                 {
-                    System.Array.Copy(bytes, 0, output, outOffset + i * 4, 4);
+                    Array.Copy(bytes, 0, output, outOffset + i * 4, 4);
                 }
                 else
                 {
-                    System.Array.Copy(bytes, 0, output, outOffset + i * 4, digestLength - (i * 4));
+                    Array.Copy(bytes, 0, output, outOffset + i * 4, digestLength - (i * 4));
                 }
             }
 
@@ -437,7 +437,7 @@ namespace Org.BouncyCastle.Crypto.Digests
             Array.Clear(buffer, 0, buffer.Length);
             if (key != null)
             {
-                System.Array.Copy(key, 0, buffer, 0, key.Length);
+                Array.Copy(key, 0, buffer, 0, key.Length);
                 bufferPos = BLOCK_LENGTH_BYTES; // zero padding
             }
             Init();

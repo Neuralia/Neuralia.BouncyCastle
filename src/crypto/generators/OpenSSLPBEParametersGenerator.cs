@@ -65,7 +65,7 @@ namespace Org.BouncyCastle.Crypto.Generators
 				digest.DoFinal(buf, 0);
 
 				int len = (bytesNeeded > buf.Length) ? buf.Length : bytesNeeded;
-				System.Array.Copy(buf, 0, key, offset, len);
+				Array.Copy(buf, 0, key, offset, len);
 				offset += len;
 
 				// check if we need any more

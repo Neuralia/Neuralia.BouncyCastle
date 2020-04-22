@@ -64,7 +64,7 @@ namespace Org.BouncyCastle.Crypto.Digests
 
 			baseDigest.DoFinal(tmp, 0);
 
-	        System.Array.Copy(tmp, 0, output, outOff, length);
+	        Array.Copy(tmp, 0, output, outOff, length);
 
 			return length;
 		}

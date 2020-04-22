@@ -1,12 +1,11 @@
 using System;
 using System.Collections;
-using System.Diagnostics.CodeAnalysis;
+
 using Org.BouncyCastle.Utilities;
 using Org.BouncyCastle.Utilities.Collections;
 
 namespace Org.BouncyCastle.Asn1.X509
 {
-    [SuppressMessage("ReSharper", "TailRecursiveCall")]
     public class X509Extensions
         : Asn1Encodable
     {
@@ -172,6 +171,16 @@ namespace Org.BouncyCastle.Asn1.X509
 
         private readonly IDictionary extensions = Platform.CreateHashtable();
         private readonly IList ordering;
+
+        public static X509Extension GetExtension(X509Extensions extensions, DerObjectIdentifier oid)
+        {
+            return null == extensions ? null : extensions.GetExtension(oid);
+        }
+
+        public static Asn1Encodable GetExtensionParsedValue(X509Extensions extensions, DerObjectIdentifier oid)
+        {
+            return null == extensions ? null : extensions.GetExtensionParsedValue(oid);
+        }
 
 		public static X509Extensions GetInstance(
             Asn1TaggedObject	obj,
@@ -369,7 +378,20 @@ namespace Org.BouncyCastle.Asn1.X509
         public X509Extension GetExtension(
             DerObjectIdentifier oid)
         {
-             return (X509Extension) extensions[oid];
+             return (X509Extension)extensions[oid];
+        }
+
+        /**
+         * return the parsed value of the extension represented by the object identifier
+         * passed in.
+         *
+         * @return the parsed value of the extension if it's present, null otherwise.
+         */
+        public Asn1Encodable GetExtensionParsedValue(DerObjectIdentifier oid)
+        {
+            X509Extension ext = GetExtension(oid);
+
+            return ext == null ? null : ext.GetParsedValue();
         }
 
 		/**

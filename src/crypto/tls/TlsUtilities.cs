@@ -859,8 +859,8 @@ namespace Org.BouncyCastle.Crypto.Tls
             int s_half = (secret.Length + 1) / 2;
             byte[] s1 = new byte[s_half];
             byte[] s2 = new byte[s_half];
-            System.Array.Copy(secret, 0, s1, 0, s_half);
-            System.Array.Copy(secret, secret.Length - s_half, s2, 0, s_half);
+            Array.Copy(secret, 0, s1, 0, s_half);
+            Array.Copy(secret, secret.Length - s_half, s2, 0, s_half);
 
             byte[] b1 = new byte[size];
             byte[] b2 = new byte[size];
@@ -876,8 +876,8 @@ namespace Org.BouncyCastle.Crypto.Tls
         internal static byte[] Concat(byte[] a, byte[] b)
         {
             byte[] c = new byte[a.Length + b.Length];
-            System.Array.Copy(a, 0, c, 0, a.Length);
-            System.Array.Copy(b, 0, c, a.Length, b.Length);
+            Array.Copy(a, 0, c, 0, a.Length);
+            Array.Copy(b, 0, c, a.Length, b.Length);
             return c;
         }
 
@@ -898,7 +898,7 @@ namespace Org.BouncyCastle.Crypto.Tls
                 mac.BlockUpdate(a, 0, a.Length);
                 mac.BlockUpdate(seed, 0, seed.Length);
                 mac.DoFinal(buf2, 0);
-                System.Array.Copy(buf2, 0, output, (size * i), System.Math.Min(size, output.Length - (size * i)));
+                Array.Copy(buf2, 0, output, (size * i), System.Math.Min(size, output.Length - (size * i)));
             }
         }
 
@@ -1391,14 +1391,6 @@ namespace Org.BouncyCastle.Crypto.Tls
             case CipherSuite.TLS_RSA_WITH_AES_128_GCM_SHA256:
                 return EncryptionAlgorithm.AES_128_GCM;
 
-            case CipherSuite.DRAFT_TLS_DHE_PSK_WITH_AES_128_OCB:
-            case CipherSuite.DRAFT_TLS_DHE_RSA_WITH_AES_128_OCB:
-            case CipherSuite.DRAFT_TLS_ECDHE_ECDSA_WITH_AES_128_OCB:
-            case CipherSuite.DRAFT_TLS_ECDHE_PSK_WITH_AES_128_OCB:
-            case CipherSuite.DRAFT_TLS_ECDHE_RSA_WITH_AES_128_OCB:
-            case CipherSuite.DRAFT_TLS_PSK_WITH_AES_128_OCB:
-                return EncryptionAlgorithm.AES_128_OCB_TAGLEN96;
-
             case CipherSuite.TLS_DH_anon_WITH_AES_256_CBC_SHA:
             case CipherSuite.TLS_DH_anon_WITH_AES_256_CBC_SHA256:
             case CipherSuite.TLS_DH_DSS_WITH_AES_256_CBC_SHA:
@@ -1461,14 +1453,6 @@ namespace Org.BouncyCastle.Crypto.Tls
             case CipherSuite.TLS_RSA_PSK_WITH_AES_256_GCM_SHA384:
             case CipherSuite.TLS_RSA_WITH_AES_256_GCM_SHA384:
                 return EncryptionAlgorithm.AES_256_GCM;
-
-            case CipherSuite.DRAFT_TLS_DHE_PSK_WITH_AES_256_OCB:
-            case CipherSuite.DRAFT_TLS_DHE_RSA_WITH_AES_256_OCB:
-            case CipherSuite.DRAFT_TLS_ECDHE_ECDSA_WITH_AES_256_OCB:
-            case CipherSuite.DRAFT_TLS_ECDHE_PSK_WITH_AES_256_OCB:
-            case CipherSuite.DRAFT_TLS_ECDHE_RSA_WITH_AES_256_OCB:
-            case CipherSuite.DRAFT_TLS_PSK_WITH_AES_256_OCB:
-                return EncryptionAlgorithm.AES_256_OCB_TAGLEN96;
 
             case CipherSuite.TLS_DH_anon_WITH_CAMELLIA_128_CBC_SHA:
             case CipherSuite.TLS_DH_anon_WITH_CAMELLIA_128_CBC_SHA256:
@@ -1684,12 +1668,10 @@ namespace Org.BouncyCastle.Crypto.Tls
             case CipherSuite.TLS_DHE_PSK_WITH_AES_128_CBC_SHA256:
             case CipherSuite.TLS_DHE_PSK_WITH_AES_128_CCM:
             case CipherSuite.TLS_DHE_PSK_WITH_AES_128_GCM_SHA256:
-            case CipherSuite.DRAFT_TLS_DHE_PSK_WITH_AES_128_OCB:
             case CipherSuite.TLS_DHE_PSK_WITH_AES_256_CBC_SHA:
             case CipherSuite.TLS_DHE_PSK_WITH_AES_256_CBC_SHA384:
             case CipherSuite.TLS_DHE_PSK_WITH_AES_256_CCM:
             case CipherSuite.TLS_DHE_PSK_WITH_AES_256_GCM_SHA384:
-            case CipherSuite.DRAFT_TLS_DHE_PSK_WITH_AES_256_OCB:
             case CipherSuite.TLS_DHE_PSK_WITH_CAMELLIA_128_CBC_SHA256:
             case CipherSuite.TLS_DHE_PSK_WITH_CAMELLIA_128_GCM_SHA256:
             case CipherSuite.TLS_DHE_PSK_WITH_CAMELLIA_256_CBC_SHA384:
@@ -1709,13 +1691,11 @@ namespace Org.BouncyCastle.Crypto.Tls
             case CipherSuite.TLS_DHE_RSA_WITH_AES_128_CCM:
             case CipherSuite.TLS_DHE_RSA_WITH_AES_128_CCM_8:
             case CipherSuite.TLS_DHE_RSA_WITH_AES_128_GCM_SHA256:
-            case CipherSuite.DRAFT_TLS_DHE_RSA_WITH_AES_128_OCB:
             case CipherSuite.TLS_DHE_RSA_WITH_AES_256_CBC_SHA:
             case CipherSuite.TLS_DHE_RSA_WITH_AES_256_CBC_SHA256:
             case CipherSuite.TLS_DHE_RSA_WITH_AES_256_CCM:
             case CipherSuite.TLS_DHE_RSA_WITH_AES_256_CCM_8:
             case CipherSuite.TLS_DHE_RSA_WITH_AES_256_GCM_SHA384:
-            case CipherSuite.DRAFT_TLS_DHE_RSA_WITH_AES_256_OCB:
             case CipherSuite.TLS_DHE_RSA_WITH_CAMELLIA_128_CBC_SHA:
             case CipherSuite.TLS_DHE_RSA_WITH_CAMELLIA_128_CBC_SHA256:
             case CipherSuite.TLS_DHE_RSA_WITH_CAMELLIA_128_GCM_SHA256:
@@ -1737,11 +1717,9 @@ namespace Org.BouncyCastle.Crypto.Tls
             case CipherSuite.TLS_ECDH_ECDSA_WITH_AES_128_CBC_SHA:
             case CipherSuite.TLS_ECDH_ECDSA_WITH_AES_128_CBC_SHA256:
             case CipherSuite.TLS_ECDH_ECDSA_WITH_AES_128_GCM_SHA256:
-            case CipherSuite.DRAFT_TLS_ECDHE_ECDSA_WITH_AES_128_OCB:
             case CipherSuite.TLS_ECDH_ECDSA_WITH_AES_256_CBC_SHA:
             case CipherSuite.TLS_ECDH_ECDSA_WITH_AES_256_CBC_SHA384:
             case CipherSuite.TLS_ECDH_ECDSA_WITH_AES_256_GCM_SHA384:
-            case CipherSuite.DRAFT_TLS_ECDHE_ECDSA_WITH_AES_256_OCB:
             case CipherSuite.TLS_ECDH_ECDSA_WITH_CAMELLIA_128_CBC_SHA256:
             case CipherSuite.TLS_ECDH_ECDSA_WITH_CAMELLIA_128_GCM_SHA256:
             case CipherSuite.TLS_ECDH_ECDSA_WITH_CAMELLIA_256_CBC_SHA384:
@@ -1788,10 +1766,8 @@ namespace Org.BouncyCastle.Crypto.Tls
             case CipherSuite.TLS_ECDHE_PSK_WITH_3DES_EDE_CBC_SHA:
             case CipherSuite.TLS_ECDHE_PSK_WITH_AES_128_CBC_SHA:
             case CipherSuite.TLS_ECDHE_PSK_WITH_AES_128_CBC_SHA256:
-            case CipherSuite.DRAFT_TLS_ECDHE_PSK_WITH_AES_128_OCB:
             case CipherSuite.TLS_ECDHE_PSK_WITH_AES_256_CBC_SHA:
             case CipherSuite.TLS_ECDHE_PSK_WITH_AES_256_CBC_SHA384:
-            case CipherSuite.DRAFT_TLS_ECDHE_PSK_WITH_AES_256_OCB:
             case CipherSuite.TLS_ECDHE_PSK_WITH_CAMELLIA_128_CBC_SHA256:
             case CipherSuite.TLS_ECDHE_PSK_WITH_CAMELLIA_256_CBC_SHA384:
             case CipherSuite.DRAFT_TLS_ECDHE_PSK_WITH_CHACHA20_POLY1305_SHA256:
@@ -1805,11 +1781,9 @@ namespace Org.BouncyCastle.Crypto.Tls
             case CipherSuite.TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA:
             case CipherSuite.TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256:
             case CipherSuite.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256:
-            case CipherSuite.DRAFT_TLS_ECDHE_RSA_WITH_AES_128_OCB:
             case CipherSuite.TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA:
             case CipherSuite.TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384:
             case CipherSuite.TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384:
-            case CipherSuite.DRAFT_TLS_ECDHE_RSA_WITH_AES_256_OCB:
             case CipherSuite.TLS_ECDHE_RSA_WITH_CAMELLIA_128_CBC_SHA256:
             case CipherSuite.TLS_ECDHE_RSA_WITH_CAMELLIA_128_GCM_SHA256:
             case CipherSuite.TLS_ECDHE_RSA_WITH_CAMELLIA_256_CBC_SHA384:
@@ -1825,13 +1799,11 @@ namespace Org.BouncyCastle.Crypto.Tls
             case CipherSuite.TLS_PSK_WITH_AES_128_CCM:
             case CipherSuite.TLS_PSK_WITH_AES_128_CCM_8:
             case CipherSuite.TLS_PSK_WITH_AES_128_GCM_SHA256:
-            case CipherSuite.DRAFT_TLS_PSK_WITH_AES_128_OCB:
             case CipherSuite.TLS_PSK_WITH_AES_256_CBC_SHA:
             case CipherSuite.TLS_PSK_WITH_AES_256_CBC_SHA384:
             case CipherSuite.TLS_PSK_WITH_AES_256_CCM:
             case CipherSuite.TLS_PSK_WITH_AES_256_CCM_8:
             case CipherSuite.TLS_PSK_WITH_AES_256_GCM_SHA384:
-            case CipherSuite.DRAFT_TLS_PSK_WITH_AES_256_OCB:
             case CipherSuite.TLS_PSK_WITH_CAMELLIA_128_CBC_SHA256:
             case CipherSuite.TLS_PSK_WITH_CAMELLIA_128_GCM_SHA256:
             case CipherSuite.TLS_PSK_WITH_CAMELLIA_256_CBC_SHA384:
@@ -1928,21 +1900,17 @@ namespace Org.BouncyCastle.Crypto.Tls
             case CipherSuite.TLS_DHE_DSS_WITH_CAMELLIA_256_GCM_SHA384:
             case CipherSuite.TLS_DHE_PSK_WITH_AES_128_CCM:
             case CipherSuite.TLS_DHE_PSK_WITH_AES_128_GCM_SHA256:
-            case CipherSuite.DRAFT_TLS_DHE_PSK_WITH_AES_128_OCB:
             case CipherSuite.TLS_DHE_PSK_WITH_AES_256_CCM:
             case CipherSuite.TLS_DHE_PSK_WITH_AES_256_GCM_SHA384:
-            case CipherSuite.DRAFT_TLS_DHE_PSK_WITH_AES_256_OCB:
             case CipherSuite.TLS_DHE_PSK_WITH_CAMELLIA_128_GCM_SHA256:
             case CipherSuite.TLS_DHE_PSK_WITH_CAMELLIA_256_GCM_SHA384:
             case CipherSuite.DRAFT_TLS_DHE_PSK_WITH_CHACHA20_POLY1305_SHA256:
             case CipherSuite.TLS_DHE_RSA_WITH_AES_128_CCM:
             case CipherSuite.TLS_DHE_RSA_WITH_AES_128_CCM_8:
             case CipherSuite.TLS_DHE_RSA_WITH_AES_128_GCM_SHA256:
-            case CipherSuite.DRAFT_TLS_DHE_RSA_WITH_AES_128_OCB:
             case CipherSuite.TLS_DHE_RSA_WITH_AES_256_CCM:
             case CipherSuite.TLS_DHE_RSA_WITH_AES_256_CCM_8:
             case CipherSuite.TLS_DHE_RSA_WITH_AES_256_GCM_SHA384:
-            case CipherSuite.DRAFT_TLS_DHE_RSA_WITH_AES_256_OCB:
             case CipherSuite.TLS_DHE_RSA_WITH_CAMELLIA_128_GCM_SHA256:
             case CipherSuite.TLS_DHE_RSA_WITH_CAMELLIA_256_GCM_SHA384:
             case CipherSuite.DRAFT_TLS_DHE_RSA_WITH_CHACHA20_POLY1305_SHA256:
@@ -1957,21 +1925,15 @@ namespace Org.BouncyCastle.Crypto.Tls
             case CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_128_CCM:
             case CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_128_CCM_8:
             case CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256:
-            case CipherSuite.DRAFT_TLS_ECDHE_ECDSA_WITH_AES_128_OCB:
             case CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_256_CCM:
             case CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_256_CCM_8:
             case CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384:
-            case CipherSuite.DRAFT_TLS_ECDHE_ECDSA_WITH_AES_256_OCB:
             case CipherSuite.TLS_ECDHE_ECDSA_WITH_CAMELLIA_128_GCM_SHA256:
             case CipherSuite.TLS_ECDHE_ECDSA_WITH_CAMELLIA_256_GCM_SHA384:
             case CipherSuite.DRAFT_TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256:
-            case CipherSuite.DRAFT_TLS_ECDHE_PSK_WITH_AES_128_OCB:
-            case CipherSuite.DRAFT_TLS_ECDHE_PSK_WITH_AES_256_OCB:
             case CipherSuite.DRAFT_TLS_ECDHE_PSK_WITH_CHACHA20_POLY1305_SHA256:
             case CipherSuite.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256:
-            case CipherSuite.DRAFT_TLS_ECDHE_RSA_WITH_AES_128_OCB:
             case CipherSuite.TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384:
-            case CipherSuite.DRAFT_TLS_ECDHE_RSA_WITH_AES_256_OCB:
             case CipherSuite.TLS_ECDHE_RSA_WITH_CAMELLIA_128_GCM_SHA256:
             case CipherSuite.TLS_ECDHE_RSA_WITH_CAMELLIA_256_GCM_SHA384:
             case CipherSuite.DRAFT_TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256:
@@ -1980,11 +1942,9 @@ namespace Org.BouncyCastle.Crypto.Tls
             case CipherSuite.TLS_PSK_WITH_AES_128_CCM:
             case CipherSuite.TLS_PSK_WITH_AES_128_CCM_8:
             case CipherSuite.TLS_PSK_WITH_AES_128_GCM_SHA256:
-            case CipherSuite.DRAFT_TLS_PSK_WITH_AES_128_OCB:
             case CipherSuite.TLS_PSK_WITH_AES_256_CCM:
             case CipherSuite.TLS_PSK_WITH_AES_256_CCM_8:
             case CipherSuite.TLS_PSK_WITH_AES_256_GCM_SHA384:
-            case CipherSuite.DRAFT_TLS_PSK_WITH_AES_256_OCB:
             case CipherSuite.TLS_PSK_WITH_CAMELLIA_128_GCM_SHA256:
             case CipherSuite.TLS_PSK_WITH_CAMELLIA_256_GCM_SHA384:
             case CipherSuite.DRAFT_TLS_PSK_WITH_CHACHA20_POLY1305_SHA256:
@@ -2214,10 +2174,8 @@ namespace Org.BouncyCastle.Crypto.Tls
             case CipherSuite.TLS_DHE_DSS_WITH_CAMELLIA_256_GCM_SHA384:
             case CipherSuite.TLS_DHE_PSK_WITH_AES_128_CCM:
             case CipherSuite.TLS_DHE_PSK_WITH_AES_128_GCM_SHA256:
-            case CipherSuite.DRAFT_TLS_DHE_PSK_WITH_AES_128_OCB:
             case CipherSuite.TLS_DHE_PSK_WITH_AES_256_CCM:
             case CipherSuite.TLS_DHE_PSK_WITH_AES_256_GCM_SHA384:
-            case CipherSuite.DRAFT_TLS_DHE_PSK_WITH_AES_256_OCB:
             case CipherSuite.TLS_DHE_PSK_WITH_CAMELLIA_128_GCM_SHA256:
             case CipherSuite.TLS_DHE_PSK_WITH_CAMELLIA_256_GCM_SHA384:
             case CipherSuite.DRAFT_TLS_DHE_PSK_WITH_CHACHA20_POLY1305_SHA256:
@@ -2225,12 +2183,10 @@ namespace Org.BouncyCastle.Crypto.Tls
             case CipherSuite.TLS_DHE_RSA_WITH_AES_128_CCM:
             case CipherSuite.TLS_DHE_RSA_WITH_AES_128_CCM_8:
             case CipherSuite.TLS_DHE_RSA_WITH_AES_128_GCM_SHA256:
-            case CipherSuite.DRAFT_TLS_DHE_RSA_WITH_AES_128_OCB:
             case CipherSuite.TLS_DHE_RSA_WITH_AES_256_CBC_SHA256:
             case CipherSuite.TLS_DHE_RSA_WITH_AES_256_CCM:
             case CipherSuite.TLS_DHE_RSA_WITH_AES_256_CCM_8:
             case CipherSuite.TLS_DHE_RSA_WITH_AES_256_GCM_SHA384:
-            case CipherSuite.DRAFT_TLS_DHE_RSA_WITH_AES_256_OCB:
             case CipherSuite.TLS_DHE_RSA_WITH_CAMELLIA_128_CBC_SHA256:
             case CipherSuite.TLS_DHE_RSA_WITH_CAMELLIA_128_GCM_SHA256:
             case CipherSuite.TLS_DHE_RSA_WITH_CAMELLIA_256_CBC_SHA256:
@@ -2256,26 +2212,20 @@ namespace Org.BouncyCastle.Crypto.Tls
             case CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_128_CCM:
             case CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_128_CCM_8:
             case CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256:
-            case CipherSuite.DRAFT_TLS_ECDHE_ECDSA_WITH_AES_128_OCB:
             case CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384:
             case CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_256_CCM:
             case CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_256_CCM_8:
             case CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384:
-            case CipherSuite.DRAFT_TLS_ECDHE_ECDSA_WITH_AES_256_OCB:
             case CipherSuite.TLS_ECDHE_ECDSA_WITH_CAMELLIA_128_CBC_SHA256:
             case CipherSuite.TLS_ECDHE_ECDSA_WITH_CAMELLIA_128_GCM_SHA256:
             case CipherSuite.TLS_ECDHE_ECDSA_WITH_CAMELLIA_256_CBC_SHA384:
             case CipherSuite.TLS_ECDHE_ECDSA_WITH_CAMELLIA_256_GCM_SHA384:
             case CipherSuite.DRAFT_TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256:
-            case CipherSuite.DRAFT_TLS_ECDHE_PSK_WITH_AES_128_OCB:
-            case CipherSuite.DRAFT_TLS_ECDHE_PSK_WITH_AES_256_OCB:
             case CipherSuite.DRAFT_TLS_ECDHE_PSK_WITH_CHACHA20_POLY1305_SHA256:
             case CipherSuite.TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256:
             case CipherSuite.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256:
-            case CipherSuite.DRAFT_TLS_ECDHE_RSA_WITH_AES_128_OCB:
             case CipherSuite.TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384:
             case CipherSuite.TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384:
-            case CipherSuite.DRAFT_TLS_ECDHE_RSA_WITH_AES_256_OCB:
             case CipherSuite.TLS_ECDHE_RSA_WITH_CAMELLIA_128_CBC_SHA256:
             case CipherSuite.TLS_ECDHE_RSA_WITH_CAMELLIA_128_GCM_SHA256:
             case CipherSuite.TLS_ECDHE_RSA_WITH_CAMELLIA_256_CBC_SHA384:
@@ -2286,11 +2236,9 @@ namespace Org.BouncyCastle.Crypto.Tls
             case CipherSuite.TLS_PSK_WITH_AES_128_CCM:
             case CipherSuite.TLS_PSK_WITH_AES_128_CCM_8:
             case CipherSuite.TLS_PSK_WITH_AES_128_GCM_SHA256:
-            case CipherSuite.DRAFT_TLS_PSK_WITH_AES_128_OCB:
             case CipherSuite.TLS_PSK_WITH_AES_256_CCM:
             case CipherSuite.TLS_PSK_WITH_AES_256_CCM_8:
             case CipherSuite.TLS_PSK_WITH_AES_256_GCM_SHA384:
-            case CipherSuite.DRAFT_TLS_PSK_WITH_AES_256_OCB:
             case CipherSuite.TLS_PSK_WITH_CAMELLIA_128_GCM_SHA256:
             case CipherSuite.TLS_PSK_WITH_CAMELLIA_256_GCM_SHA384:
             case CipherSuite.DRAFT_TLS_PSK_WITH_CHACHA20_POLY1305_SHA256:

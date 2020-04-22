@@ -48,8 +48,8 @@ namespace Org.BouncyCastle.Crypto.Digests
 
         private void CopyIn(KeccakDigest source)
         {
-            System.Array.Copy(source.state, 0, this.state, 0, source.state.Length);
-            System.Array.Copy(source.dataQueue, 0, this.dataQueue, 0, source.dataQueue.Length);
+            Array.Copy(source.state, 0, this.state, 0, source.state.Length);
+            Array.Copy(source.dataQueue, 0, this.dataQueue, 0, source.dataQueue.Length);
             this.rate = source.rate;
             this.bitsInQueue = source.bitsInQueue;
             this.fixedOutputLength = source.fixedOutputLength;
@@ -172,7 +172,7 @@ namespace Org.BouncyCastle.Crypto.Digests
                 else
                 {
                     int partialBlock = System.Math.Min(rateBytes - bytesInQueue, len - count);
-                    System.Buffer.BlockCopy(data, off + count, dataQueue, bytesInQueue, partialBlock);
+                    Array.Copy(data, off + count, dataQueue, bytesInQueue, partialBlock);
 
                     bytesInQueue += partialBlock;
                     count += partialBlock;
@@ -259,7 +259,7 @@ namespace Org.BouncyCastle.Crypto.Digests
                     bitsInQueue = rate;
                 }
                 int partialBlock = (int)System.Math.Min((long)bitsInQueue, outputLength - i);
-                System.Buffer.BlockCopy(dataQueue, (rate - bitsInQueue) >> 3, output, offset + (int)(i >> 3), partialBlock >> 3);
+                Array.Copy(dataQueue, (rate - bitsInQueue) >> 3, output, offset + (int)(i >> 3), partialBlock >> 3);
                 bitsInQueue -= partialBlock;
                 i += partialBlock;
             }

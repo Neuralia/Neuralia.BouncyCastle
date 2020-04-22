@@ -108,13 +108,13 @@ namespace Org.BouncyCastle.Crypto.Generators
 
                 if (length > outLen)
                 {
-                    System.Array.Copy(dig, 0, output, outOff, outLen);
+                    Array.Copy(dig, 0, output, outOff, outLen);
                     outOff += outLen;
                     length -= outLen;
                 }
                 else
                 {
-                    System.Array.Copy(dig, 0, output, outOff, length);
+                    Array.Copy(dig, 0, output, outOff, length);
                 }
 
                 if (++C[3] == 0)

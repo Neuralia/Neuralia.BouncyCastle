@@ -47,7 +47,7 @@ namespace Org.BouncyCastle.Asn1
 			}
 		}
 
-		public override Asn1Object ToAsn1Object()
+		public sealed override Asn1Object ToAsn1Object()
         {
             return this;
         }

@@ -62,11 +62,11 @@ namespace Org.BouncyCastle.Crypto.Macs
             }
             else
             {
-				System.Array.Copy(key, 0, inputPad, 0, keyLength);
+				Array.Copy(key, 0, inputPad, 0, keyLength);
             }
 
 			Array.Clear(inputPad, keyLength, blockLength - keyLength);
-            System.Array.Copy(inputPad, 0, outputBuf, 0, blockLength);
+            Array.Copy(inputPad, 0, outputBuf, 0, blockLength);
 
 			XorPad(inputPad, blockLength, IPAD);
             XorPad(outputBuf, blockLength, OPAD);

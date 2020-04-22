@@ -20,11 +20,11 @@ namespace Org.BouncyCastle.Crypto.Parameters
 			switch (keyLen)
 			{
 				case 16:
-					System.Array.Copy(key, keyOff, tmp, 0, 16);
-					System.Array.Copy(key, keyOff, tmp, 16, 8);
+					Array.Copy(key, keyOff, tmp, 0, 16);
+					Array.Copy(key, keyOff, tmp, 16, 8);
 					break;
 				case 24:
-					System.Array.Copy(key, keyOff, tmp, 0, 24);
+					Array.Copy(key, keyOff, tmp, 0, 24);
 					break;
 				default:
 					throw new ArgumentException("Bad length for DESede key: " + keyLen, "keyLen");

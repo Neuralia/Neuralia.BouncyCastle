@@ -133,14 +133,14 @@ namespace Org.BouncyCastle.Crypto.Engines
 			byte [] keyToBeWrapped = new byte[len];
 
 			keyToBeWrapped[0] = (byte)length;
-			System.Array.Copy(input, inOff, keyToBeWrapped, 1, length);
+			Array.Copy(input, inOff, keyToBeWrapped, 1, length);
 
 			byte[] pad = new byte[keyToBeWrapped.Length - length - 1];
 
 			if (pad.Length > 0)
 			{
 				sr.NextBytes(pad);
-				System.Array.Copy(pad, 0, keyToBeWrapped, length + 1, pad.Length);
+				Array.Copy(pad, 0, keyToBeWrapped, length + 1, pad.Length);
 			}
 
 			// Compute the CMS Key Checksum, (section 5.6.1), call this CKS.
@@ -149,14 +149,14 @@ namespace Org.BouncyCastle.Crypto.Engines
 			// Let WKCKS = WK || CKS where || is concatenation.
 			byte[] WKCKS = new byte[keyToBeWrapped.Length + CKS.Length];
 
-			System.Array.Copy(keyToBeWrapped, 0, WKCKS, 0, keyToBeWrapped.Length);
-			System.Array.Copy(CKS, 0, WKCKS, keyToBeWrapped.Length, CKS.Length);
+			Array.Copy(keyToBeWrapped, 0, WKCKS, 0, keyToBeWrapped.Length);
+			Array.Copy(CKS, 0, WKCKS, keyToBeWrapped.Length, CKS.Length);
 
 			// Encrypt WKCKS in CBC mode using KEK as the key and IV as the
 			// initialization vector. Call the results TEMP1.
 			byte [] TEMP1 = new byte[WKCKS.Length];
 
-			System.Array.Copy(WKCKS, 0, TEMP1, 0, WKCKS.Length);
+			Array.Copy(WKCKS, 0, TEMP1, 0, WKCKS.Length);
 
 			int noOfBlocks = WKCKS.Length / engine.GetBlockSize();
 			int extraBytes = WKCKS.Length % engine.GetBlockSize();
@@ -178,8 +178,8 @@ namespace Org.BouncyCastle.Crypto.Engines
 			// Left TEMP2 = IV || TEMP1.
 			byte[] TEMP2 = new byte[this.iv.Length + TEMP1.Length];
 
-			System.Array.Copy(this.iv, 0, TEMP2, 0, this.iv.Length);
-			System.Array.Copy(TEMP1, 0, TEMP2, this.iv.Length, TEMP1.Length);
+			Array.Copy(this.iv, 0, TEMP2, 0, this.iv.Length);
+			Array.Copy(TEMP1, 0, TEMP2, this.iv.Length, TEMP1.Length);
 
 			// Reverse the order of the octets in TEMP2 and call the result TEMP3.
 			byte[] TEMP3 = new byte[TEMP2.Length];
@@ -260,7 +260,7 @@ namespace Org.BouncyCastle.Crypto.Engines
 
 			byte [] TEMP3 = new byte[length];
 
-			System.Array.Copy(input, inOff, TEMP3, 0, length);
+			Array.Copy(input, inOff, TEMP3, 0, length);
 
 			for (int i = 0; i < (TEMP3.Length / engine.GetBlockSize()); i++)
 			{
@@ -282,8 +282,8 @@ namespace Org.BouncyCastle.Crypto.Engines
 
 			byte[] TEMP1 = new byte[TEMP2.Length - 8];
 
-			System.Array.Copy(TEMP2, 0, this.iv, 0, 8);
-			System.Array.Copy(TEMP2, 8, TEMP1, 0, TEMP2.Length - 8);
+			Array.Copy(TEMP2, 0, this.iv, 0, 8);
+			Array.Copy(TEMP2, 8, TEMP1, 0, TEMP2.Length - 8);
 
 			// Decrypt TEMP1 using TRIPLedeS in CBC mode using the KEK and the IV
 			// found in the previous step. Call the result WKCKS.
@@ -293,7 +293,7 @@ namespace Org.BouncyCastle.Crypto.Engines
 
 			byte[] LCEKPADICV = new byte[TEMP1.Length];
 
-			System.Array.Copy(TEMP1, 0, LCEKPADICV, 0, TEMP1.Length);
+			Array.Copy(TEMP1, 0, LCEKPADICV, 0, TEMP1.Length);
 
 			for (int i = 0; i < (LCEKPADICV.Length / engine.GetBlockSize()); i++)
 			{
@@ -307,8 +307,8 @@ namespace Org.BouncyCastle.Crypto.Engines
 			byte[] result = new byte[LCEKPADICV.Length - 8];
 			byte[] CKStoBeVerified = new byte[8];
 
-			System.Array.Copy(LCEKPADICV, 0, result, 0, LCEKPADICV.Length - 8);
-			System.Array.Copy(LCEKPADICV, LCEKPADICV.Length - 8, CKStoBeVerified, 0, 8);
+			Array.Copy(LCEKPADICV, 0, result, 0, LCEKPADICV.Length - 8);
+			Array.Copy(LCEKPADICV, LCEKPADICV.Length - 8, CKStoBeVerified, 0, 8);
 
 			// Calculate a CMS Key Checksum, (section 5.6.1), over the WK and compare
 			// with the CKS extracted in the above step. If they are not equal, return error.
@@ -326,7 +326,7 @@ namespace Org.BouncyCastle.Crypto.Engines
 
 			// CEK is the wrapped key, now extracted for use in data decryption.
 			byte[] CEK = new byte[result[0]];
-			System.Array.Copy(result, 1, CEK, 0, CEK.Length);
+			Array.Copy(result, 1, CEK, 0, CEK.Length);
 			return CEK;
 		}
 
@@ -350,7 +350,7 @@ namespace Org.BouncyCastle.Crypto.Engines
 			sha1.DoFinal(digest, 0);
 
 			byte[] result = new byte[8];
-			System.Array.Copy(digest, 0, result, 0, 8);
+			Array.Copy(digest, 0, result, 0, 8);
 			return result;
 		}
 

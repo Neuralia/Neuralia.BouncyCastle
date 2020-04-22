@@ -34,17 +34,17 @@ namespace Org.BouncyCastle.Crypto.Engines
             this.forEncryption = forEncryption;
 
             byte[] key1 = new byte[8];
-            System.Array.Copy(keyMaster, 0, key1, 0, key1.Length);
+            Array.Copy(keyMaster, 0, key1, 0, key1.Length);
             workingKey1 = GenerateWorkingKey(forEncryption, key1);
 
             byte[] key2 = new byte[8];
-            System.Array.Copy(keyMaster, 8, key2, 0, key2.Length);
+            Array.Copy(keyMaster, 8, key2, 0, key2.Length);
             workingKey2 = GenerateWorkingKey(!forEncryption, key2);
 
             if (keyMaster.Length == 24)
             {
                 byte[] key3 = new byte[8];
-                System.Array.Copy(keyMaster, 16, key3, 0, key3.Length);
+                Array.Copy(keyMaster, 16, key3, 0, key3.Length);
                 workingKey3 = GenerateWorkingKey(forEncryption, key3);
             }
             else        // 16 byte key

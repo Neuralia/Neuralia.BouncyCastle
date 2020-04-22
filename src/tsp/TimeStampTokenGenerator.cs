@@ -18,7 +18,7 @@ using Org.BouncyCastle.X509.Store;
 
 namespace Org.BouncyCastle.Tsp
 {
-	public class TimeStampNeuraliumGenerator
+	public class TimeStampTokenGenerator
 	{
 		private int accuracySeconds = -1;
 		private int accuracyMillis = -1;
@@ -38,7 +38,7 @@ namespace Org.BouncyCastle.Tsp
 		/**
 		 * basic creation - only the default attributes will be included here.
 		 */
-		public TimeStampNeuraliumGenerator(
+		public TimeStampTokenGenerator(
 			AsymmetricKeyParameter	key,
 			X509Certificate			cert,
 			string					digestOID,
@@ -50,7 +50,7 @@ namespace Org.BouncyCastle.Tsp
 		/**
 		 * create with a signer with extra signed/unsigned attributes.
 		 */
-		public TimeStampNeuraliumGenerator(
+		public TimeStampTokenGenerator(
 			AsymmetricKeyParameter	key,
 			X509Certificate			cert,
 			string					digestOID,
@@ -147,7 +147,7 @@ namespace Org.BouncyCastle.Tsp
 
 		//------------------------------------------------------------------------------
 
-		public TimeStampNeuralium Generate(
+		public TimeStampToken Generate(
 			TimeStampRequest	request,
 			BigInteger			serialNumber,
 			DateTime			genTime)
@@ -222,11 +222,11 @@ namespace Org.BouncyCastle.Tsp
 					new CmsProcessableByteArray(derEncodedTstInfo),
 					true);
 
-				return new TimeStampNeuralium(signedData);
+				return new TimeStampToken(signedData);
 			}
 			catch (CmsException cmsEx)
 			{
-				throw new TspException("Error generating time-stamp neuralium", cmsEx);
+				throw new TspException("Error generating time-stamp token", cmsEx);
 			}
 			catch (IOException e)
 			{

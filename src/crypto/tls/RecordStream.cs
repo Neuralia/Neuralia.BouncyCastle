@@ -295,7 +295,7 @@ namespace Org.BouncyCastle.Crypto.Tls
             TlsUtilities.WriteUint8(type, record, TLS_HEADER_TYPE_OFFSET);
             TlsUtilities.WriteVersion(mWriteVersion, record, TLS_HEADER_VERSION_OFFSET);
             TlsUtilities.WriteUint16(ciphertext.Length, record, TLS_HEADER_LENGTH_OFFSET);
-            System.Array.Copy(ciphertext, 0, record, TLS_HEADER_SIZE, ciphertext.Length);
+            Array.Copy(ciphertext, 0, record, TLS_HEADER_SIZE, ciphertext.Length);
             mOutput.Write(record, 0, record.Length);
             mOutput.Flush();
         }

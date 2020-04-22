@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 
-using Org.BouncyCastle.Math.Raw;
-
 namespace Org.BouncyCastle.Math.EC.Rfc7748
 {
     [CLSCompliantAttribute(false)]
@@ -12,7 +10,7 @@ namespace Org.BouncyCastle.Math.EC.Rfc7748
 
         private const uint M28 = 0x0FFFFFFFU;
 
-        private X448Field() {}
+        protected X448Field() {}
 
         public static void Add(uint[] x, uint[] y, uint[] z)
         {
@@ -47,6 +45,11 @@ namespace Org.BouncyCastle.Math.EC.Rfc7748
             uint z0 = z[0], z1 = z[1], z2 = z[2], z3 = z[3], z4 = z[4], z5 = z[5], z6 = z[6], z7 = z[7];
             uint z8 = z[8], z9 = z[9], z10 = z[10], z11 = z[11], z12 = z[12], z13 = z[13], z14 = z[14], z15 = z[15];
 
+            z1   += (z0 >> 28); z0 &= M28;
+            z5   += (z4 >> 28); z4 &= M28;
+            z9   += (z8 >> 28); z8 &= M28;
+            z13  += (z12 >> 28); z12 &= M28;
+
             z2   += (z1 >> 28); z1 &= M28;
             z6   += (z5 >> 28); z5 &= M28;
             z10  += (z9 >> 28); z9 &= M28;
@@ -74,6 +77,20 @@ namespace Org.BouncyCastle.Math.EC.Rfc7748
             z[8] = z8; z[9] = z9; z[10] = z10; z[11] = z11; z[12] = z12; z[13] = z13; z[14] = z14; z[15] = z15;
         }
 
+        public static void CMov(int cond, uint[] x, int xOff, uint[] z, int zOff)
+        {
+            Debug.Assert(0 == cond || -1 == cond);
+
+            uint MASK = (uint)cond;
+
+            for (int i = 0; i < Size; ++i)
+            {
+                uint z_i = z[zOff + i], diff = z_i ^ x[xOff + i];
+                z_i ^= (diff & MASK);
+                z[zOff + i] = z_i;
+            }
+        }
+
         public static void CNegate(int negate, uint[] z)
         {
             Debug.Assert(negate >> 1 == 0);
@@ -81,7 +98,7 @@ namespace Org.BouncyCastle.Math.EC.Rfc7748
             uint[] t = Create();
             Sub(t, z, t);
 
-            Nat.CMov(Size, negate, t, 0, z, 0);
+            CMov(-negate, t, 0, z, 0);
         }
 
         public static void Copy(uint[] x, int xOff, uint[] z, int zOff)
@@ -195,14 +212,21 @@ namespace Org.BouncyCastle.Math.EC.Rfc7748
             Mul(t, x, z);
         }
 
-        public static bool IsZeroVar(uint[] x)
+        public static int IsZero(uint[] x)
         {
             uint d = 0;
             for (int i = 0; i < Size; ++i)
             {
                 d |= x[i];
             }
-            return d == 0U;
+            d |= d >> 16;
+            d &= 0xFFFF;
+            return ((int)d - 1) >> 31;
+        }
+
+        public static bool IsZeroVar(uint[] x)
+        {
+            return 0U != IsZero(x);
         }
 
         public static void Mul(uint[] x, uint y, uint[] z)
@@ -628,18 +652,22 @@ namespace Org.BouncyCastle.Math.EC.Rfc7748
             Mul(t, x222, z);
         }
 
-        private static void Reduce(uint[] z, int c)
+        private static void Reduce(uint[] z, int x)
         {
-            uint z15 = z[15];
-            long t = z15;
-            z15 &= M28;
-            t = (t >> 28) + c;
-            z[8] += (uint)t;
-            for (int i = 0; i < 15; ++i)
+            uint u = z[15], z15 = u & M28;
+            int t = (int)(u >> 28) + x;
+
+            long cc = t;
+            for (int i = 0; i < 8; ++i)
             {
-                t += z[i]; z[i] = (uint)t & M28; t >>= 28;
+                cc += z[i]; z[i] = (uint)cc & M28; cc >>= 28;
             }
-            z[15] = z15 + (uint)t;
+            cc += t;
+            for (int i = 8; i < 15; ++i)
+            {
+                cc += z[i]; z[i] = (uint)cc & M28; cc >>= 28;
+            }
+            z[15] = z15 + (uint)cc;
         }
 
         public static void Sqr(uint[] x, uint[] z)
@@ -988,6 +1016,14 @@ namespace Org.BouncyCastle.Math.EC.Rfc7748
             z[13] = z13;
             z[14] = z14;
             z[15] = z15;
+        }
+
+        public static void SubOne(uint[] z)
+        {
+            uint[] one = Create();
+            one[0] = 1U;
+
+            Sub(z, one, z);
         }
 
         public static void Zero(uint[] z)

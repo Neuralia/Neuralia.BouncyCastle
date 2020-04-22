@@ -88,7 +88,7 @@ namespace Org.BouncyCastle.OpenSsl
 					if (salt.Length > 8)
 					{
 						salt = new byte[8];
-						System.Array.Copy(iv, 0, salt, 0, salt.Length);
+						Array.Copy(iv, 0, salt, 0, salt.Length);
 					}
 					break;
 				case PemBaseAlg.BF:

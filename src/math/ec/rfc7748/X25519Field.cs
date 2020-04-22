@@ -14,7 +14,7 @@ namespace Org.BouncyCastle.Math.EC.Rfc7748
         private static readonly int[] RootNegOne = { 0x020EA0B0, 0x0386C9D2, 0x00478C4E, 0x0035697F, 0x005E8630,
             0x01FBD7A7, 0x0340264F, 0x01F0B2B4, 0x00027E0E, 0x00570649 };
 
-        private X25519Field() {}
+        protected X25519Field() {}
 
         public static void Add(int[] x, int[] y, int[] z)
         {
@@ -49,6 +49,11 @@ namespace Org.BouncyCastle.Math.EC.Rfc7748
             int z0 = z[0], z1 = z[1], z2 = z[2], z3 = z[3], z4 = z[4];
             int z5 = z[5], z6 = z[6], z7 = z[7], z8 = z[8], z9 = z[9];
 
+            z2 += (z1 >> 26); z1 &= M26;
+            z4 += (z3 >> 26); z3 &= M26;
+            z7 += (z6 >> 26); z6 &= M26;
+            z9 += (z8 >> 26); z8 &= M26;
+
             z3 += (z2 >> 25); z2 &= M25;
             z5 += (z4 >> 25); z4 &= M25;
             z8 += (z7 >> 25); z7 &= M25;
@@ -65,6 +70,18 @@ namespace Org.BouncyCastle.Math.EC.Rfc7748
 
             z[0] = z0; z[1] = z1; z[2] = z2; z[3] = z3; z[4] = z4;
             z[5] = z5; z[6] = z6; z[7] = z7; z[8] = z8; z[9] = z9;
+        }
+
+        public static void CMov(int cond, int[] x, int xOff, int[] z, int zOff)
+        {
+            Debug.Assert(0 == cond || -1 == cond);
+
+            for (int i = 0; i < Size; ++i)
+            {
+                int z_i = z[zOff + i], diff = z_i ^ x[xOff + i];
+                z_i ^= (diff & cond);
+                z[zOff + i] = z_i;
+            }
         }
 
         public static void CNegate(int negate, int[] z)
@@ -179,14 +196,21 @@ namespace Org.BouncyCastle.Math.EC.Rfc7748
             Mul(t, x2, z);
         }
 
-        public static bool IsZeroVar(int[] x)
+        public static int IsZero(int[] x)
         {
             int d = 0;
             for (int i = 0; i < Size; ++i)
             {
                 d |= x[i];
             }
-            return d == 0;
+            d |= d >> 16;
+            d &= 0xFFFF;
+            return (d - 1) >> 31;
+        }
+
+        public static bool IsZeroVar(int[] x)
+        {
+            return 0 != IsZero(x);
         }
 
         public static void Mul(int[] x, int y, int[] z)
@@ -420,22 +444,22 @@ namespace Org.BouncyCastle.Math.EC.Rfc7748
             Mul(t, x, rz);
         }
 
-        private static void Reduce(int[] z, int c)
+        private static void Reduce(int[] z, int x)
         {
-            int z9 = z[9], t = z9;
-                       z9   = t & M24; t >>= 24;
-            t += c;
-            t *= 19;
-            t += z[0]; z[0] = t & M26; t >>= 26;
-            t += z[1]; z[1] = t & M26; t >>= 26;
-            t += z[2]; z[2] = t & M25; t >>= 25;
-            t += z[3]; z[3] = t & M26; t >>= 26;
-            t += z[4]; z[4] = t & M25; t >>= 25;
-            t += z[5]; z[5] = t & M26; t >>= 26;
-            t += z[6]; z[6] = t & M26; t >>= 26;
-            t += z[7]; z[7] = t & M25; t >>= 25;
-            t += z[8]; z[8] = t & M26; t >>= 26;
-            t += z9;   z[9] = t;
+            int t = z[9], z9 = t & M24;
+            t = (t >> 24) + x;
+
+            long cc = t * 19;
+            cc += z[0]; z[0] = (int)cc & M26; cc >>= 26;
+            cc += z[1]; z[1] = (int)cc & M26; cc >>= 26;
+            cc += z[2]; z[2] = (int)cc & M25; cc >>= 25;
+            cc += z[3]; z[3] = (int)cc & M26; cc >>= 26;
+            cc += z[4]; z[4] = (int)cc & M25; cc >>= 25;
+            cc += z[5]; z[5] = (int)cc & M26; cc >>= 26;
+            cc += z[6]; z[6] = (int)cc & M26; cc >>= 26;
+            cc += z[7]; z[7] = (int)cc & M25; cc >>= 25;
+            cc += z[8]; z[8] = (int)cc & M26; cc >>= 26;
+            z[9] = z9 + (int)cc;
         }
 
         public static void Sqr(int[] x, int[] z)

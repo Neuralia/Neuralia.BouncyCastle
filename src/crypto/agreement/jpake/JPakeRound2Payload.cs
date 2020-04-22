@@ -64,7 +64,7 @@ namespace Org.BouncyCastle.Crypto.Agreement.JPake
             get
             {
                 BigInteger[] kp = new BigInteger[knowledgeProofForX2s.Length];
-                System.Array.Copy(knowledgeProofForX2s, 0, kp, 0, knowledgeProofForX2s.Length);
+                Array.Copy(knowledgeProofForX2s, kp, knowledgeProofForX2s.Length);
                 return kp;
             }
         }

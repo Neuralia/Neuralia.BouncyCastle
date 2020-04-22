@@ -58,9 +58,9 @@ namespace Org.BouncyCastle.Crypto.Agreement.JPake
             this.gx1 = gx1;
             this.gx2 = gx2;
             this.knowledgeProofForX1 = new BigInteger[knowledgeProofForX1.Length];
-            System.Array.Copy(knowledgeProofForX1, 0, this.knowledgeProofForX1, 0, knowledgeProofForX1.Length);
+            Array.Copy(knowledgeProofForX1, this.knowledgeProofForX1, knowledgeProofForX1.Length);
             this.knowledgeProofForX2 = new BigInteger[knowledgeProofForX2.Length];
-            System.Array.Copy(knowledgeProofForX2, 0, this.knowledgeProofForX2, 0, knowledgeProofForX2.Length);
+            Array.Copy(knowledgeProofForX2, this.knowledgeProofForX2, knowledgeProofForX2.Length);
         }
 
         public virtual string ParticipantId
@@ -83,7 +83,7 @@ namespace Org.BouncyCastle.Crypto.Agreement.JPake
             get
             {
                 BigInteger[] kp = new BigInteger[knowledgeProofForX1.Length];
-                System.Array.Copy(knowledgeProofForX1, 0, kp, 0, knowledgeProofForX1.Length);
+                Array.Copy(knowledgeProofForX1, kp, knowledgeProofForX1.Length);
                 return kp;
             }
         }
@@ -93,7 +93,7 @@ namespace Org.BouncyCastle.Crypto.Agreement.JPake
             get
             {
                 BigInteger[] kp = new BigInteger[knowledgeProofForX2.Length];
-                System.Array.Copy(knowledgeProofForX2, 0, kp, 0, knowledgeProofForX2.Length);
+                Array.Copy(knowledgeProofForX2, kp, knowledgeProofForX2.Length);
                 return kp;
             }
         }

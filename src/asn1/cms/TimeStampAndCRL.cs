@@ -33,7 +33,7 @@ namespace Org.BouncyCastle.Asn1.Cms
 			return null;
 		}
 
-		public virtual ContentInfo TimeStampNeuralium
+		public virtual ContentInfo TimeStampToken
 		{
 			get { return this.timeStamp; }
 		}
@@ -46,7 +46,7 @@ namespace Org.BouncyCastle.Asn1.Cms
 		/**
 		 * <pre>
 		 * TimeStampAndCRL ::= SEQUENCE {
-		 *     timeStamp   TimeStampNeuralium,          -- according to RFC 3161
+		 *     timeStamp   TimeStampToken,          -- according to RFC 3161
 		 *     crl         CertificateList OPTIONAL -- according to RFC 5280
 		 *  }
 		 * </pre>

@@ -364,13 +364,11 @@ namespace Org.BouncyCastle.Asn1.X509
         public static X509Name GetInstance(
             object obj)
         {
-            if (obj == null || obj is X509Name)
+            if (obj is X509Name)
                 return (X509Name)obj;
-
-            if (obj != null)
-                return new X509Name(Asn1Sequence.GetInstance(obj));
-
-            throw new ArgumentException("null object in factory", "obj");
+            if (obj == null)
+                return null;
+            return new X509Name(Asn1Sequence.GetInstance(obj));
         }
 
         protected X509Name()
@@ -618,34 +616,34 @@ namespace Org.BouncyCastle.Asn1.X509
             X509NameEntryConverter	converter)
         {
             this.converter = converter;
-            X509NameNeuraliumizer nTok = new X509NameNeuraliumizer(dirName);
+            X509NameTokenizer nTok = new X509NameTokenizer(dirName);
 
-            while (nTok.HasMoreNeuraliums())
+            while (nTok.HasMoreTokens())
             {
-                string neuralium = nTok.NextNeuralium();
-                int index = neuralium.IndexOf('=');
+                string token = nTok.NextToken();
+                int index = token.IndexOf('=');
 
                 if (index == -1)
                 {
                     throw new ArgumentException("badly formated directory string");
                 }
 
-                string name = neuralium.Substring(0, index);
-                string value = neuralium.Substring(index + 1);
+                string name = token.Substring(0, index);
+                string value = token.Substring(index + 1);
                 DerObjectIdentifier	oid = DecodeOid(name, lookUp);
 
                 if (value.IndexOf('+') > 0)
                 {
-                    X509NameNeuraliumizer vTok = new X509NameNeuraliumizer(value, '+');
-                    string v = vTok.NextNeuralium();
+                    X509NameTokenizer vTok = new X509NameTokenizer(value, '+');
+                    string v = vTok.NextToken();
 
                     this.ordering.Add(oid);
                     this.values.Add(v);
                     this.added.Add(false);
 
-                    while (vTok.HasMoreNeuraliums())
+                    while (vTok.HasMoreTokens())
                     {
-                        string sv = vTok.NextNeuralium();
+                        string sv = vTok.NextToken();
                         int ndx = sv.IndexOf('=');
 
                         string nm = sv.Substring(0, ndx);
@@ -928,7 +926,7 @@ namespace Org.BouncyCastle.Asn1.X509
         {
             try
             {
-                return Asn1Object.FromByteArray(Hex.Decode(v.Substring(1)));
+                return Asn1Object.FromByteArray(Hex.DecodeStrict(v, 1, v.Length - 1));
             }
             catch (IOException e)
             {

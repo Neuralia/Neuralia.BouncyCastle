@@ -42,11 +42,11 @@ namespace Org.BouncyCastle.Crypto.Digests
 
 		private void CopyIn(MD2Digest t)
 		{
-            System.Array.Copy(t.X, 0, X, 0, t.X.Length);
+            Array.Copy(t.X, 0, X, 0, t.X.Length);
             xOff = t.xOff;
-            System.Array.Copy(t.M, 0, M, 0, t.M.Length);
+            Array.Copy(t.M, 0, M, 0, t.M.Length);
             mOff = t.mOff;
-            System.Array.Copy(t.C, 0, C, 0, t.C.Length);
+            Array.Copy(t.C, 0, C, 0, t.C.Length);
             COff = t.COff;
         }
 
@@ -92,7 +92,7 @@ namespace Org.BouncyCastle.Crypto.Digests
 
             ProcessBlock(C);
 
-            System.Array.Copy(X, xOff, output, outOff, 16);
+            Array.Copy(X, xOff, output, outOff, 16);
 
             Reset();
 
@@ -161,7 +161,7 @@ namespace Org.BouncyCastle.Crypto.Digests
             //
             while (length > 16)
             {
-                System.Array.Copy(input,inOff,M,0,16);
+                Array.Copy(input,inOff,M,0,16);
                 ProcessChecksum(M);
                 ProcessBlock(M);
                 length -= 16;

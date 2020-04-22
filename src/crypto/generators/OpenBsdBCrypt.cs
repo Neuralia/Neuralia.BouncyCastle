@@ -134,7 +134,7 @@ namespace Org.BouncyCastle.Crypto.Generators
 
             byte[] tmp = new byte[psw.Length >= 72 ? 72 : psw.Length + 1];
             int copyLen = System.Math.Min(psw.Length, tmp.Length);
-            System.Array.Copy(psw, 0, tmp, 0, copyLen);
+            Array.Copy(psw, 0, tmp, 0, copyLen);
 
             Array.Clear(psw, 0, psw.Length);
 
@@ -211,7 +211,7 @@ namespace Org.BouncyCastle.Crypto.Generators
             {
                 salt = true;
                 byte[] tmp = new byte[18];// zero padding
-                System.Array.Copy(data, 0, tmp, 0, data.Length);
+                Array.Copy(data, 0, tmp, 0, data.Length);
                 data = tmp;
             }
             else // key
@@ -275,7 +275,7 @@ namespace Org.BouncyCastle.Crypto.Generators
 
             // Padding: add two '\u0000'
             char[] tmp = new char[22 + 2];
-            System.Array.Copy(saltChars, 0, tmp, 0, saltChars.Length);
+            Array.Copy(saltChars, 0, tmp, 0, saltChars.Length);
             saltChars = tmp;
 
             int len = saltChars.Length;
@@ -296,7 +296,7 @@ namespace Org.BouncyCastle.Crypto.Generators
 
             // truncate:
             byte[] tmpSalt = new byte[16];
-            System.Array.Copy(saltBytes, 0, tmpSalt, 0, tmpSalt.Length);
+            Array.Copy(saltBytes, 0, tmpSalt, 0, tmpSalt.Length);
             saltBytes = tmpSalt;
 
             return saltBytes;

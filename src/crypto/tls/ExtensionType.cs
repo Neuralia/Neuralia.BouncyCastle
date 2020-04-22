@@ -101,7 +101,7 @@ namespace Org.BouncyCastle.Crypto.Tls
         /*
          * draft-ietf-tokbind-negotiation-08
          */
-        public static readonly int DRAFT_neuralium_binding = 24;
+        public static readonly int DRAFT_token_binding = 24;
 
         /*
          * RFC 7924

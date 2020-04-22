@@ -6,12 +6,12 @@ using Org.BouncyCastle.Math;
 
 namespace Org.BouncyCastle.Tsp
 {
-	public class TimeStampNeuraliumInfo
+	public class TimeStampTokenInfo
 	{
 		private TstInfo		tstInfo;
 		private DateTime	genTime;
 
-		public TimeStampNeuraliumInfo(
+		public TimeStampTokenInfo(
 			TstInfo tstInfo)
 		{
 			this.tstInfo = tstInfo;

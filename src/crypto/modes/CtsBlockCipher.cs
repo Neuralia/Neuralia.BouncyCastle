@@ -92,7 +92,7 @@ namespace Org.BouncyCastle.Crypto.Modes
                 resultLen = cipher.ProcessBlock(buf, 0, output, outOff);
 				Debug.Assert(resultLen == blockSize);
 
-				System.Array.Copy(buf, blockSize, buf, 0, blockSize);
+				Array.Copy(buf, blockSize, buf, 0, blockSize);
                 bufOff = blockSize;
             }
 
@@ -141,10 +141,10 @@ namespace Org.BouncyCastle.Crypto.Modes
 
             if (length > gapLen)
             {
-                System.Array.Copy(input, inOff, buf, bufOff, gapLen);
+                Array.Copy(input, inOff, buf, bufOff, gapLen);
 
                 resultLen += cipher.ProcessBlock(buf, 0, output, outOff);
-                System.Array.Copy(buf, blockSize, buf, 0, blockSize);
+                Array.Copy(buf, blockSize, buf, 0, blockSize);
 
                 bufOff = blockSize;
 
@@ -153,16 +153,16 @@ namespace Org.BouncyCastle.Crypto.Modes
 
                 while (length > blockSize)
                 {
-                    System.Array.Copy(input, inOff, buf, bufOff, blockSize);
+                    Array.Copy(input, inOff, buf, bufOff, blockSize);
                     resultLen += cipher.ProcessBlock(buf, 0, output, outOff + resultLen);
-                    System.Array.Copy(buf, blockSize, buf, 0, blockSize);
+                    Array.Copy(buf, blockSize, buf, 0, blockSize);
 
                     length -= blockSize;
                     inOff += blockSize;
                 }
             }
 
-            System.Array.Copy(input, inOff, buf, bufOff, length);
+            Array.Copy(input, inOff, buf, bufOff, length);
 
             bufOff += length;
 
@@ -220,7 +220,7 @@ namespace Org.BouncyCastle.Crypto.Modes
 
 				c.ProcessBlock(buf, blockSize, output, outOff);
 
-				System.Array.Copy(block, 0, output, outOff + blockSize, length);
+				Array.Copy(block, 0, output, outOff + blockSize, length);
             }
             else
             {
@@ -237,10 +237,10 @@ namespace Org.BouncyCastle.Crypto.Modes
                     lastBlock[i - blockSize] = (byte)(block[i - blockSize] ^ buf[i]);
                 }
 
-                System.Array.Copy(buf, blockSize, block, 0, length);
+                Array.Copy(buf, blockSize, block, 0, length);
 
                 cipher.ProcessBlock(block, 0, output, outOff);
-                System.Array.Copy(lastBlock, 0, output, outOff + blockSize, length);
+                Array.Copy(lastBlock, 0, output, outOff + blockSize, length);
             }
 
             int offset = bufOff;

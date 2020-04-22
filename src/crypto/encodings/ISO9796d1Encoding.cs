@@ -156,12 +156,12 @@ namespace Org.BouncyCastle.Crypto.Encodings
 			{
 				if (i > t - z)
 				{
-					System.Array.Copy(input, inOff + inLen - (t - i),
+					Array.Copy(input, inOff + inLen - (t - i),
 						block, block.Length - t, t - i);
 				}
 				else
 				{
-					System.Array.Copy(input, inOff, block, block.Length - (i + z), z);
+					Array.Copy(input, inOff, block, block.Length - (i + z), z);
 				}
 			}
 

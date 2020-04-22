@@ -20,7 +20,7 @@ namespace Org.BouncyCastle.Crypto.Parameters
             int     len)
         {
             this.seed = new byte[len];
-            System.Array.Copy(seed, off, this.seed, 0, len);
+            Array.Copy(seed, off, this.seed, 0, len);
         }
 
 		public byte[] GetSeed()

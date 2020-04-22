@@ -1,5 +1,5 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
+
 using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Digests;
 using Org.BouncyCastle.Utilities;
@@ -12,58 +12,47 @@ namespace Org.BouncyCastle.Asn1.X509
      * SubjectKeyIdentifier::= OCTET STRING
      * </pre>
      */
-    [SuppressMessage("ReSharper", "TailRecursiveCall")]
     public class SubjectKeyIdentifier
         : Asn1Encodable
     {
-        private readonly byte[] keyIdentifier;
-
-		public static SubjectKeyIdentifier GetInstance(
-            Asn1TaggedObject	obj,
-            bool				explicitly)
+		public static SubjectKeyIdentifier GetInstance(Asn1TaggedObject obj, bool explicitly)
         {
             return GetInstance(Asn1OctetString.GetInstance(obj, explicitly));
         }
 
-		public static SubjectKeyIdentifier GetInstance(
-            object obj)
+		public static SubjectKeyIdentifier GetInstance(object obj)
         {
             if (obj is SubjectKeyIdentifier)
-            {
-                return (SubjectKeyIdentifier) obj;
-            }
-
-			if (obj is SubjectPublicKeyInfo)
-            {
-                return new SubjectKeyIdentifier((SubjectPublicKeyInfo) obj);
-            }
-
-			if (obj is Asn1OctetString)
-            {
-                return new SubjectKeyIdentifier((Asn1OctetString) obj);
-            }
-
-			if (obj is X509Extension)
-			{
-				return GetInstance(X509Extension.ConvertValueToObject((X509Extension) obj));
-			}
-
-            throw new ArgumentException("Invalid SubjectKeyIdentifier: " + Platform.GetTypeName(obj));
+                return (SubjectKeyIdentifier)obj;
+            if (obj is SubjectPublicKeyInfo)
+                return new SubjectKeyIdentifier((SubjectPublicKeyInfo)obj);
+            if (obj is X509Extension)
+                return GetInstance(X509Extension.ConvertValueToObject((X509Extension)obj));
+            if (obj == null)
+                return null;
+            return new SubjectKeyIdentifier(Asn1OctetString.GetInstance(obj));
         }
 
-		public SubjectKeyIdentifier(
+        public static SubjectKeyIdentifier FromExtensions(X509Extensions extensions)
+        {
+            return GetInstance(X509Extensions.GetExtensionParsedValue(extensions, X509Extensions.SubjectKeyIdentifier));
+        }
+
+        private readonly byte[] keyIdentifier;
+
+        public SubjectKeyIdentifier(
             byte[] keyID)
         {
 			if (keyID == null)
 				throw new ArgumentNullException("keyID");
 
-			this.keyIdentifier = keyID;
+			this.keyIdentifier = Arrays.Clone(keyID);
         }
 
 		public SubjectKeyIdentifier(
             Asn1OctetString keyID)
+            : this(keyID.GetOctets())
         {
-            this.keyIdentifier = keyID.GetOctets();
         }
 
 		/**
@@ -80,12 +69,12 @@ namespace Org.BouncyCastle.Asn1.X509
 
 		public byte[] GetKeyIdentifier()
 		{
-			return keyIdentifier;
+            return Arrays.Clone(keyIdentifier);
 		}
 
-		public override Asn1Object ToAsn1Object()
+        public override Asn1Object ToAsn1Object()
 		{
-			return new DerOctetString(keyIdentifier);
+			return new DerOctetString(GetKeyIdentifier());
 		}
 
 		/**
@@ -120,7 +109,7 @@ namespace Org.BouncyCastle.Asn1.X509
 			byte[] dig = GetDigest(keyInfo);
 			byte[] id = new byte[8];
 
-			System.Array.Copy(dig, dig.Length - 8, id, 0, id.Length);
+			Array.Copy(dig, dig.Length - 8, id, 0, id.Length);
 
 			id[0] &= 0x0f;
 			id[0] |= 0x40;

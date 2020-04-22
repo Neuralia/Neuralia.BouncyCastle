@@ -151,9 +151,9 @@ namespace Org.BouncyCastle.Bcpg.OpenPgp
 
                 byte[] rv = new byte[VB.Length + 1 + C.Length];
 
-                System.Array.Copy(VB, 0, rv, 0, VB.Length);
+                Array.Copy(VB, 0, rv, 0, VB.Length);
                 rv[VB.Length] = (byte)C.Length;
-                System.Array.Copy(C, 0, rv, VB.Length + 1, C.Length);
+                Array.Copy(C, 0, rv, VB.Length + 1, C.Length);
 
                 return rv;
             }
@@ -174,8 +174,8 @@ namespace Org.BouncyCastle.Bcpg.OpenPgp
                     byte[] b1 = new byte[halfLength];
                     byte[] b2 = new byte[halfLength];
 
-                    System.Array.Copy(encryptedSessionInfo, 0, b1, 0, halfLength);
-                    System.Array.Copy(encryptedSessionInfo, halfLength, b2, 0, halfLength);
+                    Array.Copy(encryptedSessionInfo, 0, b1, 0, halfLength);
+                    Array.Copy(encryptedSessionInfo, halfLength, b2, 0, halfLength);
 
                     data = new byte[][] {
                         ConvertToEncodedMpi(b1),
@@ -487,7 +487,7 @@ namespace Org.BouncyCastle.Bcpg.OpenPgp
 				int blockSize = c.GetBlockSize();
 				byte[] inLineIv = new byte[blockSize + 2];
                 rand.NextBytes(inLineIv, 0, blockSize);
-				System.Array.Copy(inLineIv, inLineIv.Length - 4, inLineIv, inLineIv.Length - 2, 2);
+				Array.Copy(inLineIv, inLineIv.Length - 4, inLineIv, inLineIv.Length - 2, 2);
 
 				Stream myOut = cOut = new CipherStream(pOut, null, c);
 

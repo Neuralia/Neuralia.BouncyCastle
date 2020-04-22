@@ -105,7 +105,7 @@ namespace Org.BouncyCastle.Crypto.Digests
 
 			while (length > xBuf.Length)
 			{
-				System.Array.Copy(input, inOff, xBuf, 0, xBuf.Length);
+				Array.Copy(input, inOff, xBuf, 0, xBuf.Length);
 
 				sumByteArray(xBuf); // calc sum M
 				processBlock(xBuf, 0);
@@ -149,8 +149,8 @@ namespace Org.BouncyCastle.Crypto.Digests
 				a[j]=(byte)(input[j] ^ input[j+8]);
 			}
 
-			System.Array.Copy(input, 8, input, 0, 24);
-			System.Array.Copy(a, 0, input, 24, 8);
+			Array.Copy(input, 8, input, 0, 24);
+			Array.Copy(a, 0, input, 24, 8);
 
 			return input;
 		}
@@ -170,7 +170,7 @@ namespace Org.BouncyCastle.Crypto.Digests
 		{
 			cpyBytesToShort(input, wS);
 			w_S[15] = (short)(wS[0] ^ wS[1] ^ wS[2] ^ wS[3] ^ wS[12] ^ wS[15]);
-			System.Array.Copy(wS, 1, w_S, 0, 15);
+			Array.Copy(wS, 1, w_S, 0, 15);
 			cpyShortToBytes(w_S, input);
 		}
 
@@ -179,7 +179,7 @@ namespace Org.BouncyCastle.Crypto.Digests
 
 		private void processBlock(byte[] input, int inOff)
 		{
-			System.Array.Copy(input, inOff, M, 0, 32);
+			Array.Copy(input, inOff, M, 0, 32);
 
 			//key step 1
 
@@ -231,7 +231,7 @@ namespace Org.BouncyCastle.Crypto.Digests
 			{
 				fw(S);
 			}
-			System.Array.Copy(S, 0, H, 0, H.Length);
+			Array.Copy(S, 0, H, 0, H.Length);
 		}
 
 		private void finish()
@@ -339,14 +339,14 @@ namespace Org.BouncyCastle.Crypto.Digests
 
 			Reset();
 
-			System.Array.Copy(t.H, 0, this.H, 0, t.H.Length);
-			System.Array.Copy(t.L, 0, this.L, 0, t.L.Length);
-			System.Array.Copy(t.M, 0, this.M, 0, t.M.Length);
-			System.Array.Copy(t.Sum, 0, this.Sum, 0, t.Sum.Length);
-			System.Array.Copy(t.C[1], 0, this.C[1], 0, t.C[1].Length);
-			System.Array.Copy(t.C[2], 0, this.C[2], 0, t.C[2].Length);
-			System.Array.Copy(t.C[3], 0, this.C[3], 0, t.C[3].Length);
-			System.Array.Copy(t.xBuf, 0, this.xBuf, 0, t.xBuf.Length);
+			Array.Copy(t.H, 0, this.H, 0, t.H.Length);
+			Array.Copy(t.L, 0, this.L, 0, t.L.Length);
+			Array.Copy(t.M, 0, this.M, 0, t.M.Length);
+			Array.Copy(t.Sum, 0, this.Sum, 0, t.Sum.Length);
+			Array.Copy(t.C[1], 0, this.C[1], 0, t.C[1].Length);
+			Array.Copy(t.C[2], 0, this.C[2], 0, t.C[2].Length);
+			Array.Copy(t.C[3], 0, this.C[3], 0, t.C[3].Length);
+			Array.Copy(t.xBuf, 0, this.xBuf, 0, t.xBuf.Length);
 
 			this.xBufOff = t.xBufOff;
 			this.byteCount = t.byteCount;

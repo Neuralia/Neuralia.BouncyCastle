@@ -55,7 +55,7 @@ namespace Org.BouncyCastle.Crypto.Prng
             {
                 byte[] tmpBuf = new byte[len];
                 NextBytes(tmpBuf);
-                System.Array.Copy(tmpBuf, 0, bytes, start, len);
+                Array.Copy(tmpBuf, 0, bytes, start, len);
             }
         }
 

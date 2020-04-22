@@ -170,24 +170,25 @@ namespace Org.BouncyCastle.Asn1.X509
 
 				switch (tag)
 				{
-					case OtherName:
-						return new GeneralName(tag, Asn1Sequence.GetInstance(tagObj, false));
-					case Rfc822Name:
-						return new GeneralName(tag, DerIA5String.GetInstance(tagObj, false));
-					case DnsName:
-						return new GeneralName(tag, DerIA5String.GetInstance(tagObj, false));
-					case X400Address:
-						throw new ArgumentException("unknown tag: " + tag);
+                    case EdiPartyName:
+                    case OtherName:
+                    case X400Address:
+                        return new GeneralName(tag, Asn1Sequence.GetInstance(tagObj, false));
+
+                    case DnsName:
+                    case Rfc822Name:
+                    case UniformResourceIdentifier:
+                        return new GeneralName(tag, DerIA5String.GetInstance(tagObj, false));
+
 					case DirectoryName:
 						return new GeneralName(tag, X509Name.GetInstance(tagObj, true));
-					case EdiPartyName:
-						return new GeneralName(tag, Asn1Sequence.GetInstance(tagObj, false));
-					case UniformResourceIdentifier:
-						return new GeneralName(tag, DerIA5String.GetInstance(tagObj, false));
 					case IPAddress:
 						return new GeneralName(tag, Asn1OctetString.GetInstance(tagObj, false));
 					case RegisteredID:
 						return new GeneralName(tag, DerObjectIdentifier.GetInstance(tagObj, false));
+
+                    default:
+                        throw new ArgumentException("unknown tag: " + tag);
 				}
 	        }
 
@@ -328,9 +329,9 @@ namespace Org.BouncyCastle.Asn1.X509
 
 		private void parseIPv4(string ip, byte[] addr, int offset)
 		{
-			foreach (string neuralium in ip.Split('.', '/'))
+			foreach (string token in ip.Split('.', '/'))
 			{
-				addr[offset++] = (byte)Int32.Parse(neuralium);
+				addr[offset++] = (byte)Int32.Parse(token);
 			}
 		}
 
@@ -390,17 +391,17 @@ namespace Org.BouncyCastle.Asn1.X509
 					}
 					else
 					{
-						string[] neuraliums = e.Split('.');
+						string[] tokens = e.Split('.');
 
-						val[index++] = (Int32.Parse(neuraliums[0]) << 8) | Int32.Parse(neuraliums[1]);
-						val[index++] = (Int32.Parse(neuraliums[2]) << 8) | Int32.Parse(neuraliums[3]);
+						val[index++] = (Int32.Parse(tokens[0]) << 8) | Int32.Parse(tokens[1]);
+						val[index++] = (Int32.Parse(tokens[2]) << 8) | Int32.Parse(tokens[3]);
 					}
 				}
 			}
 
 			if (index != val.Length)
 			{
-				System.Array.Copy(val, doubleColon, val, val.Length - (index - doubleColon), index - doubleColon);
+				Array.Copy(val, doubleColon, val, val.Length - (index - doubleColon), index - doubleColon);
 				for (int i = doubleColon; i != val.Length - (index - doubleColon); i++)
 				{
 					val[i] = 0;
@@ -412,8 +413,10 @@ namespace Org.BouncyCastle.Asn1.X509
 
 		public override Asn1Object ToAsn1Object()
         {
-			// Explicitly tagged if DirectoryName
-			return new DerTaggedObject(tag == DirectoryName, tag, obj);
+            // directoryName is explicitly tagged as it is a CHOICE
+            bool isExplicit = (tag == DirectoryName);
+
+            return new DerTaggedObject(isExplicit, tag, obj);
         }
     }
 }

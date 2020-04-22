@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Text;
 
@@ -12,7 +11,6 @@ namespace Org.BouncyCastle.Math
 {
 #if !(NETCF_1_0 || NETCF_2_0 || SILVERLIGHT || PORTABLE)
     [Serializable]
-    [SuppressMessage("ReSharper", "TailRecursiveCall")]
 #endif
     public class BigInteger
     {
@@ -136,6 +134,7 @@ namespace Org.BouncyCastle.Math
         public static readonly BigInteger One;
         public static readonly BigInteger Two;
         public static readonly BigInteger Three;
+        public static readonly BigInteger Four;
         public static readonly BigInteger Ten;
 
         //private readonly static byte[] BitCountTable =
@@ -209,6 +208,7 @@ namespace Org.BouncyCastle.Math
             One = SMALL_CONSTANTS[1];
             Two = SMALL_CONSTANTS[2];
             Three = SMALL_CONSTANTS[3];
+            Four = SMALL_CONSTANTS[4];
             Ten = SMALL_CONSTANTS[10];
 
             radix2 = ValueOf(2);
@@ -249,7 +249,7 @@ namespace Org.BouncyCastle.Math
             return (nBits + BitsPerByte - 1) / BitsPerByte;
         }
 
-        internal static BigInteger Arbitrary(int sizeInBits)
+        public static BigInteger Arbitrary(int sizeInBits)
         {
             return new BigInteger(sizeInBits, RandomSource);
         }
@@ -1332,6 +1332,17 @@ namespace Org.BouncyCastle.Math
             }
         }
 
+        public int IntValueExact
+        {
+            get
+            {
+                if (BitLength > 31)
+                    throw new ArithmeticException("BigInteger out of int range");
+
+                return IntValue;
+            }
+        }
+
         /**
          * return whether or not a BigInteger is probably prime with a
          * probability of 1 - (1/2)**certainty.
@@ -1585,6 +1596,17 @@ namespace Org.BouncyCastle.Math
                 }
 
                 return sign < 0 ? -v : v;
+            }
+        }
+
+        public long LongValueExact
+        {
+            get
+            {
+                if (BitLength > 63)
+                    throw new ArithmeticException("BigInteger out of long range");
+
+                return LongValue;
             }
         }
 

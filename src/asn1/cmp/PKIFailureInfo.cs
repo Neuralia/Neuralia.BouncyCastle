@@ -14,7 +14,7 @@ namespace Org.BouncyCastle.Asn1.Cmp
      * badCertId            (4), -- no certificate could be found matching the provided criteria
      * badDataFormat        (5),
      *   -- the data submitted has the wrong format
-     * wrongAuthority       (6), -- the authority indicated in the request is different from the one creating the response neuralium
+     * wrongAuthority       (6), -- the authority indicated in the request is different from the one creating the response token
      * incorrectData        (7), -- the requester's data is incorrect (for notary services)
      * missingTimeStamp     (8), -- when the timestamp is missing but should be there (by policy)
      * badPOP               (9)  -- the proof-of-possession failed
@@ -52,7 +52,7 @@ namespace Org.BouncyCastle.Asn1.Cmp
         public const int BadTime              = (1 << 4); // -- messageTime was not sufficiently close to the system time, as defined by local policy
         public const int BadCertId            = (1 << 3); // no certificate could be found matching the provided criteria
         public const int BadDataFormat        = (1 << 2);
-        public const int WrongAuthority       = (1 << 1); // the authority indicated in the request is different from the one creating the response neuralium
+        public const int WrongAuthority       = (1 << 1); // the authority indicated in the request is different from the one creating the response token
         public const int IncorrectData        = 1;        // the requester's data is incorrect (for notary services)
         public const int MissingTimeStamp     = (1 << 15); // when the timestamp is missing but should be there (by policy)
         public const int BadPop               = (1 << 14); // the proof-of-possession failed

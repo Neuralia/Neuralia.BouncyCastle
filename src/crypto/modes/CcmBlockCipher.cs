@@ -68,7 +68,7 @@ namespace Org.BouncyCastle.Crypto.Modes
 
                 nonce = param.GetNonce();
                 initialAssociatedText = param.GetAssociatedText();
-                macSize = param.MacSize / 8;
+                macSize = GetMacSize(forEncryption, param.MacSize);
                 cipherParameters = param.Key;
             }
             else if (parameters is ParametersWithIV)
@@ -77,7 +77,7 @@ namespace Org.BouncyCastle.Crypto.Modes
 
                 nonce = param.GetIV();
                 initialAssociatedText = null;
-                macSize = macBlock.Length / 2;
+                macSize = GetMacSize(forEncryption, 64);
                 cipherParameters = param.Parameters;
             }
             else
@@ -288,13 +288,13 @@ namespace Org.BouncyCastle.Crypto.Modes
 
                 byte[] block = new byte[BlockSize];
 
-                System.Array.Copy(input, inIndex, block, 0, inLen + inOff - inIndex);
+                Array.Copy(input, inIndex, block, 0, inLen + inOff - inIndex);
 
                 ctrCipher.ProcessBlock(block, 0, block, 0);
 
-                System.Array.Copy(block, 0, output, outIndex, inLen + inOff - inIndex);
+                Array.Copy(block, 0, output, outIndex, inLen + inOff - inIndex);
 
-                System.Array.Copy(encMac, 0, output, outOff + inLen, macSize);
+                Array.Copy(encMac, 0, output, outOff + inLen, macSize);
             }
             else
             {
@@ -304,7 +304,7 @@ namespace Org.BouncyCastle.Crypto.Modes
                 outputLen = inLen - macSize;
                 Check.OutputLength(output, outOff, outputLen, "Output buffer too short.");
 
-                System.Array.Copy(input, inOff + outputLen, macBlock, 0, macSize);
+                Array.Copy(input, inOff + outputLen, macBlock, 0, macSize);
 
                 ctrCipher.ProcessBlock(macBlock, 0, macBlock, 0);
 
@@ -322,11 +322,11 @@ namespace Org.BouncyCastle.Crypto.Modes
 
                 byte[] block = new byte[BlockSize];
 
-                System.Array.Copy(input, inIndex, block, 0, outputLen - (inIndex - inOff));
+                Array.Copy(input, inIndex, block, 0, outputLen - (inIndex - inOff));
 
                 ctrCipher.ProcessBlock(block, 0, block, 0);
 
-                System.Array.Copy(block, 0, output, outIndex, outputLen - (inIndex - inOff));
+                Array.Copy(block, 0, output, outIndex, outputLen - (inIndex - inOff));
 
                 byte[] calculatedMacBlock = new byte[BlockSize];
 
@@ -359,7 +359,7 @@ namespace Org.BouncyCastle.Crypto.Modes
 
             b0[0] |= (byte)(((15 - nonce.Length) - 1) & 0x7);
 
-            System.Array.Copy(nonce, 0, b0, 1, nonce.Length);
+            Array.Copy(nonce, 0, b0, 1, nonce.Length);
 
             int q = dataLen;
             int count = 1;
@@ -432,6 +432,14 @@ namespace Org.BouncyCastle.Crypto.Modes
             cMac.BlockUpdate(data, dataOff, dataLen);
 
             return cMac.DoFinal(macBlock, 0);
+        }
+
+        private int GetMacSize(bool forEncryption, int requestedMacBits)
+        {
+            if (forEncryption && (requestedMacBits < 32 || requestedMacBits > 128 || 0 != (requestedMacBits & 15)))
+                throw new ArgumentException("tag length in octets must be one of {4,6,8,10,12,14,16}");
+
+            return requestedMacBits >> 3;
         }
 
         private int GetAssociatedTextLength()

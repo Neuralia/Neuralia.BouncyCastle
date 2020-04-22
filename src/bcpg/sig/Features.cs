@@ -66,8 +66,8 @@ namespace Org.BouncyCastle.Bcpg.Sig
             else
             {
                 byte[] temp = new byte[data.Length - 1];
-                System.Array.Copy(data, 0, temp, 0, i);
-                System.Array.Copy(data, i + 1, temp, i, temp.Length - i);
+                Array.Copy(data, 0, temp, 0, i);
+                Array.Copy(data, i + 1, temp, i, temp.Length - i);
                 data = temp;
             }
         }

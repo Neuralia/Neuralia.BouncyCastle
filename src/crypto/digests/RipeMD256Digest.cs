@@ -55,7 +55,7 @@ namespace Org.BouncyCastle.Crypto.Digests
             H6 = t.H6;
             H7 = t.H7;
 
-            System.Array.Copy(t.X, 0, X, 0, t.X.Length);
+            Array.Copy(t.X, 0, X, 0, t.X.Length);
             xOff = t.xOff;
         }
 

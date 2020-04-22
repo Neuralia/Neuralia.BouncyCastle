@@ -69,7 +69,7 @@ namespace Org.BouncyCastle.Crypto.Prng
         {
             byte[] bytes = new byte[len];
             NextBytes(bytes);
-            System.Array.Copy(bytes, 0, buf, off, len);
+            Array.Copy(bytes, 0, buf, off, len);
         }
 
         public override byte[] GenerateSeed(int numBytes)

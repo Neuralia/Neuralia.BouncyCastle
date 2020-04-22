@@ -85,7 +85,7 @@ namespace Org.BouncyCastle.Utilities.Encoders
 
             if (len > gapLen)
             {
-                System.Array.Copy(input, inOff, Buffer, bufOff, gapLen);
+                Array.Copy(input, inOff, Buffer, bufOff, gapLen);
 
                 resultLen += translator.Encode(Buffer, 0, Buffer.Length, outBytes, outOff);
 
@@ -105,7 +105,7 @@ namespace Org.BouncyCastle.Utilities.Encoders
 
             if (len != 0)
             {
-                System.Array.Copy(input, inOff, Buffer, bufOff, len);
+                Array.Copy(input, inOff, Buffer, bufOff, len);
 
                 bufOff += len;
             }

@@ -140,7 +140,7 @@ namespace Org.BouncyCastle.Crypto.Prng.Drbg
 	            mHMac.BlockUpdate(mV, 0, mV.Length);
                 mHMac.DoFinal(mV, 0);
 
-                System.Array.Copy(mV, 0, rv, i * mV.Length, mV.Length);
+                Array.Copy(mV, 0, rv, i * mV.Length, mV.Length);
 	        }
 
             if (m * mV.Length < rv.Length)
@@ -148,14 +148,14 @@ namespace Org.BouncyCastle.Crypto.Prng.Drbg
                 mHMac.BlockUpdate(mV, 0, mV.Length);
                 mHMac.DoFinal(mV, 0);
 
-	            System.Array.Copy(mV, 0, rv, m * mV.Length, rv.Length - (m * mV.Length));
+	            Array.Copy(mV, 0, rv, m * mV.Length, rv.Length - (m * mV.Length));
 	        }
 
             hmac_DRBG_Update(additionalInput);
 
 	        mReseedCounter++;
 
-	        System.Array.Copy(rv, 0, output, 0, output.Length);
+	        Array.Copy(rv, 0, output, 0, output.Length);
 
             return numberOfBits;
 	    }

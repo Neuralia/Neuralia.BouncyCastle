@@ -169,11 +169,11 @@ namespace Org.BouncyCastle.Crypto.Modes
                 throw new ArgumentException("padding not supported");
             }
 
-            System.Array.Copy(nonce, 0, G1, 0, nonce.Length - Nb_ - 1);
+            Array.Copy(nonce, 0, G1, 0, nonce.Length - Nb_ - 1);
 
             intToBytes(dataLen, buffer, 0); // for G1
 
-            System.Array.Copy(buffer, 0, G1, nonce.Length - Nb_ - 1, BYTES_IN_INT);
+            Array.Copy(buffer, 0, G1, nonce.Length - Nb_ - 1, BYTES_IN_INT);
 
             G1[G1.Length - 1] = getFlag(true, macSize);
 
@@ -284,7 +284,7 @@ namespace Org.BouncyCastle.Crypto.Modes
                     output[outOff + byteIndex] = (byte)(buffer[byteIndex] ^ macBlock[byteIndex]);
                 }
 
-                System.Array.Copy(macBlock, 0, mac, 0, macSize);
+                Array.Copy(macBlock, 0, mac, 0, macSize);
 
                 Reset();
 
@@ -329,15 +329,15 @@ namespace Org.BouncyCastle.Crypto.Modes
 
                 engine.ProcessBlock(s, 0, buffer, 0);
 
-                System.Array.Copy(output, outOff - macSize, buffer, 0, macSize);
+                Array.Copy(output, outOff - macSize, buffer, 0, macSize);
 
                 CalculateMac(output, 0, outOff - macSize);
 
-                System.Array.Copy(macBlock, 0, mac, 0, macSize);
+                Array.Copy(macBlock, 0, mac, 0, macSize);
 
                 byte[] calculatedMac = new byte[macSize];
 
-                System.Array.Copy(buffer, 0, calculatedMac, 0, macSize);
+                Array.Copy(buffer, 0, calculatedMac, 0, macSize);
 
                 if (!Arrays.ConstantTimeAreEqual(mac, calculatedMac))
                 {

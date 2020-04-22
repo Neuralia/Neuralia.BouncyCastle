@@ -180,7 +180,7 @@ namespace Org.BouncyCastle.Crypto.Modes
 
             if (nonce.Length == 12)
             {
-                System.Array.Copy(nonce, 0, J0, 0, nonce.Length);
+                Array.Copy(nonce, 0, J0, 0, nonce.Length);
                 this.J0[BlockSize - 1] = 0x01;
             }
             else
@@ -279,7 +279,7 @@ namespace Org.BouncyCastle.Crypto.Modes
         {
             if (atLength > 0)
             {
-                System.Array.Copy(S_at, 0, S_atPre, 0, BlockSize);
+                Array.Copy(S_at, 0, S_atPre, 0, BlockSize);
                 atLengthPre = atLength;
             }
 
@@ -292,7 +292,7 @@ namespace Org.BouncyCastle.Crypto.Modes
 
             if (atLengthPre > 0)
             {
-                System.Array.Copy(S_atPre, 0, S, 0, BlockSize);
+                Array.Copy(S_atPre, 0, S, 0, BlockSize);
             }
         }
 
@@ -313,7 +313,7 @@ namespace Org.BouncyCastle.Crypto.Modes
                 }
                 else
                 {
-                    System.Array.Copy(bufBlock, BlockSize, bufBlock, 0, macSize);
+                    Array.Copy(bufBlock, BlockSize, bufBlock, 0, macSize);
                     bufOff = macSize;
                 }
                 return BlockSize;
@@ -362,7 +362,7 @@ namespace Org.BouncyCastle.Crypto.Modes
 
                 if (len > 0)
                 {
-                    System.Array.Copy(input, inOff, bufBlock, 0, len);
+                    Array.Copy(input, inOff, bufBlock, 0, len);
                     bufOff = len;
                 }
             }
@@ -374,7 +374,7 @@ namespace Org.BouncyCastle.Crypto.Modes
                     if (++bufOff == bufBlock.Length)
                     {
                         ProcessBlock(bufBlock, 0, output, outOff + resultLen);
-                        System.Array.Copy(bufBlock, BlockSize, bufBlock, 0, macSize);
+                        Array.Copy(bufBlock, BlockSize, bufBlock, 0, macSize);
                         bufOff = macSize;
                         resultLen += BlockSize;
                     }
@@ -472,19 +472,19 @@ namespace Org.BouncyCastle.Crypto.Modes
 
             // We place into macBlock our calculated value for T
             this.macBlock = new byte[macSize];
-            System.Array.Copy(tag, 0, macBlock, 0, macSize);
+            Array.Copy(tag, 0, macBlock, 0, macSize);
 
             if (forEncryption)
             {
                 // Append T to the message
-                System.Array.Copy(macBlock, 0, output, outOff + bufOff, macSize);
+                Array.Copy(macBlock, 0, output, outOff + bufOff, macSize);
                 resultLen += macSize;
             }
             else
             {
                 // Retrieve the T value from the message and compare to calculated one
                 byte[] msgMac = new byte[macSize];
-                System.Array.Copy(bufBlock, extra, msgMac, 0, macSize);
+                Array.Copy(bufBlock, extra, msgMac, 0, macSize);
                 if (!Arrays.ConstantTimeAreEqual(this.macBlock, msgMac))
                     throw new InvalidCipherTextException("mac check in GCM failed");
             }
@@ -557,7 +557,7 @@ namespace Org.BouncyCastle.Crypto.Modes
             {
                 GcmUtilities.Xor(ctrBlock, buf, bufOff);
                 gHASHBlock(S, ctrBlock);
-                System.Array.Copy(ctrBlock, 0, output, outOff, BlockSize);
+                Array.Copy(ctrBlock, 0, output, outOff, BlockSize);
             }
             else
             {
@@ -584,7 +584,7 @@ namespace Org.BouncyCastle.Crypto.Modes
                 GcmUtilities.Xor(buf, off, ctrBlock, 0, len);
             }
 
-            System.Array.Copy(buf, off, output, outOff, len);
+            Array.Copy(buf, off, output, outOff, len);
             totalLength += (uint)len;
         }
 

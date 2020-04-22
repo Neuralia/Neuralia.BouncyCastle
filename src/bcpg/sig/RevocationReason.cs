@@ -32,7 +32,7 @@ namespace Org.BouncyCastle.Bcpg
             byte[] data = new byte[1 + descriptionBytes.Length];
 
             data[0] = (byte)reason;
-            System.Array.Copy(descriptionBytes, 0, data, 1, descriptionBytes.Length);
+            Array.Copy(descriptionBytes, 0, data, 1, descriptionBytes.Length);
 
             return data;
         }
@@ -51,7 +51,7 @@ namespace Org.BouncyCastle.Bcpg
             }
 
             byte[] description = new byte[data.Length - 1];
-            System.Array.Copy(data, 1, description, 0, description.Length);
+            Array.Copy(data, 1, description, 0, description.Length);
 
             return Strings.FromUtf8ByteArray(description);
         }

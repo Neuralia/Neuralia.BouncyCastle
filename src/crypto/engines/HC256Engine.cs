@@ -76,8 +76,8 @@ namespace Org.BouncyCastle.Crypto.Engines
 	        {
 				byte[] k = new byte[32];
 
-				System.Array.Copy(key, 0, k, 0, key.Length);
-				System.Array.Copy(key, 0, k, 16, key.Length);
+				Array.Copy(key, 0, k, 0, key.Length);
+				Array.Copy(key, 0, k, 16, key.Length);
 
 				key = k;
 			}
@@ -86,8 +86,8 @@ namespace Org.BouncyCastle.Crypto.Engines
 			{
 				byte[] newIV = new byte[32];
 
-				System.Array.Copy(iv, 0, newIV, 0, iv.Length);
-				System.Array.Copy(iv, 0, newIV, iv.Length, newIV.Length - iv.Length);
+				Array.Copy(iv, 0, newIV, 0, iv.Length);
+				Array.Copy(iv, 0, newIV, iv.Length, newIV.Length - iv.Length);
 
 				iv = newIV;
 			}
@@ -117,8 +117,8 @@ namespace Org.BouncyCastle.Crypto.Engines
 					+ w[i - 16] + i;
 			}
 
-			System.Array.Copy(w, 512, p, 0, 1024);
-			System.Array.Copy(w, 1536, q, 0, 1024);
+			Array.Copy(w, 512, p, 0, 1024);
+			Array.Copy(w, 1536, q, 0, 1024);
 
 			for (int i = 0; i < 4096; i++)
 			{

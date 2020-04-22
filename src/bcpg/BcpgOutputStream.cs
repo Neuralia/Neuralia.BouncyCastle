@@ -255,24 +255,24 @@ namespace Org.BouncyCastle.Bcpg
 
             if (len <= (partialBufferLength - partialOffset))
             {
-                System.Array.Copy(buffer, off, partialBuffer, partialOffset, len);
+                Array.Copy(buffer, off, partialBuffer, partialOffset, len);
                 partialOffset += len;
             }
             else
             {
                 int diff = partialBufferLength - partialOffset;
-                System.Array.Copy(buffer, off, partialBuffer, partialOffset, diff);
+                Array.Copy(buffer, off, partialBuffer, partialOffset, diff);
                 off += diff;
                 len -= diff;
                 PartialFlush(false);
                 while (len > partialBufferLength)
                 {
-                    System.Array.Copy(buffer, off, partialBuffer, 0, partialBufferLength);
+                    Array.Copy(buffer, off, partialBuffer, 0, partialBufferLength);
                     off += partialBufferLength;
                     len -= partialBufferLength;
                     PartialFlush(false);
                 }
-                System.Array.Copy(buffer, off, partialBuffer, 0, len);
+                Array.Copy(buffer, off, partialBuffer, 0, len);
                 partialOffset += len;
             }
         }

@@ -81,7 +81,7 @@ namespace Org.BouncyCastle.Crypto.Engines
         {
             byte[] c2 = new byte[inLen];
 
-            System.Array.Copy(input, inOff, c2, 0, c2.Length);
+            Array.Copy(input, inOff, c2, 0, c2.Length);
 
             ECMultiplier multiplier = CreateBasePointMultiplier();
 
@@ -114,7 +114,7 @@ namespace Org.BouncyCastle.Crypto.Engines
         {
             byte[] c1 = new byte[mCurveLength * 2 + 1];
 
-            System.Array.Copy(input, inOff, c1, 0, c1.Length);
+            Array.Copy(input, inOff, c1, 0, c1.Length);
 
             ECPoint c1P = mECParams.Curve.DecodePoint(c1);
 
@@ -126,7 +126,7 @@ namespace Org.BouncyCastle.Crypto.Engines
 
             byte[] c2 = new byte[inLen - c1.Length - mDigest.GetDigestSize()];
 
-            System.Array.Copy(input, inOff + c1.Length, c2, 0, c2.Length);
+            Array.Copy(input, inOff + c1.Length, c2, 0, c2.Length);
 
             Kdf(mDigest, c1P, c2);
 
@@ -158,7 +158,7 @@ namespace Org.BouncyCastle.Crypto.Engines
         {
             for (int i = 0; i != encData.Length; i++)
             {
-                if (encData[i] != input[inOff])
+                if (encData[i] != input[inOff + i])
                 {
                     return false;
                 }

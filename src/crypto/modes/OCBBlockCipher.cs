@@ -173,7 +173,7 @@ namespace Org.BouncyCastle.Crypto.Modes
             int bits = bottom % 8, bytes = bottom / 8;
             if (bits == 0)
             {
-                System.Array.Copy(Stretch, bytes, OffsetMAIN_0, 0, 16);
+                Array.Copy(Stretch, bytes, OffsetMAIN_0, 0, 16);
             }
             else
             {
@@ -193,7 +193,7 @@ namespace Org.BouncyCastle.Crypto.Modes
 
             this.OffsetHASH = new byte[16];
             this.Sum = new byte[16];
-            System.Array.Copy(OffsetMAIN_0, 0, OffsetMAIN, 0, 16);
+            Array.Copy(OffsetMAIN_0, 0, OffsetMAIN, 0, 16);
             this.Checksum = new byte[16];
 
             if (initialAssociatedText != null)
@@ -205,7 +205,7 @@ namespace Org.BouncyCastle.Crypto.Modes
         protected virtual int ProcessNonce(byte[] N)
         {
             byte[] nonce = new byte[16];
-            System.Array.Copy(N, 0, nonce, nonce.Length - N.Length, N.Length);
+            Array.Copy(N, 0, nonce, nonce.Length - N.Length, N.Length);
             nonce[0] = (byte)(macSize << 4);
             nonce[15 - N.Length] |= 1;
 
@@ -220,7 +220,7 @@ namespace Org.BouncyCastle.Crypto.Modes
                 byte[] Ktop = new byte[16];
                 KtopInput = nonce;
                 hashCipher.ProcessBlock(KtopInput, 0, Ktop, 0);
-                System.Array.Copy(Ktop, 0, Stretch, 0, 16);
+                Array.Copy(Ktop, 0, Stretch, 0, 16);
                 for (int i = 0; i < 8; ++i)
                 {
                     Stretch[16 + i] = (byte)(Ktop[i] ^ Ktop[i + 1]);
@@ -327,7 +327,7 @@ namespace Org.BouncyCastle.Crypto.Modes
 
                 mainBlockPos -= macSize;
                 tag = new byte[macSize];
-                System.Array.Copy(mainBlock, mainBlockPos, tag, 0, macSize);
+                Array.Copy(mainBlock, mainBlockPos, tag, 0, macSize);
             }
 
             /*
@@ -358,7 +358,7 @@ namespace Org.BouncyCastle.Crypto.Modes
                 Xor(mainBlock, Pad);
 
                 Check.OutputLength(output, outOff, mainBlockPos, "Output buffer too short");
-                System.Array.Copy(mainBlock, 0, output, outOff, mainBlockPos);
+                Array.Copy(mainBlock, 0, output, outOff, mainBlockPos);
 
                 if (!forEncryption)
                 {
@@ -376,7 +376,7 @@ namespace Org.BouncyCastle.Crypto.Modes
             Xor(Checksum, Sum);
 
             this.macBlock = new byte[macSize];
-            System.Array.Copy(Checksum, 0, macBlock, 0, macSize);
+            Array.Copy(Checksum, 0, macBlock, 0, macSize);
 
             /*
              * Validate or append tag and reset this cipher for the next run
@@ -388,7 +388,7 @@ namespace Org.BouncyCastle.Crypto.Modes
                 Check.OutputLength(output, outOff, resultLen + macSize, "Output buffer too short");
 
                 // Append tag to the message
-                System.Array.Copy(macBlock, 0, output, outOff + resultLen, macSize);
+                Array.Copy(macBlock, 0, output, outOff + resultLen, macSize);
                 resultLen += macSize;
             }
             else
@@ -454,12 +454,12 @@ namespace Org.BouncyCastle.Crypto.Modes
             mainCipher.ProcessBlock(mainBlock, 0, mainBlock, 0);
             Xor(mainBlock, OffsetMAIN);
 
-            System.Array.Copy(mainBlock, 0, output, outOff, 16);
+            Array.Copy(mainBlock, 0, output, outOff, 16);
 
             if (!forEncryption)
             {
                 Xor(Checksum, mainBlock);
-                System.Array.Copy(mainBlock, BLOCK_SIZE, mainBlock, 0, macSize);
+                Array.Copy(mainBlock, BLOCK_SIZE, mainBlock, 0, macSize);
                 mainBlockPos = macSize;
             }
         }
@@ -480,7 +480,7 @@ namespace Org.BouncyCastle.Crypto.Modes
 
             Clear(OffsetHASH);
             Clear(Sum);
-            System.Array.Copy(OffsetMAIN_0, 0, OffsetMAIN, 0, 16);
+            Array.Copy(OffsetMAIN_0, 0, OffsetMAIN, 0, 16);
             Clear(Checksum);
 
             if (clearMac)

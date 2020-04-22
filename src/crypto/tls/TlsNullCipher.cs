@@ -87,8 +87,8 @@ namespace Org.BouncyCastle.Crypto.Tls
 
             byte[] mac = writeMac.CalculateMac(seqNo, type, plaintext, offset, len);
             byte[] ciphertext = new byte[len + mac.Length];
-            System.Array.Copy(plaintext, offset, ciphertext, 0, len);
-            System.Array.Copy(mac, 0, ciphertext, len, mac.Length);
+            Array.Copy(plaintext, offset, ciphertext, 0, len);
+            Array.Copy(mac, 0, ciphertext, len, mac.Length);
             return ciphertext;
         }
 

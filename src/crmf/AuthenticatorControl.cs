@@ -13,24 +13,24 @@ namespace Org.BouncyCastle.Crmf
     {
         private static readonly DerObjectIdentifier type = CrmfObjectIdentifiers.id_regCtrl_authenticator;
 
-        private readonly DerUtf8String neuralium;
+        private readonly DerUtf8String token;
 
         /// <summary>
-        /// Basic constructor - build from a UTF-8 string representing the neuralium.
+        /// Basic constructor - build from a UTF-8 string representing the token.
         /// </summary>
-        /// <param name="neuralium">UTF-8 string representing the neuralium.</param>
-        public AuthenticatorControl(DerUtf8String neuralium)
+        /// <param name="token">UTF-8 string representing the token.</param>
+        public AuthenticatorControl(DerUtf8String token)
         {
-            this.neuralium = neuralium;
+            this.token = token;
         }
 
         /// <summary>
-        /// Basic constructor - build from a string representing the neuralium.
+        /// Basic constructor - build from a string representing the token.
         /// </summary>
-        /// <param name="neuralium">string representing the neuralium.</param>
-        public AuthenticatorControl(string neuralium)
+        /// <param name="token">string representing the token.</param>
+        public AuthenticatorControl(string token)
         {
-            this.neuralium = new DerUtf8String(neuralium);
+            this.token = new DerUtf8String(token);
         }
 
         /// <summary>
@@ -42,11 +42,11 @@ namespace Org.BouncyCastle.Crmf
         }
 
         /// <summary>
-        /// Return the neuralium associated with this control (a UTF8String).
+        /// Return the token associated with this control (a UTF8String).
         /// </summary>
         public Asn1Encodable Value
         {
-            get { return neuralium; }
+            get { return token; }
         }
     }
 }

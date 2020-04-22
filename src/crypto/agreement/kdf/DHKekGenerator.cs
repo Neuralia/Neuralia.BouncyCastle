@@ -92,13 +92,13 @@ namespace Org.BouncyCastle.Crypto.Agreement.Kdf
 
                 if (len > outLen)
                 {
-                    System.Array.Copy(dig, 0, outBytes, outOff, outLen);
+                    Array.Copy(dig, 0, outBytes, outOff, outLen);
                     outOff += outLen;
                     len -= outLen;
                 }
                 else
                 {
-                    System.Array.Copy(dig, 0, outBytes, outOff, len);
+                    Array.Copy(dig, 0, outBytes, outOff, len);
                 }
 
                 counter++;

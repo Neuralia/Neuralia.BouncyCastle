@@ -107,7 +107,7 @@ namespace Org.BouncyCastle.Security
             }
             else if (algOid.Equals(X9ObjectIdentifiers.IdECPublicKey))
             {
-                X962Parameters para = new X962Parameters(algID.Parameters.ToAsn1Object());
+                X962Parameters para = X962Parameters.GetInstance(algID.Parameters.ToAsn1Object());
 
                 X9ECParameters x9;
                 if (para.IsNamedCurve)
@@ -132,8 +132,8 @@ namespace Org.BouncyCastle.Security
             }
             else if (algOid.Equals(CryptoProObjectIdentifiers.GostR3410x2001))
             {
-                Gost3410PublicKeyAlgParameters gostParams = new Gost3410PublicKeyAlgParameters(
-                    Asn1Sequence.GetInstance(algID.Parameters.ToAsn1Object()));
+                Gost3410PublicKeyAlgParameters gostParams = Gost3410PublicKeyAlgParameters.GetInstance(
+                    algID.Parameters.ToAsn1Object());
 
                 ECDomainParameters ecP = ECGost3410NamedCurves.GetByOid(gostParams.PublicKeyParamSet);
 
@@ -213,18 +213,9 @@ namespace Org.BouncyCastle.Security
                     }
                     else
                     {
-                        byte[] encVal = Asn1OctetString.GetInstance(privKey).GetOctets();
-                        byte[] dVal = new byte[encVal.Length];
-
-                        for (int i = 0; i != encVal.Length; i++)
-                        {
-                            dVal[i] = encVal[encVal.Length - 1 - i];
-                        }
-
+                        byte[] dVal = Arrays.Reverse(Asn1OctetString.GetInstance(privKey).GetOctets());
                         d = new BigInteger(1, dVal);
                     }
-
-
                 }
                 else
                 {

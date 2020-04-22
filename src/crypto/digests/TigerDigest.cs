@@ -870,10 +870,10 @@ namespace Org.BouncyCastle.Crypto.Digests
 			b = t.b;
 			c = t.c;
 
-			System.Array.Copy(t.x, 0, x, 0, t.x.Length);
+			Array.Copy(t.x, 0, x, 0, t.x.Length);
 			xOff = t.xOff;
 
-			System.Array.Copy(t.Buffer, 0, Buffer, 0, t.Buffer.Length);
+			Array.Copy(t.Buffer, 0, Buffer, 0, t.Buffer.Length);
 			bOff = t.bOff;
 
 			byteCount = t.byteCount;

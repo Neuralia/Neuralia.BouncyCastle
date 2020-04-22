@@ -194,19 +194,19 @@ namespace Org.BouncyCastle.Crypto.Tls
 
                 encryptCipher.Init(true, new ParametersWithIV(null, explicitIV));
 
-                System.Array.Copy(explicitIV, 0, outBuf, outOff, blockSize);
+                Array.Copy(explicitIV, 0, outBuf, outOff, blockSize);
                 outOff += blockSize;
             }
 
             int blocks_start = outOff;
 
-            System.Array.Copy(plaintext, offset, outBuf, outOff, len);
+            Array.Copy(plaintext, offset, outBuf, outOff, len);
             outOff += len;
 
             if (!encryptThenMac)
             {
                 byte[] mac = mWriteMac.CalculateMac(seqNo, type, plaintext, offset, len);
-                System.Array.Copy(mac, 0, outBuf, outOff, mac.Length);
+                Array.Copy(mac, 0, outBuf, outOff, mac.Length);
                 outOff += mac.Length;
             }
 
@@ -223,7 +223,7 @@ namespace Org.BouncyCastle.Crypto.Tls
             if (encryptThenMac)
             {
                 byte[] mac = mWriteMac.CalculateMac(seqNo, type, outBuf, 0, outOff);
-                System.Array.Copy(mac, 0, outBuf, outOff, mac.Length);
+                Array.Copy(mac, 0, outBuf, outOff, mac.Length);
                 outOff += mac.Length;
             }
 

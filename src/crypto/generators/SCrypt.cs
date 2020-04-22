@@ -98,38 +98,44 @@ namespace Org.BouncyCastle.Crypto.Generators
 			uint[] blockY = new uint[BCount];
 
 			uint[] X = new uint[BCount];
-			uint[][] V = new uint[N][];
+            uint[] V = new uint[N * BCount];
 
 			try
 			{
-				System.Array.Copy(B, BOff, X, 0, BCount);
+				Array.Copy(B, BOff, X, 0, BCount);
 
-				for (int i = 0; i < N; ++i)
-				{
-					V[i] = (uint[])X.Clone();
-					BlockMix(X, blockX1, blockX2, blockY, r);
-				}
+                int off = 0;
+                for (int i = 0; i < N; i += 2)
+                {
+                    Array.Copy(X, 0, V, off, BCount);
+                    off += BCount;
+                    BlockMix(X, blockX1, blockX2, blockY, r);
+                    Array.Copy(blockY, 0, V, off, BCount);
+                    off += BCount;
+                    BlockMix(blockY, blockX1, blockX2, X, r);
+                }
 
 				uint mask = (uint)N - 1;
 				for (int i = 0; i < N; ++i)
 				{
-					uint j = X[BCount - 16] & mask;
-					Xor(X, V[j], 0, X);
-					BlockMix(X, blockX1, blockX2, blockY, r);
-				}
+					int j = (int)(X[BCount - 16] & mask);
+                    Array.Copy(V, j * BCount, blockY, 0, BCount);
+                    Xor(blockY, X, 0, blockY);
+                    BlockMix(blockY, blockX1, blockX2, X, r);
+                }
 
-				System.Array.Copy(X, 0, B, BOff, BCount);
+				Array.Copy(X, 0, B, BOff, BCount);
 			}
 			finally
 			{
-				ClearAll(V);
+				Clear(V);
 				ClearAll(X, blockX1, blockX2, blockY);
 			}
 		}
 
 		private static void BlockMix(uint[] B, uint[] X1, uint[] X2, uint[] Y, int r)
 		{
-			System.Array.Copy(B, B.Length - 16, X1, 0, 16);
+			Array.Copy(B, B.Length - 16, X1, 0, 16);
 
 			int BOff = 0, YOff = 0, halfLen = B.Length >> 1;
 
@@ -138,13 +144,11 @@ namespace Org.BouncyCastle.Crypto.Generators
 				Xor(X1, B, BOff, X2);
 
 				Salsa20Engine.SalsaCore(8, X2, X1);
-				System.Array.Copy(X1, 0, Y, YOff, 16);
+				Array.Copy(X1, 0, Y, YOff, 16);
 
 				YOff = halfLen + BOff - YOff;
 				BOff += 16;
 			}
-
-			System.Array.Copy(Y, 0, B, 0, Y.Length);
 		}
 
 		private static void Xor(uint[] a, uint[] b, int bOff, uint[] output)

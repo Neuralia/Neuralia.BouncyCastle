@@ -31,7 +31,7 @@ namespace Org.BouncyCastle.Crypto.Parameters
 				throw new ArgumentOutOfRangeException("keyLen");
 
 			this.key = new byte[keyLen];
-            System.Array.Copy(key, keyOff, this.key, 0, keyLen);
+            Array.Copy(key, keyOff, this.key, 0, keyLen);
         }
 
 		public byte[] GetKey()

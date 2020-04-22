@@ -31,7 +31,7 @@ namespace Org.BouncyCastle.Crypto.Digests
 
 		protected void CopyIn(GeneralDigest t)
 		{
-            System.Array.Copy(t.xBuf, 0, xBuf, 0, t.xBuf.Length);
+            Array.Copy(t.xBuf, 0, xBuf, 0, t.xBuf.Length);
 
             xBufOff = t.xBufOff;
             byteCount = t.byteCount;

@@ -81,7 +81,7 @@ namespace Org.BouncyCastle.Asn1.Cmp
 		// arc for Registration Info in CRMF
 		// id-regInfo OBJECT IDENTIFIER ::= { id-pkip id-regInfo(2) }
 
-		public static readonly DerObjectIdentifier regCtrl_regNeuralium = new DerObjectIdentifier("1.3.6.1.5.5.7.5.1.1");
+		public static readonly DerObjectIdentifier regCtrl_regToken = new DerObjectIdentifier("1.3.6.1.5.5.7.5.1.1");
 		public static readonly DerObjectIdentifier regCtrl_authenticator = new DerObjectIdentifier("1.3.6.1.5.5.7.5.1.2");
 		public static readonly DerObjectIdentifier regCtrl_pkiPublicationInfo = new DerObjectIdentifier("1.3.6.1.5.5.7.5.1.3");
 		public static readonly DerObjectIdentifier regCtrl_pkiArchiveOptions = new DerObjectIdentifier("1.3.6.1.5.5.7.5.1.4");

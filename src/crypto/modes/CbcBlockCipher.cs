@@ -69,7 +69,7 @@ namespace Org.BouncyCastle.Crypto.Modes
                     throw new ArgumentException("initialisation vector must be the same length as block size");
                 }
 
-                System.Array.Copy(iv, 0, IV, 0, iv.Length);
+                Array.Copy(iv, 0, IV, 0, iv.Length);
 
 				parameters = ivParam.Parameters;
             }
@@ -142,7 +142,7 @@ namespace Org.BouncyCastle.Crypto.Modes
         */
         public void Reset()
         {
-            System.Array.Copy(IV, 0, cbcV, 0, IV.Length);
+            Array.Copy(IV, 0, cbcV, 0, IV.Length);
 			Array.Clear(cbcNextV, 0, cbcNextV.Length);
 
             cipher.Reset();
@@ -185,7 +185,7 @@ namespace Org.BouncyCastle.Crypto.Modes
             /*
             * copy ciphertext to cbcV
             */
-            System.Array.Copy(outBytes, outOff, cbcV, 0, cbcV.Length);
+            Array.Copy(outBytes, outOff, cbcV, 0, cbcV.Length);
 
             return length;
         }
@@ -213,7 +213,7 @@ namespace Org.BouncyCastle.Crypto.Modes
                 throw new DataLengthException("input buffer too short");
             }
 
-            System.Array.Copy(input, inOff, cbcNextV, 0, blockSize);
+            Array.Copy(input, inOff, cbcNextV, 0, blockSize);
 
             int length = cipher.ProcessBlock(input, inOff, outBytes, outOff);
 

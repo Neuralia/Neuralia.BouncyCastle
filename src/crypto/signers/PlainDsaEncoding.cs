@@ -52,7 +52,7 @@ namespace Org.BouncyCastle.Crypto.Signers
 
             int pos = len - bsLen;
             Arrays.Fill(buf, off, off + pos, 0);
-            System.Array.Copy(bs, bsOff, buf, off + pos, bsLen);
+            Array.Copy(bs, bsOff, buf, off + pos, bsLen);
         }
     }
 }

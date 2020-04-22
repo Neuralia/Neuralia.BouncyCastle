@@ -10,42 +10,34 @@ namespace Org.BouncyCastle.Asn1.Tsp
 		: Asn1Encodable
 	{
 		private readonly PkiStatusInfo	pkiStatusInfo;
-		private readonly ContentInfo	timeStampNeuralium;
+		private readonly ContentInfo	timeStampToken;
 
-		public static TimeStampResp GetInstance(
-			object o)
-		{
-			if (o == null || o is TimeStampResp)
-			{
-				return (TimeStampResp) o;
-			}
+        public static TimeStampResp GetInstance(object obj)
+        {
+            if (obj is TimeStampResp)
+                return (TimeStampResp)obj;
+            if (obj == null)
+                return null;
+            return new TimeStampResp(Asn1Sequence.GetInstance(obj));
+        }
 
-			if (o is Asn1Sequence)
-			{
-				return new TimeStampResp((Asn1Sequence) o);
-			}
-
-			throw new ArgumentException(
-				"Unknown object in 'TimeStampResp' factory: " + Platform.GetTypeName(o));
-		}
-
-		private TimeStampResp(
+        private TimeStampResp(
 			Asn1Sequence seq)
 		{
 			this.pkiStatusInfo = PkiStatusInfo.GetInstance(seq[0]);
 
 			if (seq.Count > 1)
 			{
-				this.timeStampNeuralium = ContentInfo.GetInstance(seq[1]);
+				this.timeStampToken = ContentInfo.GetInstance(seq[1]);
 			}
 		}
 
 		public TimeStampResp(
 			PkiStatusInfo	pkiStatusInfo,
-			ContentInfo		timeStampNeuralium)
+			ContentInfo		timeStampToken)
 		{
 			this.pkiStatusInfo = pkiStatusInfo;
-			this.timeStampNeuralium = timeStampNeuralium;
+			this.timeStampToken = timeStampToken;
 		}
 
 		public PkiStatusInfo Status
@@ -53,28 +45,23 @@ namespace Org.BouncyCastle.Asn1.Tsp
 			get { return pkiStatusInfo; }
 		}
 
-		public ContentInfo TimeStampNeuralium
+		public ContentInfo TimeStampToken
 		{
-			get { return timeStampNeuralium; }
+			get { return timeStampToken; }
 		}
 
 		/**
 		 * <pre>
 		 * TimeStampResp ::= SEQUENCE  {
 		 *   status                  PkiStatusInfo,
-		 *   timeStampNeuralium          TimeStampNeuralium     OPTIONAL  }
+		 *   timeStampToken          TimeStampToken     OPTIONAL  }
 		 * </pre>
 		 */
-		public override Asn1Object ToAsn1Object()
-		{
-			Asn1EncodableVector v = new Asn1EncodableVector(pkiStatusInfo);
-
-			if (timeStampNeuralium != null)
-			{
-				v.Add(timeStampNeuralium);
-			}
-
-			return new DerSequence(v);
-		}
+        public override Asn1Object ToAsn1Object()
+        {
+            Asn1EncodableVector v = new Asn1EncodableVector(pkiStatusInfo);
+            v.AddOptional(timeStampToken);
+            return new DerSequence(v);
+        }
 	}
 }

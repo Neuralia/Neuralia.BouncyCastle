@@ -93,7 +93,7 @@ namespace Org.BouncyCastle.Crypto.Tls
 
             byte[] additionalData = GetAdditionalData(seqNo, type, len);
             byte[] mac = CalculateRecordMac(macKey, additionalData, output, 0, len);
-            System.Array.Copy(mac, 0, output, len, mac.Length);
+            Array.Copy(mac, 0, output, len, mac.Length);
 
             return output;
         }

@@ -217,7 +217,7 @@ namespace Org.BouncyCastle.Crypto.Engines
 			byte[] output = new byte[key.Modulus.BitLength / 8 + 1];
 
 			byte[] tmp = key.G.ModPow(plain, key.Modulus).ToByteArray();
-			System.Array.Copy(tmp, 0, output, output.Length - tmp.Length, tmp.Length);
+			Array.Copy(tmp, 0, output, output.Length - tmp.Length, tmp.Length);
 			return output;
 		}
 
@@ -266,7 +266,7 @@ namespace Org.BouncyCastle.Crypto.Engines
 			byte[] output = new byte[key.Modulus.BitLength / 8 + 1];
 
 			byte[] m1m2CryptBytes = m1m2Crypt.ToByteArray();
-			System.Array.Copy(m1m2CryptBytes, 0, output,
+			Array.Copy(m1m2CryptBytes, 0, output,
 				output.Length - m1m2CryptBytes.Length, m1m2CryptBytes.Length);
 
 			return output;
@@ -315,7 +315,7 @@ namespace Org.BouncyCastle.Crypto.Engines
 					}
 				}
 				byte[] ret = new byte[retpos];
-				System.Array.Copy(retval, 0, ret, 0, retpos);
+				Array.Copy(retval, 0, ret, 0, retpos);
 				return ret;
 			}
 			else

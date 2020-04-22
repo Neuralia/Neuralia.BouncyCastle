@@ -41,7 +41,7 @@ namespace Org.BouncyCastle.Crypto.Encodings
         {
             string strictProperty = Platform.GetEnvironmentVariable(StrictLengthEnabledProperty);
 
-            strictLengthEnabled = new bool[]{ strictProperty == null || strictProperty.Equals("true")};
+            strictLengthEnabled = new bool[]{ strictProperty == null || Platform.EqualsIgnoreCase("true", strictProperty) };
         }
 
 
@@ -199,7 +199,7 @@ namespace Org.BouncyCastle.Crypto.Encodings
             }
 
             block[block.Length - inLen - 1] = 0x00;       // mark the end of the padding
-            System.Array.Copy(input, inOff, block, block.Length - inLen, inLen);
+            Array.Copy(input, inOff, block, block.Length - inLen, inLen);
 
             return engine.ProcessBlock(block, 0, block.Length);
         }
@@ -357,7 +357,7 @@ namespace Org.BouncyCastle.Crypto.Encodings
 
             byte[] result = new byte[data.Length - start];
 
-            System.Array.Copy(data, start, result, 0, result.Length);
+            Array.Copy(data, start, result, 0, result.Length);
 
             return result;
         }

@@ -105,7 +105,10 @@ namespace Org.BouncyCastle.Crypto.Tls
                 decryptKey = server_write_key;
             }
 
+            // NOTE: Ensure dummy nonce is not part of the generated sequence(s)
             byte[] dummyNonce = new byte[fixed_iv_length + record_iv_length];
+            dummyNonce[0] = (byte)~encryptImplicitNonce[0];
+            dummyNonce[1] = (byte)~decryptImplicitNonce[1];
 
             this.encryptCipher.Init(true, new AeadParameters(encryptKey, 8 * macSize, dummyNonce));
             this.decryptCipher.Init(false, new AeadParameters(decryptKey, 8 * macSize, dummyNonce));
@@ -125,7 +128,7 @@ namespace Org.BouncyCastle.Crypto.Tls
             switch (nonceMode)
             {
                 case NONCE_RFC5288:
-                    System.Array.Copy(encryptImplicitNonce, 0, nonce, 0, encryptImplicitNonce.Length);
+                    Array.Copy(encryptImplicitNonce, 0, nonce, 0, encryptImplicitNonce.Length);
                     // RFC 5288/6655: The nonce_explicit MAY be the 64-bit sequence number.
                     TlsUtilities.WriteUint64(seqNo, nonce, encryptImplicitNonce.Length);
                     break;
@@ -147,7 +150,7 @@ namespace Org.BouncyCastle.Crypto.Tls
             byte[] output = new byte[record_iv_length + ciphertextLength];
             if (record_iv_length != 0)
             {
-                System.Array.Copy(nonce, nonce.Length - record_iv_length, output, 0, record_iv_length);
+                Array.Copy(nonce, nonce.Length - record_iv_length, output, 0, record_iv_length);
             }
             int outputPos = record_iv_length;
 
@@ -185,8 +188,8 @@ namespace Org.BouncyCastle.Crypto.Tls
             switch (nonceMode)
             {
                 case NONCE_RFC5288:
-                    System.Array.Copy(decryptImplicitNonce, 0, nonce, 0, decryptImplicitNonce.Length);
-                    System.Array.Copy(ciphertext, offset, nonce, nonce.Length - record_iv_length, record_iv_length);
+                    Array.Copy(decryptImplicitNonce, 0, nonce, 0, decryptImplicitNonce.Length);
+                    Array.Copy(ciphertext, offset, nonce, nonce.Length - record_iv_length, record_iv_length);
                     break;
                 case NONCE_DRAFT_CHACHA20_POLY1305:
                     TlsUtilities.WriteUint64(seqNo, nonce, nonce.Length - 8);

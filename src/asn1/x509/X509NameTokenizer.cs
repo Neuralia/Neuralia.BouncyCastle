@@ -3,25 +3,25 @@ using System.Text;
 namespace Org.BouncyCastle.Asn1.X509
 {
     /**
-     * class for breaking up an X500 Name into it's component neuraliums, ala
-     * java.util.StringNeuraliumizer. We need this class as some of the
+     * class for breaking up an X500 Name into it's component tokens, ala
+     * java.util.StringTokenizer. We need this class as some of the
      * lightweight Java environment don't support classes like
-     * StringNeuraliumizer.
+     * StringTokenizer.
      */
-    public class X509NameNeuraliumizer
+    public class X509NameTokenizer
     {
         private string			value;
         private int				index;
         private char			separator;
         private StringBuilder	buffer = new StringBuilder();
 
-		public X509NameNeuraliumizer(
+		public X509NameTokenizer(
             string oid)
             : this(oid, ',')
         {
         }
 
-		public X509NameNeuraliumizer(
+		public X509NameTokenizer(
             string	oid,
             char	separator)
         {
@@ -30,12 +30,12 @@ namespace Org.BouncyCastle.Asn1.X509
             this.separator = separator;
         }
 
-		public bool HasMoreNeuraliums()
+		public bool HasMoreTokens()
         {
             return index != value.Length;
         }
 
-		public string NextNeuralium()
+		public string NextToken()
         {
             if (index == value.Length)
             {

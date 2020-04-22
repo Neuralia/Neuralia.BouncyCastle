@@ -25,7 +25,7 @@ namespace Org.BouncyCastle.Crypto.Parameters
         public X25519PrivateKeyParameters(byte[] buf, int off)
             : base(true)
         {
-            System.Array.Copy(buf, off, data, 0, KeySize);
+            Array.Copy(buf, off, data, 0, KeySize);
         }
 
         public X25519PrivateKeyParameters(Stream input)
@@ -37,7 +37,7 @@ namespace Org.BouncyCastle.Crypto.Parameters
 
         public void Encode(byte[] buf, int off)
         {
-            System.Array.Copy(data, 0, buf, off, KeySize);
+            Array.Copy(data, 0, buf, off, KeySize);
         }
 
         public byte[] GetEncoded()

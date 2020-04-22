@@ -378,7 +378,7 @@ namespace Org.BouncyCastle.Math.EC.Abc
 
             // Reduce the TNAF array to its actual length
             sbyte[] tnaf = new sbyte[length];
-            System.Array.Copy(u, 0, tnaf, 0, length);
+            Array.Copy(u, 0, tnaf, 0, length);
             return tnaf;
         }
 

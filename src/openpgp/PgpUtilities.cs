@@ -27,17 +27,20 @@ namespace Org.BouncyCastle.Bcpg.OpenPgp
 
 			try
 			{
-				Asn1Sequence s = (Asn1Sequence) Asn1Object.FromByteArray(encoding);
+                Asn1Sequence s = Asn1Sequence.GetInstance(encoding);
 
-				i1 = (DerInteger) s[0];
-				i2 = (DerInteger) s[1];
+				i1 = DerInteger.GetInstance(s[0]);
+                i2 = DerInteger.GetInstance(s[1]);
 			}
-			catch (IOException e)
+			catch (Exception e)
 			{
 				throw new PgpException("exception encoding signature", e);
 			}
 
-			return new MPInteger[]{ new MPInteger(i1.Value), new MPInteger(i2.Value) };
+			return new MPInteger[]{
+                new MPInteger(i1.Value),
+                new MPInteger(i2.Value)
+            };
 		}
 
 		public static MPInteger[] RsaSigToMpi(
@@ -327,11 +330,11 @@ namespace Org.BouncyCastle.Bcpg.OpenPgp
 
 				if (dig.Length > (keyBytes.Length - generatedBytes))
                 {
-                    System.Array.Copy(dig, 0, keyBytes, generatedBytes, keyBytes.Length - generatedBytes);
+                    Array.Copy(dig, 0, keyBytes, generatedBytes, keyBytes.Length - generatedBytes);
                 }
                 else
                 {
-                    System.Array.Copy(dig, 0, keyBytes, generatedBytes, dig.Length);
+                    Array.Copy(dig, 0, keyBytes, generatedBytes, dig.Length);
                 }
 
 				generatedBytes += dig.Length;
@@ -469,7 +472,7 @@ namespace Org.BouncyCastle.Bcpg.OpenPgp
             //
             byte[] firstBlock = new byte[8];
 
-			System.Array.Copy(buf, 0, firstBlock, 0, firstBlock.Length);
+			Array.Copy(buf, 0, firstBlock, 0, firstBlock.Length);
 
             try
             {

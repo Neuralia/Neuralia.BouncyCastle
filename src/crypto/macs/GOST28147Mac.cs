@@ -88,7 +88,7 @@ namespace Org.BouncyCastle.Crypto.Macs
                 ParametersWithIV p = (ParametersWithIV)parameters;
 
                 workingKey = GenerateWorkingKey(((KeyParameter)p.Parameters).GetKey());
-                System.Array.Copy(p.GetIV(), 0, mac, 0, mac.Length);
+                Array.Copy(p.GetIV(), 0, mac, 0, mac.Length);
                 macIV = p.GetIV(); // don't skip the initial CM5Func
             }
 			else
@@ -183,7 +183,7 @@ namespace Org.BouncyCastle.Crypto.Macs
 		{
 			byte[] sum = new byte[buf.Length - bufOff];
 
-			System.Array.Copy(buf, bufOff, sum, 0, mac.Length);
+			Array.Copy(buf, bufOff, sum, 0, mac.Length);
 
 			for (int i = 0; i != mac.Length; i++)
 			{
@@ -199,7 +199,7 @@ namespace Org.BouncyCastle.Crypto.Macs
 			if (bufOff == buf.Length)
 			{
 				byte[] sumbuf = new byte[buf.Length];
-				System.Array.Copy(buf, 0, sumbuf, 0, mac.Length);
+				Array.Copy(buf, 0, sumbuf, 0, mac.Length);
 
 				if (firstStep)
 				{
@@ -233,10 +233,10 @@ namespace Org.BouncyCastle.Crypto.Macs
 
 			if (len > gapLen)
 			{
-				System.Array.Copy(input, inOff, buf, bufOff, gapLen);
+				Array.Copy(input, inOff, buf, bufOff, gapLen);
 
 				byte[] sumbuf = new byte[buf.Length];
-				System.Array.Copy(buf, 0, sumbuf, 0, mac.Length);
+				Array.Copy(buf, 0, sumbuf, 0, mac.Length);
 
 				if (firstStep)
 				{
@@ -267,7 +267,7 @@ namespace Org.BouncyCastle.Crypto.Macs
 				}
 			}
 
-			System.Array.Copy(input, inOff, buf, bufOff, len);
+			Array.Copy(input, inOff, buf, bufOff, len);
 
 			bufOff += len;
 		}
@@ -283,7 +283,7 @@ namespace Org.BouncyCastle.Crypto.Macs
 			}
 
 			byte[] sumbuf = new byte[buf.Length];
-			System.Array.Copy(buf, 0, sumbuf, 0, mac.Length);
+			Array.Copy(buf, 0, sumbuf, 0, mac.Length);
 
 			if (firstStep)
 			{
@@ -296,7 +296,7 @@ namespace Org.BouncyCastle.Crypto.Macs
 
 			gost28147MacFunc(workingKey, sumbuf, 0, mac, 0);
 
-			System.Array.Copy(mac, (mac.Length/2)-macSize, output, outOff, macSize);
+			Array.Copy(mac, (mac.Length/2)-macSize, output, outOff, macSize);
 
 			Reset();
 

@@ -113,7 +113,7 @@ namespace Org.BouncyCastle.Crypto.Modes
         public virtual void Reset()
         {
             Arrays.Fill(counter, (byte)0);
-            System.Array.Copy(IV, 0, counter, 0, IV.Length);
+            Array.Copy(IV, 0, counter, 0, IV.Length);
             cipher.Reset();
         }
     }

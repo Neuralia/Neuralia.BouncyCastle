@@ -94,7 +94,7 @@ namespace Org.BouncyCastle.Crypto.Generators
 					digest.BlockUpdate(C, 0, C.Length);
 					digest.DoFinal(hashBuf, 0);
 
-					System.Array.Copy(hashBuf, 0, output, outOff + counter * hLen, hLen);
+					Array.Copy(hashBuf, 0, output, outOff + counter * hLen, hLen);
 				}
 				while (++counter < (length / hLen));
 			}
@@ -107,7 +107,7 @@ namespace Org.BouncyCastle.Crypto.Generators
                 digest.BlockUpdate(C, 0, C.Length);
                 digest.DoFinal(hashBuf, 0);
 
-                System.Array.Copy(hashBuf, 0, output, outOff + counter * hLen, length - (counter * hLen));
+                Array.Copy(hashBuf, 0, output, outOff + counter * hLen, length - (counter * hLen));
             }
 
             return length;

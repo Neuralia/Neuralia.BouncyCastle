@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
 using Org.BouncyCastle.Utilities;
@@ -8,7 +7,6 @@ using Org.BouncyCastle.Utilities.Encoders;
 
 namespace Org.BouncyCastle.Asn1
 {
-    [SuppressMessage("ReSharper", "TailRecursiveCall")]
     public abstract class Asn1OctetString
         : Asn1Object, Asn1OctetStringParser
     {
@@ -69,20 +67,7 @@ namespace Org.BouncyCastle.Asn1
 			this.str = str;
         }
 
-        internal Asn1OctetString(
-            Asn1Encodable obj)
-        {
-            try
-            {
-				this.str = obj.GetEncoded(Asn1Encodable.Der);
-            }
-            catch (IOException e)
-            {
-                throw new ArgumentException("Error processing object : " + e.ToString());
-            }
-        }
-
-		public Stream GetOctetStream()
+        public Stream GetOctetStream()
 		{
 			return new MemoryStream(str, false);
 		}
