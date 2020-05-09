@@ -75,7 +75,7 @@ namespace Org.BouncyCastle.Crypto.Prng.Drbg
 
             mV = seed;
 	        byte[] subV = new byte[mV.Length + 1];
-	        Array.Copy(mV, 0, subV, 1, mV.Length);
+	        System.Buffer.BlockCopy(mV, 0, subV, 1, mV.Length);
 	        mC = DrbgUtilities.HashDF(mDigest, subV, mSeedLength);
 
             mReseedCounter = 1;
@@ -134,9 +134,9 @@ namespace Org.BouncyCastle.Crypto.Prng.Drbg
 	        {
 	            byte[] newInput = new byte[1 + mV.Length + additionalInput.Length];
 	            newInput[0] = 0x02;
-	            Array.Copy(mV, 0, newInput, 1, mV.Length);
+	            System.Buffer.BlockCopy(mV, 0, newInput, 1, mV.Length);
 	            // TODO: inOff / inLength
-	            Array.Copy(additionalInput, 0, newInput, 1 + mV.Length, additionalInput.Length);
+	            System.Buffer.BlockCopy(additionalInput, 0, newInput, 1 + mV.Length, additionalInput.Length);
 	            byte[] w = Hash(newInput);
 
                 AddTo(mV, w);
@@ -147,7 +147,7 @@ namespace Org.BouncyCastle.Crypto.Prng.Drbg
 
             // 4.
 	        byte[] subH = new byte[mV.Length + 1];
-	        Array.Copy(mV, 0, subH, 1, mV.Length);
+	        System.Buffer.BlockCopy(mV, 0, subH, 1, mV.Length);
 	        subH[0] = 0x03;
 
             byte[] H = Hash(subH);
@@ -165,7 +165,7 @@ namespace Org.BouncyCastle.Crypto.Prng.Drbg
 
 	        mReseedCounter++;
 
-	        Array.Copy(rv, 0, output, 0, output.Length);
+	        System.Buffer.BlockCopy(rv, 0, output, 0, output.Length);
 
 	        return numberOfBits;
 	    }
@@ -230,7 +230,7 @@ namespace Org.BouncyCastle.Crypto.Prng.Drbg
             mV = seed;
 	        byte[] subV = new byte[mV.Length + 1];
 	        subV[0] = 0x00;
-	        Array.Copy(mV, 0, subV, 1, mV.Length);
+	        System.Buffer.BlockCopy(mV, 0, subV, 1, mV.Length);
 	        mC = DrbgUtilities.HashDF(mDigest, subV, mSeedLength);
 
             mReseedCounter = 1;
@@ -264,7 +264,7 @@ namespace Org.BouncyCastle.Crypto.Prng.Drbg
 	        int m = (lengthInBits / 8) / digestSize;
 
             byte[] data = new byte[input.Length];
-	        Array.Copy(input, 0, data, 0, input.Length);
+	        System.Buffer.BlockCopy(input, 0, data, 0, input.Length);
 
 	        byte[] W = new byte[lengthInBits / 8];
 
@@ -276,7 +276,7 @@ namespace Org.BouncyCastle.Crypto.Prng.Drbg
 	            int bytesToCopy = ((W.Length - i * dig.Length) > dig.Length)
 	                    ? dig.Length
 	                    : (W.Length - i * dig.Length);
-	            Array.Copy(dig, 0, W, i * dig.Length, bytesToCopy);
+	            System.Buffer.BlockCopy(dig, 0, W, i * dig.Length, bytesToCopy);
 
                 AddTo(data, ONE);
 	        }

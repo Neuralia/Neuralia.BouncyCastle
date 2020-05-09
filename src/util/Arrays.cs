@@ -444,7 +444,7 @@ namespace Org.BouncyCastle.Utilities
                 return null;
             if (existing == null || existing.Length != data.Length)
                 return Clone(data);
-            Array.Copy(data, 0, existing, 0, existing.Length);
+            System.Buffer.BlockCopy(data, 0, existing, 0, existing.Length);
             return existing;
         }
 
@@ -511,7 +511,7 @@ namespace Org.BouncyCastle.Utilities
         public static byte[] CopyOf(byte[] data, int newLength)
         {
             byte[] tmp = new byte[newLength];
-            Array.Copy(data, 0, tmp, 0, System.Math.Min(newLength, data.Length));
+            System.Buffer.BlockCopy(data, 0, tmp, 0, System.Math.Min(newLength, data.Length));
             return tmp;
         }
 
@@ -558,7 +558,7 @@ namespace Org.BouncyCastle.Utilities
         {
             int newLength = GetLength(from, to);
             byte[] tmp = new byte[newLength];
-            Array.Copy(data, from, tmp, 0, System.Math.Min(newLength, data.Length - from));
+            System.Buffer.BlockCopy(data, from, tmp, 0, System.Math.Min(newLength, data.Length - from));
             return tmp;
         }
 
@@ -601,7 +601,7 @@ namespace Org.BouncyCastle.Utilities
 
             int length = a.Length;
             byte[] result = new byte[length + 1];
-            Array.Copy(a, 0, result, 0, length);
+            System.Buffer.BlockCopy(a, 0, result, 0, length);
             result[length] = b;
             return result;
         }
@@ -638,8 +638,8 @@ namespace Org.BouncyCastle.Utilities
                 return Clone(a);
 
             byte[] rv = new byte[a.Length + b.Length];
-            Array.Copy(a, 0, rv, 0, a.Length);
-            Array.Copy(b, 0, rv, a.Length, b.Length);
+            System.Buffer.BlockCopy(a, 0, rv, 0, a.Length);
+            System.Buffer.BlockCopy(b, 0, rv, a.Length, b.Length);
             return rv;
         }
 
@@ -665,7 +665,7 @@ namespace Org.BouncyCastle.Utilities
             for (int j = 0; j < count; ++j)
             {
                 byte[] v = nonNull[j];
-                Array.Copy(v, 0, result, pos, v.Length);
+                System.Buffer.BlockCopy(v, 0, result, pos, v.Length);
                 pos += v.Length;
             }
 
@@ -692,7 +692,7 @@ namespace Org.BouncyCastle.Utilities
 
             int length = a.Length;
             byte[] result = new byte[length + 1];
-            Array.Copy(a, 0, result, 1, length);
+            System.Buffer.BlockCopy(a, 0, result, 1, length);
             result[0] = b;
             return result;
         }

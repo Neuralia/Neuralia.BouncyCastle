@@ -22,12 +22,7 @@ namespace Org.BouncyCastle.Crypto
             SecureRandom	random,
             int				strength)
         {
-			if (random == null)
-				throw new ArgumentNullException("random");
-			if (strength < 1)
-				throw new ArgumentException("strength must be a positive value", "strength");
-
-			this.random = random;
+            this.random = random;
             this.strength = strength;
         }
 
