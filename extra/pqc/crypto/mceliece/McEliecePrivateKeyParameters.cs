@@ -193,17 +193,17 @@ namespace org.bouncycastle.pqc.crypto.mceliece
 		public override void Rehydrate(IDataRehydrator rehydrator) {
 			this.k = rehydrator.ReadInt();
 			this.n = rehydrator.ReadInt();
-			this.field = new GF2mField(rehydrator.ReadNonNullableArray());
-			this.goppaPoly = new PolynomialGF2mSmallM(this.field, rehydrator.ReadNonNullableArray());
-			this.sInv = new GF2Matrix(rehydrator.ReadNonNullableArray());
-			this.p1 = new Permutation(rehydrator.ReadNonNullableArray());
-			this.p2 = new Permutation(rehydrator.ReadNonNullableArray());
-			this.h = new GF2Matrix(rehydrator.ReadNonNullableArray());
+			this.field = new GF2mField((SafeArrayHandle)rehydrator.ReadNonNullableArray());
+			this.goppaPoly = new PolynomialGF2mSmallM(this.field, (SafeArrayHandle)rehydrator.ReadNonNullableArray());
+			this.sInv = new GF2Matrix((SafeArrayHandle)rehydrator.ReadNonNullableArray());
+			this.p1 = new Permutation((SafeArrayHandle)rehydrator.ReadNonNullableArray());
+			this.p2 = new Permutation((SafeArrayHandle)rehydrator.ReadNonNullableArray());
+			this.h = new GF2Matrix((SafeArrayHandle)rehydrator.ReadNonNullableArray());
 			int count = rehydrator.ReadInt();
 			this.qInv = new PolynomialGF2mSmallM[count];
 			for (int i = 0; i < count; i++)
 			{
-				this.qInv[i] = new PolynomialGF2mSmallM(this.field, rehydrator.ReadNonNullableArray());
+				this.qInv[i] = new PolynomialGF2mSmallM(this.field, (SafeArrayHandle)rehydrator.ReadNonNullableArray());
 			}
 		}
 

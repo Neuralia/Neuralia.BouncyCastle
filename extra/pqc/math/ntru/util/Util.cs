@@ -117,7 +117,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.ntru.util {
 		/// <returns> an array of length <code>length</code> </returns>
 		/// <exception cref="IOException"> </exception>
 		public static SafeArrayHandle readFullLength(Stream InputStream, int length) {
-			SafeArrayHandle arr = ByteArray.Create(length);
+			SafeArrayHandle arr = SafeArrayHandle.Create(length);
 
 			if(InputStream.Read(arr.Bytes, arr.Offset, arr.Length) != arr.Length) {
 				throw new IOException("Not enough bytes to read.");

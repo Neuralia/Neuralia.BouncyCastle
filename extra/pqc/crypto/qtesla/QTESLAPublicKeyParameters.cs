@@ -60,11 +60,11 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.qtesla {
 		}
 
 		public static QTESLAPublicKeyParameters Rehydrate(SafeArrayHandle data) {
-			IDataRehydrator rehydrator = DataSerializationFactory.CreateRehydrator(data);
+			using IDataRehydrator rehydrator = DataSerializationFactory.CreateRehydrator(data);
 
 			QTESLASecurityCategory.SecurityCategories securityCategory = (QTESLASecurityCategory.SecurityCategories) rehydrator.ReadByte();
 
-			using(SafeArrayHandle publicKey = rehydrator.ReadNonNullableArray()) {
+			using(SafeArrayHandle publicKey = (SafeArrayHandle)rehydrator.ReadNonNullableArray()) {
 
 				return new QTESLAPublicKeyParameters(securityCategory, (sbyte[]) (Array) publicKey.ToExactByteArrayCopy());
 

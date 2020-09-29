@@ -1064,7 +1064,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru.numeric {
         /// <returns>Two's complement representation of this</returns>
         public SafeArrayHandle ToByteArray() {
 			if(this._sign == 0) {
-				SafeArrayHandle item = ByteArray.Create(1);
+				SafeArrayHandle item = SafeArrayHandle.Create(1);
 				item[0] = 0;
 
 				return item;
@@ -1076,7 +1076,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru.numeric {
 			int        bytesLen = ((int) (uint) bitLen >> 3) + 1;
 
 			// Puts the little-endian int array representing the magnitude of this BigInteger into the big-endian byte array.
-			SafeArrayHandle bytes           = ByteArray.Create(bytesLen);
+			SafeArrayHandle bytes           = SafeArrayHandle.Create(bytesLen);
 			int         firstByteNumber = 0;
 			int         highBytes;
 			int         digitIndex     = 0;

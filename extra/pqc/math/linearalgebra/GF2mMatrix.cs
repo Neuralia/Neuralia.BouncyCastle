@@ -109,7 +109,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 					d += 8;
 				}
 
-				SafeArrayHandle bf = ByteArray.Create((this.numRows * this.numColumns * count) + 4);
+				SafeArrayHandle bf = SafeArrayHandle.Create((this.numRows * this.numColumns * count) + 4);
 				bf[0] = unchecked((byte) (this.numRows                      & 0xff));
 				bf[1] = unchecked((byte) ((int) ((uint) this.numRows >> 8)  & 0xff));
 				bf[2] = unchecked((byte) ((int) ((uint) this.numRows >> 16) & 0xff));

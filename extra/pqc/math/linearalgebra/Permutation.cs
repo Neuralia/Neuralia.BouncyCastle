@@ -118,7 +118,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 			get {
 				int         n      = this.perm.Length;
 				int         size   = IntegerFunctions.ceilLog256(n                    - 1);
-				SafeArrayHandle result = ByteArray.Create(4 + (n * size));
+				SafeArrayHandle result = SafeArrayHandle.Create(4 + (n * size));
 				LittleEndianConversions.I2OSP(n, result, 0);
 
 				for(int i = 0; i < n; i++) {

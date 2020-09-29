@@ -162,7 +162,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 				return null;
 			}
 
-			SafeArrayHandle result = ByteArray.Create(array.Length);
+			SafeArrayHandle result = SafeArrayHandle.Create(array.Length);
 			result.Entry.CopyFrom(array.Entry, 0, 0, array.Length);
 
 			return result;
@@ -184,7 +184,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 				}
 			}
 
-			SafeArrayHandle byteString = ByteArray.Create((hexChars + 1) >> 1);
+			SafeArrayHandle byteString = SafeArrayHandle.Create((hexChars + 1) >> 1);
 
 			int pos = hexChars & 1;
 
@@ -276,7 +276,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 		/// <param name="x2"> the second array </param>
 		/// <returns> x1 XOR x2 </returns>
 		public static SafeArrayHandle xor(SafeArrayHandle x1, SafeArrayHandle x2) {
-			SafeArrayHandle @out = ByteArray.Create(x1.Length);
+			SafeArrayHandle @out = SafeArrayHandle.Create(x1.Length);
 
 			for(int i = x1.Length - 1; i >= 0; i--) {
 				@out[i] = (byte) (x1[i] ^ x2[i]);
@@ -295,7 +295,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 		///     addresses)
 		/// </returns>
 		public static SafeArrayHandle concatenate(SafeArrayHandle x1, SafeArrayHandle x2) {
-			SafeArrayHandle result = ByteArray.Create(x1.Length + x2.Length);
+			SafeArrayHandle result = SafeArrayHandle.Create(x1.Length + x2.Length);
 
 			x1.Entry.CopyTo(result.Entry);
 			x2.Entry.CopyTo(result.Entry, 0, x1.Length, x2.Length);
@@ -312,7 +312,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 		/// <returns> the concatenated input array </returns>
 		public static SafeArrayHandle concatenate(ByteArray[] array) {
 			int        rowLength = array[0].Length;
-			SafeArrayHandle result    = ByteArray.Create(array.Length * rowLength);
+			SafeArrayHandle result    = SafeArrayHandle.Create(array.Length * rowLength);
 			int        index     = 0;
 
 			for(int i = 0; i < array.Length; i++) {
@@ -358,7 +358,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 		///     (inclusively) to <tt>end</tt> (exclusively)
 		/// </returns>
 		public static SafeArrayHandle subArray(SafeArrayHandle input, int start, int end) {
-			SafeArrayHandle result = ByteArray.Create(end - start);
+			SafeArrayHandle result = SafeArrayHandle.Create(end - start);
 			result.Entry.CopyFrom(input.Entry, start, 0, end - start);
 
 			return result;

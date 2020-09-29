@@ -1,4 +1,5 @@
-﻿using Neuralia.Blockchains.Tools.Serialization;
+﻿using Neuralia.Blockchains.Tools.Data;
+using Neuralia.Blockchains.Tools.Serialization;
 using Neuralia.BouncyCastle.extra.pqc.math.linearalgebra;
 
 namespace org.bouncycastle.pqc.crypto.mceliece
@@ -150,16 +151,16 @@ namespace org.bouncycastle.pqc.crypto.mceliece
 		public override void Rehydrate(IDataRehydrator rehydrator) {
 			this.k = rehydrator.ReadInt();
 			this.n = rehydrator.ReadInt();
-			var data = rehydrator.ReadNonNullableArray();
+			var data = (SafeArrayHandle)rehydrator.ReadNonNullableArray();
 			this.field = new GF2mField(data);
 			data.Return();
-			data = rehydrator.ReadNonNullableArray();
+			data = (SafeArrayHandle)rehydrator.ReadNonNullableArray();
 			this.goppaPoly = new PolynomialGF2mSmallM(this.field, data);
 			data.Return();
-			data = rehydrator.ReadNonNullableArray();
+			data = (SafeArrayHandle)rehydrator.ReadNonNullableArray();
 			this.p = new Permutation(data);
 			data.Return();
-			data = rehydrator.ReadNonNullableArray();
+			data = (SafeArrayHandle)rehydrator.ReadNonNullableArray();
 			this.h = new GF2Matrix(data);
 			data.Return();
 			
@@ -168,10 +169,8 @@ namespace org.bouncycastle.pqc.crypto.mceliece
 			this.qInv = new PolynomialGF2mSmallM[count];
 			for (int i = 0; i < count; i++)
 			{
-				var datax = rehydrator.ReadNonNullableArray();
+				using var datax = (SafeArrayHandle)rehydrator.ReadNonNullableArray();
 				this.qInv[i] = new PolynomialGF2mSmallM(this.field, datax);
-				datax.Return();
-				
 			}
 		}
 

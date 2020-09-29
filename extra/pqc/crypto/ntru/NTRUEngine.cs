@@ -97,10 +97,10 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru {
 
 			while(true) {
 				// M = b|octL|m|p0
-				SafeArrayHandle b = ByteArray.Create(db / 8);
+				SafeArrayHandle b = SafeArrayHandle.Create(db / 8);
 				this.random.NextBytes(b.Bytes, b.Offset, b.Length);
-				SafeArrayHandle p0 = ByteArray.Create((maxLenBytes + 1) - l);
-				SafeArrayHandle M  = ByteArray.Create(bufferLenBits / 8);
+				SafeArrayHandle p0 = SafeArrayHandle.Create((maxLenBytes + 1) - l);
+				SafeArrayHandle M  = SafeArrayHandle.Create(bufferLenBits / 8);
 
 				b.Entry.CopyTo(M.Entry, 0, 0, b.Length);
 
@@ -152,7 +152,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru {
 		}
 
 		private SafeArrayHandle buildSData(SafeArrayHandle oid, SafeArrayHandle m, int l, SafeArrayHandle b, SafeArrayHandle hTrunc) {
-			SafeArrayHandle sData = ByteArray.Create(oid.Length + l + b.Length + hTrunc.Length);
+			SafeArrayHandle sData = SafeArrayHandle.Create(oid.Length + l + b.Length + hTrunc.Length);
 
 			oid.Entry.CopyTo(sData.Entry, 0, 0, oid.Length);
 			m.Entry.CopyTo(sData.Entry, 0, oid.Length, m.Length);
@@ -236,7 +236,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru {
 		private IntegerPolynomial MGF(SafeArrayHandle seed, int N, int minCallsR, bool hashSeed) {
 			IDigest    hashAlg = this.@params.hashAlg;
 			int        hashLen = hashAlg.GetDigestSize();
-			SafeArrayHandle buf     = ByteArray.Create(minCallsR * hashLen);
+			SafeArrayHandle buf     = SafeArrayHandle.Create(minCallsR * hashLen);
 			SafeArrayHandle Z       = hashSeed ? this.calcHash(hashAlg, seed) : seed;
 			int        counter = 0;
 
@@ -316,7 +316,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru {
 			byte[] tempHash = new byte[hashAlg.GetDigestSize()];
 			hashAlg.DoFinal(tempHash, 0);
 
-			SafeArrayHandle resultHash = ByteArray.Create(tempHash.Length);
+			SafeArrayHandle resultHash = SafeArrayHandle.Create(tempHash.Length);
 			resultHash.Entry.CopyFrom(ref tempHash, 0, 0, tempHash.Length);
 
 			return resultHash;
@@ -387,7 +387,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru {
 			cMTrin.mod3();
 			SafeArrayHandle cM = cMTrin.toBinary3Sves();
 
-			SafeArrayHandle cb = ByteArray.Create(bLen);
+			SafeArrayHandle cb = SafeArrayHandle.Create(bLen);
 			cM.Entry.CopyTo(cb.Entry, 0, 0, bLen);
 
 			int cl = cM[bLen] & 0xFF; // llen=1, so read one byte
@@ -396,13 +396,13 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru {
 				throw new InvalidCipherTextException("Message too long: " + cl + ">" + maxMsgLenBytes);
 			}
 
-			SafeArrayHandle cm = ByteArray.Create(cl);
+			SafeArrayHandle cm = SafeArrayHandle.Create(cl);
 			cM.Entry.CopyTo(cm.Entry, bLen + 1, 0, cl);
 
-			SafeArrayHandle p0 = ByteArray.Create(cM.Length - (bLen + 1 + cl));
+			SafeArrayHandle p0 = SafeArrayHandle.Create(cM.Length - (bLen + 1 + cl));
 			cM.Entry.CopyTo(p0.Entry, bLen + 1 + cl, 0, p0.Length);
 
-			SafeArrayHandle tempempty = ByteArray.Create(p0.Length);
+			SafeArrayHandle tempempty = SafeArrayHandle.Create(p0.Length);
 
 			
 			if(!FastArrays.ConstantTimeAreEqual(p0, tempempty)) {
@@ -464,7 +464,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru {
 		}
 
 		private SafeArrayHandle copyOf(SafeArrayHandle src, int len) {
-			SafeArrayHandle tmp = ByteArray.Create(len);
+			SafeArrayHandle tmp = SafeArrayHandle.Create(len);
 
 			src.Entry.CopyTo(tmp.Entry, 0, 0, len < src.Length ? len : src.Length);
 

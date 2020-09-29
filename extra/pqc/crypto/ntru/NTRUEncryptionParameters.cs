@@ -13,7 +13,7 @@ using Org.BouncyCastle.Utilities;
 namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru {
 
 	/// <summary>
-	///     A set of parameters for NtruEncrypt. Several predefined parameter sets are available and new ones can be created as
+	///     A set of parameters for NTRUEncrypt. Several predefined parameter sets are available and new ones can be created as
 	///     well.
 	/// </summary>
 	public class NTRUEncryptionParameters : ICloneable {
@@ -156,7 +156,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru {
 			this.minCallsR    = rehydrator.ReadInt();
 			this.minCallsMask = rehydrator.ReadInt();
 			this.hashSeed     = rehydrator.ReadBool();
-			this.oid          = rehydrator.ReadNonNullableArray();
+			this.oid          = (SafeArrayHandle)rehydrator.ReadNonNullableArray();
 			this.sparse       = rehydrator.ReadBool();
 			this.fastFp       = rehydrator.ReadBool();
 			this.polyType     = rehydrator.ReadInt();

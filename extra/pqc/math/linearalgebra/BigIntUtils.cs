@@ -138,7 +138,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 					return valBytes.Branch();
 				}
 
-				SafeArrayHandle result = ByteArray.Create(value.BitLength >> 3);
+				SafeArrayHandle result = SafeArrayHandle.Create(value.BitLength >> 3);
 				result.Entry.CopyFrom(valBytes.Entry, 1, 0, result.Length);
 
 				return result;

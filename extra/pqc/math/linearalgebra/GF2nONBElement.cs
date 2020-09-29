@@ -954,7 +954,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 			/// @todo this method does not reverse the bit-order as it should!!! </summary>
 
 			int         k      = ((this.mDegree - 1) >> 3) + 1;
-			SafeArrayHandle result = ByteArray.Create(k);
+			SafeArrayHandle result = SafeArrayHandle.Create(k);
 			int         i;
 
 			for(i = 0; i < k; i++) {

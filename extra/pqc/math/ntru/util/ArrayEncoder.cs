@@ -76,7 +76,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.ntru.util {
 			int        bitsPerCoeff = 31 - Extensions.NumberOfLeadingZeros(q);
 			int        numBits      = a.Length      * bitsPerCoeff;
 			int        numBytes     = (numBits + 7) / 8;
-			SafeArrayHandle data         = ByteArray.Create(numBytes);
+			SafeArrayHandle data         = SafeArrayHandle.Create(numBytes);
 			int        bitIndex     = 0;
 			int        byteIndex    = 0;
 
@@ -191,7 +191,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.ntru.util {
 		public static SafeArrayHandle encodeMod3Sves(int[] arr) {
 			int        numBits   = ((arr.Length * 3) + 1) / 2;
 			int        numBytes  = (numBits          + 7) / 8;
-			SafeArrayHandle data      = ByteArray.Create(numBytes);
+			SafeArrayHandle data      = SafeArrayHandle.Create(numBytes);
 			int        bitIndex  = 0;
 			int        byteIndex = 0;
 
@@ -239,7 +239,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.ntru.util {
 
 			if(arr.Length < size) {
 				// pad with leading zeros so arr.length==size
-				SafeArrayHandle arr2 = ByteArray.Create(size);
+				SafeArrayHandle arr2 = SafeArrayHandle.Create(size);
 				arr2.Entry.CopyFrom(arr, 0, size - arr.Length, arr.Length);
 
 				return arr2;
@@ -247,13 +247,13 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.ntru.util {
 
 			if(arr.Length > size) {
 				// drop sign bit
-				SafeArrayHandle arr2 = ByteArray.Create(arr.Length - 1);
+				SafeArrayHandle arr2 = SafeArrayHandle.Create(arr.Length - 1);
 				arr2.Entry.CopyFrom(arr, 1, 0, arr.Length - 1);
 
 				return arr2;
 			}
 
-			SafeArrayHandle arr3 = ByteArray.Create(arr.Length);
+			SafeArrayHandle arr3 = SafeArrayHandle.Create(arr.Length);
 			arr3.Entry.CopyFrom(arr);
 
 			return arr3;

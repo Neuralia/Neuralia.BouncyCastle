@@ -6,7 +6,7 @@ using Org.BouncyCastle.Crypto.Digests;
 namespace org.bouncycastle.pqc.crypto.mceliece
 {
 
-	public class Utils {
+	public class McElieceUtils {
 		public const string SHA2_256 = "SHA2-256";
 		public const string SHA2_512 = "SHA2-512";
 		public const string SHA3_256 = "SHA3-256";

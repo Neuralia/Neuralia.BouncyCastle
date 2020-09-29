@@ -7,7 +7,7 @@ using Neuralia.BouncyCastle.extra.pqc.math.ntru.polynomial;
 namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru {
 
 	/// <summary>
-	///     A NtruEncrypt private key is essentially a polynomial named <code>f</code>
+	///     A NTRUEncrypt private key is essentially a polynomial named <code>f</code>
 	///     which takes different forms depending on whether product-form polynomials are used,
 	///     and on <code>fastP</code>
 	///     <br>
@@ -27,7 +27,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru {
 		///     otherwise, <code>f=t</code>
 		/// </param>
 		/// <param name="fp">     the inverse of <code>f</code> </param>
-		/// <param name="params"> the NtruEncrypt parameters to use </param>
+		/// <param name="params"> the NTRUEncrypt parameters to use </param>
 		public NTRUEncryptionPrivateKeyParameters(IntegerPolynomial h, IPolynomial t, IntegerPolynomial fp, NTRUEncryptionParameters @params) : base(true, @params) {
 
 			this.h  = h;
@@ -39,7 +39,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru {
 		///     Converts a byte array to a polynomial <code>f</code> and constructs a new private key
 		/// </summary>
 		/// <param name="b">      an encoded polynomial </param>
-		/// <param name="params"> the NtruEncrypt parameters to use </param>
+		/// <param name="params"> the NTRUEncrypt parameters to use </param>
 		/// <seealso cref= # getEncoded
 		/// (
 		/// )
@@ -51,7 +51,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru {
 		///     Reads a polynomial <code>f</code> from an input stream and constructs a new private key
 		/// </summary>
 		/// <param name="is">     an input stream </param>
-		/// <param name="params"> the NtruEncrypt parameters to use </param>
+		/// <param name="params"> the NTRUEncrypt parameters to use </param>
 		/// <seealso cref= # writeTo( OutputStream
 		/// )
 		/// </seealso>
@@ -98,12 +98,10 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru {
 						tBytes = this.t.toIntegerPolynomial().toBinary3Tight();
 					}
 
-					res = ByteArray.Create(hBytes.Length + tBytes.Length);
+					res = SafeArrayHandle.Create(hBytes.Length + tBytes.Length);
 
 					res.Entry.CopyFrom(hBytes.Entry, 0, 0, hBytes.Length);
 					res.Entry.CopyFrom(tBytes.Entry, 0, hBytes.Length, tBytes.Length);
-
-					hBytes.Dispose();
 				}
 
 				return res;

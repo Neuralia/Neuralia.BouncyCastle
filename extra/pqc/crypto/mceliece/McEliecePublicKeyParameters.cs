@@ -74,7 +74,7 @@ namespace org.bouncycastle.pqc.crypto.mceliece
 		public override void Rehydrate(IDataRehydrator rehydrator) {
 			this.n = rehydrator.ReadInt();
 			this.t = rehydrator.ReadInt();
-			this.g = new GF2Matrix(rehydrator.ReadNonNullableArray());
+			this.g = new GF2Matrix((SafeArrayHandle)rehydrator.ReadNonNullableArray());
 		}
 
 		public override void Dehydrate(IDataDehydrator dehydrator) {

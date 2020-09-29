@@ -102,7 +102,7 @@ namespace org.bouncycastle.pqc.crypto.mceliece
 		private void initCipherEncrypt(McElieceCCA2PublicKeyParameters pubKey)
 		{
 			this.sr = this.sr != null ? this.sr : new BetterSecureRandom();
-			this.messDigest = Utils.getDigest(pubKey.Digest, this.digestGenerator);
+			this.messDigest = McElieceUtils.getDigest(pubKey.Digest, this.digestGenerator);
 			this.n = pubKey.N;
 			this.k = pubKey.K;
 			this.t = pubKey.T;
@@ -111,7 +111,7 @@ namespace org.bouncycastle.pqc.crypto.mceliece
 
 		private void initCipherDecrypt(McElieceCCA2PrivateKeyParameters privKey)
 		{
-			this.messDigest = Utils.getDigest(privKey.Digest, this.digestGenerator);
+			this.messDigest = McElieceUtils.getDigest(privKey.Digest, this.digestGenerator);
 			this.n = privKey.N;
 			this.t = privKey.T;
 		}
@@ -135,7 +135,7 @@ namespace org.bouncycastle.pqc.crypto.mceliece
 
 			// compute H(r||input)
 			this.messDigest.BlockUpdate(rm.ToExactByteArray(), 0, rm.Length);
-			SafeArrayHandle hrm = ByteArray.Create(this.messDigest.GetDigestSize());
+			SafeArrayHandle hrm = SafeArrayHandle.Create(this.messDigest.GetDigestSize());
 			byte[] result = new byte[this.messDigest.GetDigestSize()];
 			this.messDigest.DoFinal(result, 0);
 			hrm.Entry.CopyFrom(result.AsSpan());
@@ -147,13 +147,13 @@ namespace org.bouncycastle.pqc.crypto.mceliece
 			SafeArrayHandle c1 = McElieceCCA2Primitives.encryptionPrimitive((McElieceCCA2PublicKeyParameters) this.key, r, z).Encoded;
 
 			// get PRNG object
-			DigestRandomGenerator sr0 = new DigestRandomGenerator(Utils.getDigest(Utils.SHA2_256, this.digestGenerator));
+			DigestRandomGenerator sr0 = new DigestRandomGenerator(McElieceUtils.getDigest(McElieceUtils.SHA2_256, this.digestGenerator));
 
 			// seed PRNG with r'
 			sr0.AddSeedMaterial(rBytes.ToExactByteArray());
 
 			// generate random c2
-			SafeArrayHandle c2 = ByteArray.Create(input.Length);
+			SafeArrayHandle c2 = SafeArrayHandle.Create(input.Length);
 			sr0.NextBytes(c2.ToExactByteArray());
 
 			// XOR with input
@@ -180,8 +180,8 @@ namespace org.bouncycastle.pqc.crypto.mceliece
 
 			// split ciphertext (c1||c2)
 			var c1c2 = ByteUtils.split(input, c1Len);
-			SafeArrayHandle c1 = c1c2[0];
-			SafeArrayHandle c2 = c1c2[1];
+			SafeArrayHandle c1 = (SafeArrayHandle)c1c2[0];
+			SafeArrayHandle c2 = (SafeArrayHandle)c1c2[1];
 
 			// decrypt c1 ...
 			GF2Vector hrmVec = GF2Vector.OS2VP(this.n, c1);
@@ -191,13 +191,13 @@ namespace org.bouncycastle.pqc.crypto.mceliece
 			GF2Vector z = decC1[1];
 
 			// get PRNG object
-			DigestRandomGenerator sr0 = new DigestRandomGenerator(Utils.getDigest(Utils.SHA2_256, this.digestGenerator));
+			DigestRandomGenerator sr0 = new DigestRandomGenerator(McElieceUtils.getDigest(McElieceUtils.SHA2_256, this.digestGenerator));
 
 			// seed PRNG with r'
 			sr0.AddSeedMaterial(rBytes.ToExactByteArray());
 
 			// generate random sequence
-			SafeArrayHandle mBytes = ByteArray.Create(c2Len);
+			SafeArrayHandle mBytes = SafeArrayHandle.Create(c2Len);
 			sr0.NextBytes(mBytes.ToExactByteArray());
 
 			// XOR with c2 to obtain m
@@ -208,7 +208,7 @@ namespace org.bouncycastle.pqc.crypto.mceliece
 
 			// compute H(r||m)
 			SafeArrayHandle rmBytes = ByteUtils.concatenate(rBytes, mBytes);
-			SafeArrayHandle hrm = ByteArray.Create(this.messDigest.GetDigestSize());
+			using SafeArrayHandle hrm = SafeArrayHandle.Create(this.messDigest.GetDigestSize());
 			this.messDigest.BlockUpdate(rmBytes.ToExactByteArray(), 0, rmBytes.Length);
 			byte[] result = new byte[this.messDigest.GetDigestSize()];
 			this.messDigest.DoFinal(result, 0);

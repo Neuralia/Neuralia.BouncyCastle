@@ -26,7 +26,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 		/// <param name="x"> the integer to convert </param>
 		/// <returns> the converted integer </returns>
 		public static SafeArrayHandle I2OSP(int x) {
-			SafeArrayHandle result = ByteArray.Create(4);
+			SafeArrayHandle result = SafeArrayHandle.Create(4);
 			result[0] = (byte) (int) ((uint) x >> 24);
 			result[1] = (byte) (int) ((uint) x >> 16);
 			result[2] = (byte) (int) ((uint) x >> 8);
@@ -61,7 +61,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 				throw new ArithmeticException("Cannot encode given integer into specified number of octets.");
 			}
 
-			SafeArrayHandle result = ByteArray.Create(oLen);
+			SafeArrayHandle result = SafeArrayHandle.Create(oLen);
 
 			for(int i = oLen - 1; i >= (oLen - octL); i--) {
 				result[i] = (byte) (int) ((uint) x >> (8 * (oLen - 1 - i)));
@@ -91,7 +91,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 		/// <param name="input"> the integer to convert </param>
 		/// <returns> the converted integer </returns>
 		public static SafeArrayHandle I2OSP(long input) {
-			SafeArrayHandle output = ByteArray.Create(8);
+			SafeArrayHandle output = SafeArrayHandle.Create(8);
 			output[0] = (byte) (long) ((ulong) input >> 56);
 			output[1] = (byte) (long) ((ulong) input >> 48);
 			output[2] = (byte) (long) ((ulong) input >> 40);
@@ -238,7 +238,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 		/// <param name="input"> the int array </param>
 		/// <returns> the converted array </returns>
 		public static SafeArrayHandle toByteArray(int[] input) {
-			SafeArrayHandle result = ByteArray.Create(input.Length << 2);
+			SafeArrayHandle result = SafeArrayHandle.Create(input.Length << 2);
 
 			for(int i = 0; i < input.Length; i++) {
 				I2OSP(input[i], result, i << 2);
@@ -258,7 +258,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 		public static SafeArrayHandle toByteArray(int[] input, int length) {
 
 			int         intLen = input.Length;
-			SafeArrayHandle result = ByteArray.Create(length);
+			SafeArrayHandle result = SafeArrayHandle.Create(length);
 			int         index  = 0;
 
 			for(int i = 0; i <= (intLen - 2); i++, index += 4) {

@@ -195,7 +195,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 				int n = (int) ((uint) (this.numColumns + 7) >> 3);
 				n *= this.numRows;
 				n += 8;
-				SafeArrayHandle enc = ByteArray.Create(n);
+				SafeArrayHandle enc = SafeArrayHandle.Create(n);
 
 				LittleEndianConversions.I2OSP(this.numRows, enc, 0);
 				LittleEndianConversions.I2OSP(this.numColumns, enc, 4);

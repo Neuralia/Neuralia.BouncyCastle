@@ -89,7 +89,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 		/// <param name="x"> the integer to convert </param>
 		/// <returns> the converted integer </returns>
 		public static SafeArrayHandle I2OSP(int x) {
-			SafeArrayHandle result = ByteArray.Create(4);
+			SafeArrayHandle result = SafeArrayHandle.Create(4);
 			result[0] = (byte) x;
 			result[1] = (byte) (int) ((uint) x >> 8);
 			result[2] = (byte) (int) ((uint) x >> 16);
@@ -132,7 +132,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 		/// <param name="input"> the integer to convert </param>
 		/// <returns> the converted integer </returns>
 		public static SafeArrayHandle I2OSP(long input) {
-			SafeArrayHandle output = ByteArray.Create(8);
+			SafeArrayHandle output = SafeArrayHandle.Create(8);
 			output[0] = (byte) input;
 			output[1] = (byte) (long) ((ulong) input >> 8);
 			output[2] = (byte) (long) ((ulong) input >> 16);
@@ -172,7 +172,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 		/// <returns> the converted array </returns>
 		public static SafeArrayHandle toByteArray(int[] input, int outLen) {
 			int         intLen = input.Length;
-			SafeArrayHandle result = ByteArray.Create(outLen);
+			SafeArrayHandle result = SafeArrayHandle.Create(outLen);
 			int         index  = 0;
 
 			for(int i = 0; i <= (intLen - 2); i++, index += 4) {

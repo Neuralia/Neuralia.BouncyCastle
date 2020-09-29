@@ -105,7 +105,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 					d += 8;
 				}
 
-				SafeArrayHandle res = ByteArray.Create(this.vector.Length * count);
+				SafeArrayHandle res = SafeArrayHandle.Create(this.vector.Length * count);
 				count = 0;
 
 				for(int i = 0; i < this.vector.Length; i++) {

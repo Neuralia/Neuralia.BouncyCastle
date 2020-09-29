@@ -1,4 +1,5 @@
-﻿using Neuralia.Blockchains.Tools.Serialization;
+﻿using Neuralia.Blockchains.Tools.Data;
+using Neuralia.Blockchains.Tools.Serialization;
 using Neuralia.BouncyCastle.extra.pqc.math.linearalgebra;
 
 namespace org.bouncycastle.pqc.crypto.mceliece
@@ -77,9 +78,8 @@ namespace org.bouncycastle.pqc.crypto.mceliece
 			this.n = rehydrator.ReadInt();
 			this.t = rehydrator.ReadInt();
 			this.Digest = rehydrator.ReadString();
-			var data = rehydrator.ReadNonNullableArray();
+			using var data = (SafeArrayHandle)rehydrator.ReadNonNullableArray();
 			this.matrixG = new GF2Matrix(data);
-			data.Return();
 		}
 
 		public override void Dehydrate(IDataDehydrator dehydrator) {

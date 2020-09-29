@@ -26,7 +26,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru {
 		///     Constructs a new index generator.
 		/// </summary>
 		/// <param name="seed">   a seed of arbitrary length to initialize the index generator with </param>
-		/// <param name="params"> NtruEncrypt parameters </param>
+		/// <param name="params"> NTRUEncrypt parameters </param>
 		internal IndexGenerator(SafeArrayHandle seed, NTRUEncryptionParameters @params) {
 			this.seed      = seed;
 			this.N         = @params.N;
@@ -49,7 +49,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru {
 			if(!this.initialized) {
 				this.buf = new BitString();
 
-				using(SafeArrayHandle hash = ByteArray.Create(this.hashAlg.GetDigestSize())) {
+				using(SafeArrayHandle hash = SafeArrayHandle.Create(this.hashAlg.GetDigestSize())) {
 
 					while(this.counter < this.minCallsR) {
 						this.appendHash(this.buf, hash);
@@ -71,7 +71,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru {
 					int        tmpLen     = this.c       - this.remLen;
 					int        cThreshold = this.counter + (((tmpLen + this.hLen) - 1) / this.hLen);
 
-					using(SafeArrayHandle hash = ByteArray.Create(this.hashAlg.GetDigestSize())) {
+					using(SafeArrayHandle hash = SafeArrayHandle.Create(this.hashAlg.GetDigestSize())) {
 
 						while(this.counter < cThreshold) {
 							this.appendHash(M, hash);
@@ -122,7 +122,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru {
 		}
 
 		private static SafeArrayHandle copyOf(SafeArrayHandle src, int len) {
-			SafeArrayHandle tmp = ByteArray.Create(len);
+			SafeArrayHandle tmp = SafeArrayHandle.Create(len);
 
 			tmp.Entry.CopyFrom(src.Entry, 0, 0, len < src.Length ? len : src.Length);
 
@@ -133,7 +133,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru {
 		///     Represents a string of bits and supports appending, reading the head, and reading the tail.
 		/// </summary>
 		public class BitString : IDisposableExtended {
-			internal SafeArrayHandle bytes = ByteArray.Create(4);
+			internal SafeArrayHandle bytes = SafeArrayHandle.Create(4);
 			internal int        lastByteBits; // lastByteBits <= 8
 			internal int        numBytes;     // includes the last byte even if only some of its bits are used
 
@@ -179,7 +179,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru {
 			public virtual BitString getTrailing(int numBits) {
 				BitString newStr = new BitString();
 				newStr.numBytes = (numBits + 7) / 8;
-				newStr.bytes = ByteArray.Create(newStr.numBytes);
+				newStr.bytes = SafeArrayHandle.Create(newStr.numBytes);
 
 				for(int i = 0; i < newStr.numBytes; i++) {
 					newStr.bytes[i] = this.bytes[i];

@@ -64,7 +64,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.qtesla {
 
 				QTESLASecurityCategory.SecurityCategories securityCategory = (QTESLASecurityCategory.SecurityCategories) rehydrator.ReadByte();
 
-				using(SafeArrayHandle privateKey = rehydrator.ReadNonNullableArray()) {
+				using(SafeArrayHandle privateKey = (SafeArrayHandle)rehydrator.ReadNonNullableArray()) {
 
 					return new QTESLAPrivateKeyParameters(securityCategory, (sbyte[]) (Array) privateKey.ToExactByteArrayCopy());
 

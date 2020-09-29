@@ -140,7 +140,7 @@ namespace org.bouncycastle.pqc.crypto.mceliece
 
 		private GF2Vector computeMessageRepresentative(SafeArrayHandle input)
 		{
-			SafeArrayHandle data = ByteArray.Create(this.maxPlainTextSize + ((this.k & 0x07) != 0 ? 1 : 0));
+			using SafeArrayHandle data = SafeArrayHandle.Create(this.maxPlainTextSize + ((this.k & 0x07) != 0 ? 1 : 0));
 			input.Entry.CopyTo(data.Entry, 0, 0, input.Length);
 			data[input.Length] = 0x01;
 			return GF2Vector.OS2VP(this.k, data);
@@ -218,7 +218,7 @@ namespace org.bouncycastle.pqc.crypto.mceliece
 			}
 
 			// extract and return message
-			SafeArrayHandle mBytes = ByteArray.Create(index);
+			SafeArrayHandle mBytes = SafeArrayHandle.Create(index);
 			mrBytes.Entry.CopyTo(mBytes.Entry, 0, 0, index);
 			return mBytes;
 		}

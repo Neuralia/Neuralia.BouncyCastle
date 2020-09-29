@@ -1175,7 +1175,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 				}
 
 				// get rid of the sign bit (first byte)
-				SafeArrayHandle tmp = ByteArray.Create(val.BitLength >> 3);
+				SafeArrayHandle tmp = SafeArrayHandle.Create(val.BitLength >> 3);
 				tmp.Entry.CopyFrom(valBytes.Entry, 1, 0, tmp.Length);
 
 				return tmp;
@@ -1184,7 +1184,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 		}
 
 		public static BigInteger octetsToInteger(SafeArrayHandle data, int offset, int length) {
-			using(SafeArrayHandle val = ByteArray.Create(length + 1)) {
+			using(SafeArrayHandle val = SafeArrayHandle.Create(length + 1)) {
 
 				val[0] = 0;
 

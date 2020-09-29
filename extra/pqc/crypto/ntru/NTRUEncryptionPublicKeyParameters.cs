@@ -5,7 +5,7 @@ using Neuralia.BouncyCastle.extra.pqc.math.ntru.polynomial;
 namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru {
 
 	/// <summary>
-	///     A NtruEncrypt public key is essentially a polynomial named <code>h</code>.
+	///     A NTRUEncrypt public key is essentially a polynomial named <code>h</code>.
 	/// </summary>
 	public class NTRUEncryptionPublicKeyParameters : NTRUEncryptionKeyParameters {
 		public IntegerPolynomial h;
@@ -14,7 +14,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru {
 		///     Constructs a new public key from a polynomial
 		/// </summary>
 		/// <param name="h">      the polynomial <code>h</code> which determines the key </param>
-		/// <param name="params"> the NtruEncrypt parameters to use </param>
+		/// <param name="params"> the NTRUEncrypt parameters to use </param>
 		public NTRUEncryptionPublicKeyParameters(IntegerPolynomial h, NTRUEncryptionParameters @params) : base(false, @params) {
 
 			this.h = h;
@@ -24,7 +24,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru {
 		///     Converts a byte array to a polynomial <code>h</code> and constructs a new public key
 		/// </summary>
 		/// <param name="b">      an encoded polynomial </param>
-		/// <param name="params"> the NtruEncrypt parameters to use </param>
+		/// <param name="params"> the NTRUEncrypt parameters to use </param>
 		/// <seealso cref= # Encoded
 		/// </seealso>
 		public NTRUEncryptionPublicKeyParameters(SafeArrayHandle b, NTRUEncryptionParameters @params) : base(false, @params) {
@@ -36,7 +36,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.crypto.ntru {
 		///     Reads a polynomial <code>h</code> from an input stream and constructs a new public key
 		/// </summary>
 		/// <param name="is">     an input stream </param>
-		/// <param name="params"> the NtruEncrypt parameters to use </param>
+		/// <param name="params"> the NTRUEncrypt parameters to use </param>
 		/// <seealso cref= # writeTo( OutputStream
 		/// )
 		/// </seealso>

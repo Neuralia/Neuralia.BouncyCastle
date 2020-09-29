@@ -165,7 +165,7 @@ namespace org.bouncycastle.pqc.crypto.mceliece
 				nr = 8;
 			}
 			// take s bit from m
-			SafeArrayHandle data = ByteArray.Create(nq + 1);
+			SafeArrayHandle data = SafeArrayHandle.Create(nq + 1);
 			if (m.Length < data.Length)
 			{
 				m.Entry.CopyTo(data.Entry);
@@ -209,7 +209,7 @@ namespace org.bouncycastle.pqc.crypto.mceliece
 				}
 			}
 
-			SafeArrayHandle result = ByteArray.Create(sq + 1);
+			SafeArrayHandle result = SafeArrayHandle.Create(sq + 1);
 			SafeArrayHandle help = d.ToByteArray();
 			if (help.Length < result.Length)
 			{

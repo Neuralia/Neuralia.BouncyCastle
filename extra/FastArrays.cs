@@ -85,7 +85,7 @@ namespace Neuralia.BouncyCastle.extra {
 				return null;
 			}
 
-			SafeArrayHandle clone = ByteArray.Create(data.Length);
+			SafeArrayHandle clone = SafeArrayHandle.Create(data.Length);
 			data.Entry.CopyTo(clone.Entry, 0, 0, clone.Length);
 
 			return clone;
@@ -122,7 +122,7 @@ namespace Neuralia.BouncyCastle.extra {
 				return Clone(a);
 			}
 
-			SafeArrayHandle joined = ByteArray.Create(a.Length + b.Length);
+			SafeArrayHandle joined = SafeArrayHandle.Create(a.Length + b.Length);
 
 			a.Entry.CopyTo(joined.Entry, 0, 0, a.Length);
 			b.Entry.CopyTo(joined.Entry, 0, a.Length, b.Length);
@@ -139,7 +139,7 @@ namespace Neuralia.BouncyCastle.extra {
 		}
 
 		public static SafeArrayHandle CopyOf(SafeArrayHandle data, int newLength) {
-			SafeArrayHandle tmp = ByteArray.Create(newLength);
+			SafeArrayHandle tmp = SafeArrayHandle.Create(newLength);
 
 			tmp.Entry.CopyFrom(data.Entry, 0, 0, Math.Min(newLength, data.Length));
 

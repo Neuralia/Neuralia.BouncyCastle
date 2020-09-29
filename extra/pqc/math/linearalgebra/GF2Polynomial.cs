@@ -206,7 +206,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 			SafeArrayHandle val = bi.ToByteArray();
 
 			if(val[0] == 0) {
-				SafeArrayHandle dummy = ByteArray.Create(val.Length - 1);
+				SafeArrayHandle dummy = SafeArrayHandle.Create(val.Length - 1);
 				dummy.Entry.CopyFrom(val.Entry, 1, 0, dummy.Length);
 
 				val.Return();
@@ -436,7 +436,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 			int         k  = ((this.len - 1) >> 3) + 1;
 			int         ov = k & 0x03;
 			int         m;
-			SafeArrayHandle res = ByteArray.Create(k);
+			SafeArrayHandle res = SafeArrayHandle.Create(k);
 			int         i;
 
 			for(i = 0; i < (k >> 2); i++) {
@@ -463,7 +463,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 		/// </seealso>
 		public virtual BigInteger toFlexiBigInt() {
 			if((this.len == 0) || this.Zero) {
-				return new BigInteger(0, ByteArray.Create(0));
+				return new BigInteger(0, SafeArrayHandle.Create(0));
 			}
 
 			return new BigInteger(1, this.toByteArray());

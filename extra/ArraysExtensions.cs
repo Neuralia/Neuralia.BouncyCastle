@@ -37,7 +37,7 @@ namespace Neuralia.BouncyCastle.extra {
 
 		public static SafeArrayHandle Concatenate(SafeArrayHandle a, SafeArrayHandle b, SafeArrayHandle c) {
 			if((a != null) && (b != null) && (c != null)) {
-				SafeArrayHandle rv = ByteArray.Create(a.Length + b.Length + c.Length);
+				SafeArrayHandle rv = SafeArrayHandle.Create(a.Length + b.Length + c.Length);
 
 				a.Entry.CopyTo(rv.Entry, 0, 0, a.Length);
 				b.Entry.CopyTo(rv.Entry, 0, a.Length, b.Length);
@@ -58,7 +58,7 @@ namespace Neuralia.BouncyCastle.extra {
 		}
 
 		public static SafeArrayHandle WrapMemory(byte[] array) {
-			SafeArrayHandle rv = ByteArray.Create(array.Length);
+			SafeArrayHandle rv = SafeArrayHandle.Create(array.Length);
 			rv.Entry.CopyFrom((ReadOnlySpan<byte>) array, 0, 0, array.Length);
 
 			return rv;

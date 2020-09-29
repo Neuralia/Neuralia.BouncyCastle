@@ -30,7 +30,7 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 		/// <param name="chars"> the char array </param>
 		/// <returns> the converted array </returns>
 		public static SafeArrayHandle toByteArray(char[] chars) {
-			SafeArrayHandle result = ByteArray.Create(chars.Length);
+			SafeArrayHandle result = SafeArrayHandle.Create(chars.Length);
 
 			for(int i = chars.Length - 1; i >= 0; i--) {
 				result[i] = (byte) chars[i];
@@ -47,14 +47,14 @@ namespace Neuralia.BouncyCastle.extra.pqc.math.linearalgebra {
 		/// <returns> the converted array </returns>
 		public static SafeArrayHandle toByteArrayForPBE(char[] chars) {
 
-			SafeArrayHandle @out = ByteArray.Create(chars.Length);
+			SafeArrayHandle @out = SafeArrayHandle.Create(chars.Length);
 
 			for(int i = 0; i < chars.Length; i++) {
 				@out[i] = (byte) chars[i];
 			}
 
 			int         length = @out.Length * 2;
-			SafeArrayHandle ret    = ByteArray.Create(length + 2);
+			SafeArrayHandle ret    = SafeArrayHandle.Create(length + 2);
 
 			int j = 0;
 

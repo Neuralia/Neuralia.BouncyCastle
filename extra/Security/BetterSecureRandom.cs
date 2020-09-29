@@ -28,7 +28,7 @@ namespace Neuralia.BouncyCastle.extra.Security {
 		/// fix bugs in the parent version when a number can be negative and thus smaller than minValue
 		/// </summary>
 		/// <param name="minValue"></param>
-		/// <param name="maxValue"></param>SSSS
+		/// <param name="maxValue"></param>
 		/// <returns></returns>
 		/// <exception cref="ArgumentException"></exception>
 		public override int Next(int minValue, int maxValue) {
@@ -40,7 +40,7 @@ namespace Neuralia.BouncyCastle.extra.Security {
 			byte[] bytes = new byte[sizeof(int)];
 			this.NextBytes(bytes);
 
-			TypeSerializer.Deserialize(bytes, out int result);
+			TypeSerializer.Deserialize(bytes.AsSpan(), out int result);
 			
 			return result;
 		}
@@ -49,7 +49,7 @@ namespace Neuralia.BouncyCastle.extra.Security {
 			byte[] bytes = new byte[sizeof(long)];
 			this.NextBytes(bytes);
 
-			TypeSerializer.Deserialize(bytes, out long result);
+			TypeSerializer.Deserialize(bytes.AsSpan(), out long result);
 			
 			return result;
 		}
